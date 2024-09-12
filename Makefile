@@ -3,16 +3,16 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+         #
+#    By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/06/03 14:44:03 by eberkowi          #+#    #+#              #
-#    Updated: 2024/09/11 10:55:52 by eberkowi         ###   ########.fr        #
+#    Updated: 2024/09/12 14:24:21 by maheleni         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME := minishell
 CC := cc
-FLAGS := -Wall -Wextra -Werror
+FLAGS := #-Wall -Wextra -Werror
 LINKFLAGS := -lreadline
 
 CFILES := main.c

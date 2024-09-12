@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 10:12:47 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/09/12 12:25:29 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/09/12 16:51:55 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,14 +25,22 @@ void handle_input(char *input)
 	add_input_to_history(input);
 }
 
+void	copy_env()
+{
+	//do we get env from main envp or
+	//from getenv()
+
+}
+
 int	main(int argc, char *argv[])
 {
+	//what happens if ./minishell gets arguments?
 	(void) argc;
 	(void) argv;
 	char *env_copy; //What data structure is this?
 	int	status;
 
-	copy_env(); 
+	copy_env();
 	create_signals();
 	while (1)
 	{
@@ -48,3 +56,17 @@ int	main(int argc, char *argv[])
 	
 	return (0);
 }
+
+// int	main(int argc, char *argv[], char *envp[])	//main to test stuff with
+// {
+// 	printf("Envp\n");
+// 	int i = 0;
+// 	while (envp[i] != NULL)
+// 	{
+// 		printf("%s\n", envp[i]);
+// 		i++;
+// 	}
+// 	char *args[] = {"echo", "hello", NULL};
+// 	if (execv("/usr/bin/echo", args) == 0)
+// 		printf("Problem with execv\n");
+// }
