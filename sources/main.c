@@ -3,15 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 10:12:47 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/09/11 12:11:30 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/09/12 10:57:13 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-
+/**
+ * @authors Maria Helenius mariaaallotar
+ */
 int	main(int argc, char *argv[])
 {
 	(void) argc;
