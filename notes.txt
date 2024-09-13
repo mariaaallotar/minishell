@@ -1,0 +1,16 @@
+-Builtins are not dependent on PATH, but can they be hardcoded,
+i.e. 
+    char *args[] = {"echo", "hello", NULL};
+	if (execv("/usr/bin/echo", args) == 0)
+		printf("Problem with execv\n");?
+        
+    "Your shell must implement the following builtins:
+    ◦ echo with option -n
+    ◦ cd with only a relative or absolute path
+    ◦ pwd with no options
+    ◦ export with no options
+    ◦ unset with no options
+    ◦ env with no options or arguments
+    ◦ exit with no options"
+
+

@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/12 15:13:14 by maheleni          #+#    #+#             */
-/*   Updated: 2024/09/12 16:51:11 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/09/13 10:20:18 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,29 @@
 //the unset things? Does that work even after unseting, in the same way
 
 /**
+ * so when we run any program from minishell we will give it the changed environ
+ */
+
+/**
  * if i export some variable in minishell and open bash, how does bash get it? We
  * need to actually edit the file that holds the esported variables for that to
  * work? I suppose we could hardcode it to do export but I don't think that is correct.
  */
 
+
+//Code example of how access environment variables
+extern char **environ;
+
+void print_environ() {
+    for (int i = 0; environ[i] != NULL; i++) {
+        printf("%s\n", environ[i]);
+    }
+}
+
+int main() {
+    print_environ(); // Accesses the global `environ` variable
+    return 0;
+}
+/**
+ * is environ the exact same thing as envp
+ */
