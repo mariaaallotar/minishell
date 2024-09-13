@@ -12,6 +12,49 @@ ls -la      		-two flags in one (same outcome as: ls -l -a)
 /bin/bash			-just a path
 cat infile			-using a file
 
+Exit --------------------------------------------
+
+Error codes are between 0 and 255
+
+minishell: exit a
+exit
+bash: exit: a: numeric argument required
+zsh:
+
+minishell: exit 3
+exit
+zsh: echo $?
+3
+zsh: 
+
+minishell: exit 356
+exit
+zsh: echo $?
+100
+zsh:
+(bash uses 8bits to store the exit code, so it will wrap higher numbers to fit 0-255)
+
+minishell: exit 3 a
+exit
+bash: exit: too many arguments
+minishell:
+
+minishell: exit_______________
+exit
+zsh:
+
+minishell: exit \t\t\t\t\t\t\t\t
+exit
+zsh:
+
+minishell: _exit
+exit
+zsh: 
+
+minishell: a exit
+a: command not found
+minishell: 
+
 Built_In Commands -------------------------------
 
 echo hello			-Why is echo a built in command?
@@ -28,6 +71,12 @@ ls | wc								-basic pipe
 < infile notcat | ls > outfile		-pipex bad command
 < infile sleep 10 | ls > outfile	-pipex sleep test
 
+Redirection -------------------------------------
+
+cat < infile	-cat is reading from stdin
+< infile cat	-same
+cat infile		-cat is opening the file itself
+
 Combination of single and double quotes ---------
 
 grep "Hello World" file.txt         -looks for Hello World
@@ -35,6 +84,9 @@ grep 'Hello World' file.txt         -looks for Hello World
 grep '"Hello World"' file.txt       -looks for "Hello World" WITH the double quotes
 search_term="World"; grep "Hello '$search_term'" file.txt     -looks for Hello 'World'
 search_term="World"; grep "Hello $search_term" file.txt       -looks for Hello World
+grep 'The cost is $100' file.txt		-$ is NOT interpretted in single quotes
+grep "The cost is $100" file.txt		-$ IS interpretted in double quotes
+grep "It's a beautiful day" file.txt	-single quote is just char
 
 
 Non-Linear --------------------------------------

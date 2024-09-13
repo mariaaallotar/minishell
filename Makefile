@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+         #
+#    By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/06/03 14:44:03 by eberkowi          #+#    #+#              #
-#    Updated: 2024/09/13 10:20:23 by maheleni         ###   ########.fr        #
+#    Updated: 2024/09/13 14:47:43 by eberkowi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,7 +15,10 @@ CC := cc
 FLAGS := #-Wall -Wextra -Werror
 LINKFLAGS := -lreadline
 
-CFILES := main.c
+CFILES := main.c \
+		handle_inputs.c \
+		handle_exit_command.c \
+		error_exit.c
 
 HEADER := includes/minishell.h
 LIBFT := libft/libft.a
