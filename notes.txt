@@ -1,16 +1,110 @@
--Builtins are not dependent on PATH, but can they be hardcoded,
-i.e. 
-    char *args[] = {"echo", "hello", NULL};
-	if (execv("/usr/bin/echo", args) == 0)
-		printf("Problem with execv\n");?
-        
-    "Your shell must implement the following builtins:
-    ◦ echo with option -n
-    ◦ cd with only a relative or absolute path
-    ◦ pwd with no options
-    ◦ export with no options
-    ◦ unset with no options
-    ◦ env with no options or arguments
-    ◦ exit with no options"
+
+-------------------------------------------------
+Parsing Cases
+-------------------------------------------------
+
+Basic -------------------------------------------
+
+ls					-	
+ls -a				-"ls" "-a" are two seperate tokens?
+ls -l -a			-two flags seperate (same outcome as: ls -la)
+ls -la      		-two flags in one (same outcome as: ls -l -a)
+/bin/bash			-just a path
+cat infile			-using a file
+
+Built_In Commands -------------------------------
+
+echo hello			-Why is echo a built in command?
+echo -n hello		-echo only needs -n flags
+cd
+pwd
+export
+
+Pipes -------------------------------------------
+
+ls | wc								-basic pipe
+< infile cat | wc > outfile			-pipex imitation
+< infile cat | wc >> outfile		->> appends the outfile instead of overwrite
+< infile notcat | ls > outfile		-pipex bad command
+< infile sleep 10 | ls > outfile	-pipex sleep test
+
+Combination of single and double quotes ---------
+
+grep "Hello World" file.txt         -looks for Hello World
+grep 'Hello World' file.txt         -looks for Hello World
+grep '"Hello World"' file.txt       -looks for "Hello World" WITH the double quotes
+search_term="World"; grep "Hello '$search_term'" file.txt     -looks for Hello 'World'
+search_term="World"; grep "Hello $search_term" file.txt       -looks for Hello World
+
+
+Non-Linear --------------------------------------
+
+ls $(echo /usr | cat)		-the content of () are executed first, then the "ls"
+ls "$(echo /usr | cat)"		-..
+
+Heredoc -----------------------------------------
+
+<< cat | wc		-Basic heredoc
+grep "Hello World" << end   -heredoc in the middle (as any file)
+
+Variables ---------------------------------------
+
+var="World"
+VAR="Hello World"
+VAR=Hello
+VAR="Hell $(var)"
+
+Exit status -------------------------------------
+
+echo $?     -exit status of the last commandline
+
+Maybe -------------------------------------------
+
+cat &		-suspends the command. maybe don't have to do this?
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 

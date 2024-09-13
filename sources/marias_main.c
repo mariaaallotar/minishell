@@ -3,26 +3,25 @@
 /*                                                        :::      ::::::::   */
 /*   marias_main.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/12 11:21:42 by maheleni          #+#    #+#             */
-/*   Updated: 2024/09/12 11:54:03 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/09/13 11:36:29 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-int execute(commands)
-{
+#include "../includes/minishell.h"
 
-}
-
-int main (argv, envp)
+int	main(int argc, char *argv[], char *envp[])	//main to test stuff with
 {
-    s_env this_env = copy_env(envp);    //what datastructure is our env
-    create_signals();
-    while (true)
-    {
-        line = readline("prompt: ");    //does readline only live in that function?
-        binary_tree commands = tokenize(argv);
-        execute(commands);
-    }
+	printf("Envp\n");
+	int i = 0;
+	while (envp[i] != NULL)
+	{
+		printf("%s\n", envp[i]);
+		i++;
+	}
+	char *args[] = {"bash", NULL};
+	if (execve("/bin/bash", args, envp) == 0)
+		printf("Problem with execv\n");
 }
