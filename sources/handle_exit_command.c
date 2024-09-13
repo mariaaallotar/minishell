@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_exit_command.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 14:44:33 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/09/13 14:57:37 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/09/13 16:37:29 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 void handle_exit_command(t_main *main)
 {
 	int exit_code;
-	if (!ft_strncmp(main->input, "exit", 5)) //only a test, check notes.txt for cases
+	if (!ft_strncmp(main->input, "exit", 5)) //FIXME only a test, check notes.txt for cases
 	{
 		printf("exit\n");
 		free(main->input);
