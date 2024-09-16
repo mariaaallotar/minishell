@@ -4,14 +4,9 @@
 /*   marias_main.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
-/*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/12 11:21:42 by maheleni          #+#    #+#             */
-<<<<<<< Updated upstream
-/*   Updated: 2024/09/16 16:08:42 by maheleni         ###   ########.fr       */
-=======
-/*   Updated: 2024/09/13 13:18:02 by maheleni         ###   ########.fr       */
->>>>>>> Stashed changes
+/*   Updated: 2024/09/16 16:18:17 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
