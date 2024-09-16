@@ -1,0 +1,20 @@
+-------------------------------------------------
+    Responsibilities of Environment
+-------------------------------------------------
+
+- copies the environment into our own variable
+- updates the environment
+- tranlates the values into char **envp for execve
+- holds all local variables
+
+-------------------------------------------------
+    Notes
+-------------------------------------------------
+
+- when one variable is unset, the following programs will not have access to it
+
+-------------------------------------------------
+    Variables that need to be updated
+-------------------------------------------------
+
+ - https://chatgpt.com/share/66e4402c-6fb0-800f-8ea0-7a158e4518f0 

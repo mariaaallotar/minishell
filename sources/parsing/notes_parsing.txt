@@ -1,6 +1,24 @@
+-------------------------------------------------
+    Responsibilities of Parsing
+-------------------------------------------------
+
+- parses one commandline into tokens
+- if the first token is 'exit' exits minishell
+        //TODO is there any other case where the program does not proceed?
+- organises those tokens into a datastructure
+        //TODO what is that datastucture?
+        //does it make to have a struct like this:
+        //  struct command
+        //  {
+        //      name_of_command
+        //      flag
+        //      infile
+        //      outfile
+        //  }
+        //how would we then handle the expansion (?) of 
 
 -------------------------------------------------
-Parsing Cases
+    Parsing Cases
 -------------------------------------------------
 
 Basic -------------------------------------------
@@ -73,9 +91,9 @@ ls | wc								-basic pipe
 
 Redirection -------------------------------------
 
-cat < infile	-cat is reading from stdin
+cat < infile	-cat is reading from infile
 < infile cat	-same
-cat infile		-cat is opening the file itself
+cat infile		-same
 
 Combination of single and double quotes ---------
 
@@ -93,6 +111,7 @@ Non-Linear --------------------------------------
 
 ls $(echo /usr | cat)		-the content of () are executed first, then the "ls"
 ls "$(echo /usr | cat)"		-..
+//TODO are the non-linear always calles in this way (with the $())?
 
 Heredoc -----------------------------------------
 

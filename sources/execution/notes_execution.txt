@@ -1,0 +1,11 @@
+-------------------------------------------------
+    Responsibilities of Execution
+-------------------------------------------------
+
+- loops through all the command in the commandline      //make sure that if a command is dependet on some other commands
+                                                        //output that they are executed in the right order
+    - creates pipe
+    - creates fork
+    - executes (or sets correct errno and exits that process)
+    - returns the last processes exit
+    //basically pipex

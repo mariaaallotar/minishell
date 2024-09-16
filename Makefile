@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+         #
+#    By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/06/03 14:44:03 by eberkowi          #+#    #+#              #
-#    Updated: 2024/09/16 11:44:33 by eberkowi         ###   ########.fr        #
+#    Updated: 2024/09/16 14:43:32 by maheleni         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 

@@ -6,16 +6,11 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/12 15:13:14 by maheleni          #+#    #+#             */
-/*   Updated: 2024/09/13 16:37:55 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/09/16 15:34:04 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-//so if I open minishell when env is unset, bash that i open in minishell won't
-//have it either? YES, that is the case
-
-//misconceptions: we do not create our own env, we just modify envp
 
 /**
  * Things in env that are constantly updated:
