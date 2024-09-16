@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 10:12:47 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/09/13 14:57:42 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/09/16 13:49:05 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,29 +21,32 @@ void	copy_env()
 void	initialize_variables(t_main *main)
 {
 	main->input = NULL;
+	main->split_input = NULL;
 	main->exit_code = 0;
 }
 
 int	main(void) //what happens if ./minishell gets arguments?
 {
-	// char 	*env_copy; //What data structure is this?
+	//char 	*env_copy; //What data structure is this?
 	t_main 	main;
 
 	initialize_variables(&main);
-	// copy_env();
-	// create_signals();
+	//copy_env();
+	//create_signals();
 	while (1)
 	{
 		handle_input(&main.input);
-		handle_exit_command(&main);
-		printf("%s\n", main.input);
-		// parse_and_tokenize_and_tree_the_tokens();
-		// apply_commands_in_tree(main.status);
-		// set_exit_status_of_last_line(main.status);
+		parsing(&main);
+		//break ;
+		//parse_and_tokenize_and_tree_the_tokens();
+		//apply_commands_in_tree(main.status);
+		//set_exit_status_of_last_line(main.status);
 	}
 	free(main.input);
-	// free(env_copy);
-	// free_signals();
+	if (main.split_input)
+		ft_free_split(&main.split_input);
+	//free(env_copy);
+	//free_signals();
 	
-	exit (0);
+	exit (main.exit_code);
 }

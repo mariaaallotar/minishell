@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 11:21:19 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/09/13 16:38:21 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/09/16 11:48:12 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,8 @@
 typedef struct s_main
 {
 	char	*input;
-	int		status;     //status of what?
-	int		exit_code;  //of what?
+	char	**split_input;
+	int		exit_code;  //exit code of the exit command given by user?
 } t_main;
 
 //display prompt, readline, and save it in history
@@ -31,7 +31,7 @@ void	handle_input(char **input);
 //error and exit for failed malloc in readline
 int	error_exit_handle_input(void);
 
-//checks the input for exit and optional exit code
-void handle_exit_command(t_main *main);
+//Master parsing function that calls are other functions for parsing
+void	parsing(t_main *main);
 
 #endif
