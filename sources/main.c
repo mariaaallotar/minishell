@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 10:12:47 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/09/16 13:49:05 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/09/16 15:15:28 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,9 +42,8 @@ int	main(void) //what happens if ./minishell gets arguments?
 		//apply_commands_in_tree(main.status);
 		//set_exit_status_of_last_line(main.status);
 	}
-	free(main.input);
-	if (main.split_input)
-		ft_free_split(&main.split_input);
+	if (main.input)
+		free(main.input);
 	//free(env_copy);
 	//free_signals();
 	

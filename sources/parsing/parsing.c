@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 11:32:36 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/09/16 14:34:21 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/09/16 15:29:59 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,55 +46,98 @@ static void	malloc_split_input_array(t_main *main)
 		split_length = get_split_length(main->input);
 	else
 		return ;
-	main->split_input = malloc(split_length * sizeof(char *));
+	main->split_input = malloc((split_length + 1) * sizeof(char *));
 	if (!main->split_input)
 	{
 		free(main->input);
 		main->input = NULL;
 		exit (1);
 	}
-	printf("split_length = %d\n", split_length); //REMOVE	
+	//printf("split_length = %d\n", split_length); //REMOVE	
+}
+
+static void	exit_split_element_malloc_failed(t_main *main, int i)
+{
+	while (i >= 0)
+	{
+		free(main->split_input[i]);
+		i--;
+	}
+	free(main->split_input);
+	exit (1);
+}
+
+static size_t	get_element_length(char *element)
+{
+	size_t result;
+
+	result = 0;
+	while (*element && *element >= 33)
+	{
+		result++;
+		element++;
+	}
+		
+	return (result);
 }
 
 static void	add_elements_to_split_input(t_main *main)
 {
 	int i;
 	int j;
-	int element_length;
+	size_t element_length;
 
 	i = 0;
 	while (*main->input)
 	{
 		while (*main->input && (*main->input == ' ' || *main->input == '\t'))
 			main->input++;
-		if (!*main->input)
-			return ;
-			j = 0;
+		j = 0;
 		element_length = get_element_length(main->input);
+		//printf("element %d length = %zu\n", i, element_length); //REMOVE
+		if (!*main->input || element_length == 0)
+		{
+			main->split_input[i] = NULL;
+			return ;
+		}	
 		main->split_input[i] = malloc(element_length + 1);
+		if (!main->split_input[i])
+			exit_split_element_malloc_failed(main, i - 1);
 		while (*main->input && *main->input != ' ' && *main->input != '\t')
 		{
-			main->split_input[i][j++] = *main->input++;
+			main->split_input[i][j++] = *main->input;
+			main->input++;
 		}
 		main->split_input[i][j] = '\0';
+		//printf("element %d  str = %s\n", i, main->split_input[i]);
 		i++;
-	}	
+	}
+	main->split_input[i] = NULL;
 }
 
 static void	mini_split(t_main *main)
 {
 	malloc_split_input_array(main);
 	add_elements_to_split_input(main);
-
-	free(main->input);
-	main->input = NULL;
 }
 
 void	parsing(t_main *main)
 {
 	exit_for_testing(main); //REMOVE
 	mini_split(main);
-	free(main->split_input); // replace with ft_free_split
-	//ft_free_split(&main->split_input);
+
+	int i = 0;
+	while (main->split_input[i])
+	{
+		printf("index %d = %s\n", i, main->split_input[i]);
+		i++;
+	}
+	
+	if (*main->input)
+	{
+		free(main->input);
+		main->input = NULL;
+	}	
+	ft_free_split(&main->split_input);
 	main->split_input = NULL;
 }
