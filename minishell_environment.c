@@ -6,10 +6,34 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/12 15:13:14 by maheleni          #+#    #+#             */
-/*   Updated: 2024/09/17 10:41:46 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/09/17 10:47:58 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+//so if I open minishell when env is unset, bash that i open in minishell won't
+//have it either? YES, that is the case
+
+//misconceptions: we do not create our own env, we just modify envp
+
+/**
+ * Things in env that are constantly updated:
+ *  - SHLVL: This variable indicates the shell level. It increments by 1 each 
+ *      time a new shell is spawned
+ *  - _: This variable holds the last argument of the previous command, or in the
+ *      context of spawning a new shell, it may be set to the path of the shell 
+ *      executable (e.g., /bin/bash)
+ *  - PWD: This is the "Present Working Directory" and represents the current
+ *      directory when the shell was started. It updates if the shell is opened
+ *      in a different directory
+ *  - 
+*/
+
+/**
+ * Where are variables that are not exported? Just in a list of strings in a
+ * main struct?
+ * 
+ * Whenever minishell is opened, add one to SHLVL
+*/
 //so if I open minishell when env is unset, bash that i open in minishell won't
 //have it either? YES, that is the case
 
