@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 11:21:19 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/09/17 11:57:47 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/09/17 17:53:45 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,10 +32,10 @@ void	handle_input(char **input);
 int	error_exit_handle_input(void);
 
 //Master parsing function that calls are other functions for parsing
-void	parsing(t_main *main);
+int	parsing(t_main *main);
 
 //A split for minishell copyright 2024
-void	mini_split(t_main *main);
+int	split_input(t_main *main);
 
 void exit_for_testing(t_main *main); //REMOVE
 
@@ -44,5 +44,8 @@ void	exit_free_split_element_malloc_failed(t_main *main, int i);
 
 //Split the input into individual elements and check for no spaces before/after symbols
 void	add_elements_to_split_input(t_main *main, char *input);
+
+//Returns 1 if the given char is a special character that we need to handle, else 0
+int	is_special(char c);
 
 #endif
