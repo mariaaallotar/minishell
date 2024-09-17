@@ -5,10 +5,11 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/12 11:21:42 by maheleni          #+#    #+#             */
-/*   Updated: 2024/09/16 16:18:17 by maheleni         ###   ########.fr       */
+/*   Created: Invalid date        by                   #+#    #+#             */
+/*   Updated: 2024/09/17 10:42:12 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #include "../includes/minishell.h"
 # include <readline/readline.h>
@@ -37,6 +38,7 @@ int	main(int argc, char *argv[], char *envp[])	//main to test stuff with
 		printf("%s\n", envp[i]);
 		i++;
 	}
+    sleep(10);
     sleep(10);
 	char *args[] = {"bash", NULL};
 	if (execve("/bin/bash", args, envp) == 0)
