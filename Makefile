@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+         #
+#    By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/06/03 14:44:03 by eberkowi          #+#    #+#              #
-#    Updated: 2024/09/16 14:43:32 by maheleni         ###   ########.fr        #
+#    Updated: 2024/09/17 11:57:36 by eberkowi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,7 +18,10 @@ LINKFLAGS := -lreadline
 CFILES := main.c \
 		handle_inputs.c \
 		error_exit.c \
-		parsing/parsing.c
+		parsing/parsing.c \
+		parsing/mini_split.c \
+		parsing/exit_parsing.c \
+		parsing/add_elements_to_split_input.c
 
 HEADER := includes/minishell.h
 LIBFT := libft/libft.a
