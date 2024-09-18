@@ -12,3 +12,33 @@
     ◦ exit with no options
 
 -------------------------------------------------
+    Notes
+-------------------------------------------------
+
+echo --------------------------------------------
+
+- without flags: print WITH newline at end
+- with flag -n: print WITHOUT newline at end
+
+cd ----------------------------------------------
+
+- absolute path:
+    - /home/user/documents
+    - /var/log
+    - /usr/local/bin
+    - /
+- relative path
+    - documents/
+    - ./documents
+    - ../logs
+    - ../../
+- updates env: PWD and OLDPWD
+
+pwd ---------------------------------------------
+
+- should be easy to just print the variable PWD
+    (if it has been updated correctly)
+
+exit --------------------------------------------
+
+- TODO move exit handling (aside form parsing) to builtins from parsing

@@ -18,3 +18,7 @@
 -------------------------------------------------
 
  - https://chatgpt.com/share/66e4402c-6fb0-800f-8ea0-7a158e4518f0 
+
+ + OLDPWD
+ - PPID is probably handled automatically
+ - HISTFILE is not needed
