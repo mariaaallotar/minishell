@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 11:21:19 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/09/18 14:29:30 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/09/18 18:39:59 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,5 +54,8 @@ void add_double_quotes_element(t_main *main, char *input, int *id_input, int id_
 
 //Add special character elements to the split_input array
 void add_special_character_element(t_main *main, char *input, int *i, int split_index);
+
+//Checks for an exit command and exit-code and exits if found or shows error for incorrect format
+void	exit_command(t_main *main);
 
 #endif

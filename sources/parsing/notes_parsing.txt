@@ -133,8 +133,8 @@ echo $?     -exit status of the last commandline
 
 Maybe -------------------------------------------
 
-cat &		-suspends the command. maybe don't have to do this?
-cat<<<Makefile
+cat &			-suspends the command. maybe don't have to do this?
+cat<<<Makefile	-<<< is it's own special character that we DO NOT need to handle
 
 
 

@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 11:32:36 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/09/18 14:29:36 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/09/18 18:41:27 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,9 @@ int	parsing(t_main *main)
 		printf("input[%d] = %s\n", i, main->split_input[i]);
 		i++;
 	}
+
+	//builtins
+	exit_command(main);
 	
 	//free and null
 	if (*main->input)

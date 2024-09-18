@@ -6,7 +6,7 @@
 #    By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/06/03 14:44:03 by eberkowi          #+#    #+#              #
-#    Updated: 2024/09/18 13:39:20 by eberkowi         ###   ########.fr        #
+#    Updated: 2024/09/18 18:44:44 by eberkowi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,7 +24,8 @@ CFILES := main.c \
 		parsing/parse_utilities.c \
 		parsing/add_quotes_and_special_elements.c \
 		environment/copy_environment.c \
-		input_and_signals/handle_inputs.c
+		input_and_signals/handle_inputs.c \
+		built_ins/exit_command.c
 
 HEADER := includes/minishell.h
 LIBFT := libft/libft.a
@@ -37,7 +38,7 @@ OBJS := $(CFILES:$(SRC_PATH)%.c=$(OBJ_PATH)%.o)
 all: $(OBJ_PATH) $(NAME)
 
 $(OBJ_PATH):
-	mkdir -p $(OBJ_PATH) $(OBJ_PATH)/parsing $(OBJ_PATH)/environment $(OBJ_PATH)/input_and_signals
+	mkdir -p $(OBJ_PATH) $(OBJ_PATH)/parsing $(OBJ_PATH)/environment $(OBJ_PATH)/input_and_signals $(OBJ_PATH)/built_ins
 
 $(OBJ_PATH)%.o: $(SRC_PATH)%.c $(HEADER)
 	$(CC) $(FLAGS) -c $< -o $@
