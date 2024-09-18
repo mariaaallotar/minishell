@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 11:21:19 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/09/18 13:34:42 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/09/18 14:29:30 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,6 @@ int	parsing(t_main *main);
 
 //A split for minishell copyright 2024
 int	split_input(t_main *main);
-
-void exit_for_testing(t_main *main); //REMOVE
 
 //Free all previous malloced splits and exit
 void	exit_free_split_element_malloc_failed(t_main *main, int i);

@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 11:32:36 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/09/18 10:06:59 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/09/18 14:29:36 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 int	parsing(t_main *main)
 {
 	//main functions
-	exit_for_testing(main); //REMOVE
 	if (!split_input(main))
 		return (0);
 
