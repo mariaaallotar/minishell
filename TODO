@@ -4,5 +4,14 @@ leave this in the vs code //ENGLISH TALK <- this is not what I wrote!!
 
 
 MARIA:
-    - readeach readline history
-    - research signals
+    - research signals  //do not understand them, I need to test our minishell how much is
+                        //already handled 
+
+
+TODAY:
+    - merge all branches into main
+    - remove all new branches
+    - clean up main branch
+        - check all TODOs, possibly need to move some functions into other folders
+    - create main restirctions  https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-protected-branches/managing-a-branch-protection-rule
+    

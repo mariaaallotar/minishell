@@ -111,7 +111,8 @@ Non-Linear --------------------------------------
 
 ls $(echo /usr | cat)		-the content of () are executed first, then the "ls"
 ls "$(echo /usr | cat)"		-..
-//TODO are the non-linear always calles in this way (with the $())?
+ls `echo /usr`              - same thing but different syntax
+
 
 Heredoc -----------------------------------------
 
@@ -128,6 +129,7 @@ VAR="Hell $(var)"
 Exit status -------------------------------------
 
 echo $?     -exit status of the last commandline
+            // $? is the only one of the special shell variables that we need to handle
 
 Maybe -------------------------------------------
 
