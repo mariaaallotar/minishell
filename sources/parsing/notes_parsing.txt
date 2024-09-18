@@ -134,6 +134,7 @@ echo $?     -exit status of the last commandline
 Maybe -------------------------------------------
 
 cat &		-suspends the command. maybe don't have to do this?
+cat<<<Makefile
 
 
 

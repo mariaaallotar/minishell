@@ -1,42 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parsing.c                                          :+:      :+:    :+:   */
+/*   exit_parsing.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/16 11:32:36 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/09/18 10:06:59 by eberkowi         ###   ########.fr       */
+/*   Created: 2024/09/17 11:22:10 by eberkowi          #+#    #+#             */
+/*   Updated: 2024/09/17 11:52:01 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int	parsing(t_main *main)
+void exit_for_testing(t_main *main) //REMOVE
 {
-	//main functions
-	exit_for_testing(main); //REMOVE
-	if (!split_input(main))
-		return (0);
-
-	//print for testing
-	int i = 0;
-	while (main->split_input[i])
-	{
-		printf("input[%d] = %s\n", i, main->split_input[i]);
-		i++;
-	}
-	
-	//free and null
-	if (*main->input)
+	if (!ft_strncmp("exit", main->input, 4))
 	{
 		free(main->input);
-		main->input = NULL;
+		exit (1);	
 	}
-	if (main->split_input)
+}
+
+void	exit_free_split_element_malloc_failed(t_main *main, int i)
+{
+	while (i >= 0)
 	{
-		ft_free_split(&main->split_input);
-		main->split_input = NULL;
+		free(main->split_input[i]);
+		i--;
 	}
-	return (1);
+	free(main->split_input);
+	free(main->input);
 }
