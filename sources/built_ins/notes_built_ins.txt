@@ -41,4 +41,4 @@ pwd ---------------------------------------------
 
 exit --------------------------------------------
 
-- TODO move exit handling (aside form parsing) to builtins from parsing
+- ethan is an exit master and can be trusted with decisions and builtins and everything

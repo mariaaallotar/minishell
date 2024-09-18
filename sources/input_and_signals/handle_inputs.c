@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 12:11:12 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/09/18 13:36:30 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/09/18 13:49:28 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static void	display_prompt_and_wait_for_input(char **input)
 {
-	*input = readline("minishell: "); //TODO Change to set directly in struct
+	*input = readline("minishell: ");
 	if (!*input)
 		exit (error_exit_handle_input());
 }

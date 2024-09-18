@@ -2,10 +2,10 @@
     Responsibilities of Input and Signals
 -------------------------------------------------
 
-- handles readline          //TODO move this (form parsing) here
+- handles readline
     - gets the commandline from terminal
     - handles history
-- handles signals           //TODO what does that actually mean?
+- handles signals
 
 -------------------------------------------------
 
