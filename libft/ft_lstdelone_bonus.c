@@ -1,24 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exit_parsing.c                                     :+:      :+:    :+:   */
+/*   ft_lstdelone_bonus.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/17 11:22:10 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/09/18 14:28:57 by eberkowi         ###   ########.fr       */
+/*   Created: 2024/04/25 14:11:46 by eberkowi          #+#    #+#             */
+/*   Updated: 2024/04/26 15:32:39 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
+#include "libft.h"
 
-void	exit_free_split_element_malloc_failed(t_main *main, int i)
+void	ft_lstdelone(t_list *lst, void (*del)(void*))
 {
-	while (i >= 0)
-	{
-		free(main->split_input[i]);
-		i--;
-	}
-	free(main->split_input);
-	free(main->input);
+	if (!lst)
+		return ;
+	(*del)(lst->content);
+	free(lst);
 }

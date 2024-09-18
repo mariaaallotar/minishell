@@ -1,24 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exit_parsing.c                                     :+:      :+:    :+:   */
+/*   ft_lstnew_bonus.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/17 11:22:10 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/09/18 14:28:57 by eberkowi         ###   ########.fr       */
+/*   Created: 2024/04/25 10:59:17 by eberkowi          #+#    #+#             */
+/*   Updated: 2024/04/26 15:32:49 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
+#include "libft.h"
 
-void	exit_free_split_element_malloc_failed(t_main *main, int i)
+t_list	*ft_lstnew(void *content)
 {
-	while (i >= 0)
-	{
-		free(main->split_input[i]);
-		i--;
-	}
-	free(main->split_input);
-	free(main->input);
+	t_list	*new_node;
+
+	new_node = (t_list *)malloc(sizeof(t_list));
+	if (!new_node)
+		return (NULL);
+	new_node->content = content;
+	new_node->next = NULL;
+	return (new_node);
 }
