@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 11:21:19 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/09/17 17:53:45 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/09/18 11:41:39 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,5 +47,14 @@ void	add_elements_to_split_input(t_main *main, char *input);
 
 //Returns 1 if the given char is a special character that we need to handle, else 0
 int	is_special(char c);
+
+//Add single quote elements to the split_input array
+void add_single_quotes_element(t_main *main, char *input, int *id_input, int id_split);
+
+//Add double quote elements to the split_input array
+void add_double_quotes_element(t_main *main, char *input, int *id_input, int id_split);
+
+//Add special character elements to the split_input array
+void add_special_character_element(t_main *main, char *input, int *i, int split_index);
 
 #endif

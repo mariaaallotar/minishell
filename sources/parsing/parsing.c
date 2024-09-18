@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 11:32:36 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/09/17 19:42:34 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/09/18 10:06:59 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,9 +32,11 @@ int	parsing(t_main *main)
 	{
 		free(main->input);
 		main->input = NULL;
-	}	
-	ft_free_split(&main->split_input);
-	main->split_input = NULL;
-	
+	}
+	if (main->split_input)
+	{
+		ft_free_split(&main->split_input);
+		main->split_input = NULL;
+	}
 	return (1);
 }

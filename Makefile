@@ -6,7 +6,7 @@
 #    By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/06/03 14:44:03 by eberkowi          #+#    #+#              #
-#    Updated: 2024/09/17 17:53:45 by eberkowi         ###   ########.fr        #
+#    Updated: 2024/09/18 11:39:39 by eberkowi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,7 +22,8 @@ CFILES := main.c \
 		parsing/split_input.c \
 		parsing/exit_parsing.c \
 		parsing/add_elements_to_split_input.c \
-		parsing/parse_utilities.c
+		parsing/parse_utilities.c \
+		parsing/add_quotes_and_special_elements.c
 
 HEADER := includes/minishell.h
 LIBFT := libft/libft.a
