@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 11:21:19 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/09/18 11:41:39 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/09/18 13:34:42 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ typedef struct s_main
 } t_main;
 
 //display prompt, readline, and save it in history
-void	handle_input(char **input);
+void	handle_inputs(char **input);
 
 //error and exit for failed malloc in readline
 int	error_exit_handle_input(void);
