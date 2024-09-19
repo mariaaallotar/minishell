@@ -3,15 +3,26 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strlcpy.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 15:51:36 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/04/30 11:49:20 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/09/19 15:21:18 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
+/**
+* Copies up to (dstsize - 1) characters from the string src to dst,
+* 	NUL-terminating the result if dstsize is not 0.
+* If the src and dst strings overlap, the behavior is undefined.
+* Parameters:
+*	*dst - the destination to copy to
+*	*src - the source to copy from
+*	dstsize - the size of dst memory
+* Returns:
+*	The size of the string it tried to copy, in practice the size of src
+*/
 size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize)
 {
 	size_t	i;

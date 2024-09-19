@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_itoa.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 15:12:38 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/04/26 15:32:27 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/09/19 15:16:41 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,14 @@ static char	*ft_negative_num(int n)
 	num_string[num_length + 1] = '\0';
 	return (num_string);
 }
-
+/**
+* Allocates and returns a string representing the integer received as an
+* argument
+* Parameters:
+*	n - int number
+* Returns:
+*	A string of that number
+*/
 char	*ft_itoa(int n)
 {
 	char	*num_string;
