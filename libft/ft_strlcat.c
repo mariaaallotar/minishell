@@ -3,15 +3,29 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strlcat.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 15:51:41 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/04/26 15:33:39 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/09/19 15:21:03 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
+/**
+* Appends (concatenate) string src to the end of dst
+*	It will append at most dstsize - strlen(dst) - 1 characters.  
+*	It will then NUL-terminate, unless dstsize is 0 or the original dst string
+*	was longer than dstsize
+* If the src and dst strings overlap, the behavior is undefined.
+* Parameters:
+*	*dst - the destination to append to
+*	*src - the source to copy from
+*	dstsize - the size of dst memory
+* Returns:
+*	The size of the string it tried to create, in practice the initial length
+*		of dst plus the length of src
+*/
 size_t	ft_strlcat(char *dst, const char *src, size_t dstsize)
 {
 	size_t	i;

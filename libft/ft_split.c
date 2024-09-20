@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 15:34:30 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/07/25 11:36:08 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/09/19 15:19:42 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,16 @@ static char	**ft_free_all(char **result, int i)
 	return (0);
 }
 
+/**
+* Allocates and returns an array of strings obtained by splitting 's' using
+*	the character 'c' as a delimiter. The array must end with a NULL pointer
+* Parameters:
+*	*s - string to be split
+*	c - delimiter character
+* Returns:
+*	Array of new strings resulting from the split
+*	NULL if the allocation fails
+*/
 char	**ft_split(char const *s, char c)
 {
 	char	**result;

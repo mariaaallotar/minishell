@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_putnbr_fd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 15:16:29 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/07/24 10:45:31 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/09/19 15:19:10 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,12 @@ static void	ft_rec_div(int n, int fd)
 	write(fd, &temp, 1);
 }
 
+/**
+* Outputs the integer ’n’ to the given file descriptor
+* Parameters:
+*	n - number to output
+*	fd - filedescriptor on which to write
+*/
 void	ft_putnbr_fd(int n, int fd)
 {
 	if (n == -2147483648)
