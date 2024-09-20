@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 11:32:36 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/09/20 12:19:39 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/09/20 13:28:06 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,6 @@ static int get_number_of_pipes(t_main *main)
 
 static void	malloc_commands(t_main *main, t_commands **commands, int size)
 {
-	printf("size = %d\n", size);
 	*commands = malloc((size) * sizeof(t_commands));
 	if (!*commands)
 	{
@@ -62,7 +61,6 @@ static void malloc_and_init_commands(t_main *main, t_commands **commands)
 	int num_of_pipes;
 
 	num_of_pipes = get_number_of_pipes(main);
-	printf("num_of_pipes = %d\n", num_of_pipes);
 	malloc_commands(main, commands, num_of_pipes + 2);
 	initialize_commands(commands, num_of_pipes + 2);
 }
@@ -97,9 +95,6 @@ int	parsing(t_main *main, t_commands **commands)
 	
 	//malloc commands array based on number of pipes
 	malloc_and_init_commands(main, commands);
-	
-	printf("bool = %d\n", (*commands)[0].null_terminate);
-	printf("bool = %d\n", (*commands)[1].null_terminate);
 
 	// (*commands)[0].command = &(main->split_input[0]);
 	// (*commands)[1].command = &(main->split_input[1]);
