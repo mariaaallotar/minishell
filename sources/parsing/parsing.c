@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 11:32:36 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/09/20 12:19:39 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/09/20 15:15:16 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,10 +25,10 @@ static int get_number_of_pipes(t_main *main)
 	return (result);	
 }
 
-static void	malloc_commands(t_main *main, t_commands **commands, int size)
+static void	malloc_commands(t_main *main, t_command **commands, int size)
 {
 	printf("size = %d\n", size);
-	*commands = malloc((size) * sizeof(t_commands));
+	*commands = malloc((size) * sizeof(t_command));
 	if (!*commands)
 	{
 		ft_free_split(&main->split_input);
@@ -37,16 +37,14 @@ static void	malloc_commands(t_main *main, t_commands **commands, int size)
 	}	
 }
 
-static void	initialize_commands(t_commands **commands, int size)
+static void	initialize_commands(t_command **commands, int size)
 {
 	int i;
 
 	i = 0;
 	while (i < size)
 	{
-		(*commands)[i].null_terminate = false;
 		(*commands)[i].command = NULL;
-		(*commands)[i].flags = NULL;
 		(*commands)[i].heredoc_delimiter = NULL;
 		(*commands)[i].redirect_in = NULL;
 		(*commands)[i].redirect_out = NULL;
@@ -54,22 +52,20 @@ static void	initialize_commands(t_commands **commands, int size)
 		(*commands)[i].redirect_append = NULL;
 		i++;
 	}
-	(*commands)[size -1].null_terminate = true;
 }
 
-static void malloc_and_init_commands(t_main *main, t_commands **commands)
+static void malloc_and_init_commands(t_main *main, t_command **commands)
 {
 	int num_of_pipes;
 
 	num_of_pipes = get_number_of_pipes(main);
+	main->num_of_command_structs = num_of_pipes + 1;
 	printf("num_of_pipes = %d\n", num_of_pipes);
-	malloc_commands(main, commands, num_of_pipes + 2);
-	initialize_commands(commands, num_of_pipes + 2);
+	malloc_commands(main, commands, num_of_pipes + 1);
+	initialize_commands(commands, num_of_pipes + 1);
 }
 
-//Left off here fighting with malloc for command arrays
-
-int	parsing(t_main *main, t_commands **commands)
+int	parsing(t_main *main, t_command **commands)
 {
 	//main functions
 	if (!split_input(main))
@@ -97,14 +93,16 @@ int	parsing(t_main *main, t_commands **commands)
 	
 	//malloc commands array based on number of pipes
 	malloc_and_init_commands(main, commands);
-	
-	printf("bool = %d\n", (*commands)[0].null_terminate);
-	printf("bool = %d\n", (*commands)[1].null_terminate);
 
-	// (*commands)[0].command = &(main->split_input[0]);
-	// (*commands)[1].command = &(main->split_input[1]);
-	// printf("command in parsing = %s\n", *((*commands)[0].command));
-	// printf("command in parsing = %s\n", *((*commands)[1].command));
+	//Test for mallocing and assigning and printing REMOVE
+	int j = 0;
+	while (j < main->num_of_command_structs)
+	{
+		(*commands)[j].command = &(main->split_input[j]);
+		printf("command = %s\n", *((*commands)[j].command));
+		j++;
+	}
+	
 	free(*commands);
 
 	// ------------------------------------------------------------------------

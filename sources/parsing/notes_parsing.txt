@@ -16,6 +16,7 @@
         //      outfile
         //  }
         //how would we then handle the expansion (?) of 
+- expands $VARs
 
 -------------------------------------------------
     Parsing Cases
@@ -133,8 +134,9 @@ echo $?     -exit status of the last commandline
 
 Maybe -------------------------------------------
 
-cat &			-suspends the command. maybe don't have to do this?
-cat<<<Makefile	-<<< is it's own special character that we DO NOT need to handle
+cat &					-suspends the command. maybe don't have to do this?
+cat<<<Makefile			-<<< is it's own special character that we DO NOT need to handle
+< infile cat < infile 	-cats infile twice (DONT HANDLE THIS SHIT just make sure it doesnt seg fault)
 
 
 

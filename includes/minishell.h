@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 11:21:19 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/09/20 12:31:46 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/09/20 15:09:47 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,19 +31,19 @@ typedef struct s_main
 	char	**split_input;
 	t_list	*env_list;
 	int		exit_code;  //exit code of the exit command given by user?
+	int 	num_of_command_structs;
 } t_main;
 
-typedef struct s_commands
+typedef struct s_command
 {
-	bool	null_terminate;
 	char	**command;
-	char	**flags;
 	char	**heredoc_delimiter;
 	char	**redirect_in;
 	char	**redirect_out;
 	bool    redirect_heredoc;
 	char	**redirect_append;
-}	t_commands;
+}	t_command;
+
 /*****************************************************************************/
 	//INPUT AND SIGNALS
 /*****************************************************************************/
@@ -59,7 +59,7 @@ int	error_exit_handle_input(void);
 /*****************************************************************************/
 
 //Master parsing function that calls are other functions for parsing
-int	parsing(t_main *main, t_commands **commands);
+int	parsing(t_main *main, t_command **commands);
 
 //A split for minishell copyright 2024
 int	split_input(t_main *main);
