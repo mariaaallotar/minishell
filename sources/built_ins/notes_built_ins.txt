@@ -20,6 +20,10 @@ echo --------------------------------------------
 - without flags: print WITH newline at end
 - with flag -n: print WITHOUT newline at end
 
+exeution:
+- if string after echo is equal to "-n " or "-n\n" print without newline
+- print all strings untill I find NULL
+
 cd ----------------------------------------------
 
 - absolute path:

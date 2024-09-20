@@ -6,7 +6,7 @@
 #    By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/06/03 14:44:03 by eberkowi          #+#    #+#              #
-#    Updated: 2024/09/20 13:27:45 by maheleni         ###   ########.fr        #
+#    Updated: 2024/09/20 15:16:06 by maheleni         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,7 +26,8 @@ CFILES := main.c \
 		input_and_signals/handle_inputs.c \
 		built_ins/exit_command.c \
 		environment/environment_utils.c \
-		environment/print_environment.c
+		environment/print_environment.c \
+		built_ins/echo.c \
 
 HEADER := includes/minishell.h
 LIBFT := libft/libft.a

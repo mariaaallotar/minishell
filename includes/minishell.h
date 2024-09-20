@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 11:21:19 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/09/20 13:27:46 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/09/20 15:40:08 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ typedef struct s_main
 	int		exit_code;  //exit code of the exit command given by user?
 } t_main;
 
-typedef struct s_commands
+typedef struct s_command
 {
 	bool	null_terminate;
 	char	**command;
@@ -43,7 +43,8 @@ typedef struct s_commands
 	char	**redirect_out;
 	bool    redirect_heredoc;
 	char	**redirect_append;
-}	t_commands;
+}	t_command;
+
 /*****************************************************************************/
 	//INPUT AND SIGNALS
 /*****************************************************************************/
@@ -59,7 +60,7 @@ int	error_exit_handle_input(void);
 /*****************************************************************************/
 
 //Master parsing function that calls are other functions for parsing
-int	parsing(t_main *main, t_commands **commands);
+int	parsing(t_main *main, t_command **commands);
 
 //A split for minishell copyright 2024
 int	split_input(t_main *main);
@@ -133,5 +134,11 @@ void	print_list_content(void *content);
  * @note variable_key needs to have '=' sign! E.g. "PATH="
  */
 void	remove_variable(t_main *main, char *variable_key);
+
+/*****************************************************************************/
+	//BUILTINS
+/*****************************************************************************/
+
+void    echo(t_command command);
 
 #endif
