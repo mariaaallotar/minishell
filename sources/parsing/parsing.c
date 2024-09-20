@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 11:32:36 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/09/20 10:54:13 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/09/20 12:19:39 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,9 +98,9 @@ int	parsing(t_main *main, t_commands **commands)
 	//malloc commands array based on number of pipes
 	malloc_and_init_commands(main, commands);
 	
-	int j = 0;
-	while ((*commands)[i].null_terminate)
-		printf("commmand = %s\n", *((*commands)[j].command));
+	printf("bool = %d\n", (*commands)[0].null_terminate);
+	printf("bool = %d\n", (*commands)[1].null_terminate);
+
 	// (*commands)[0].command = &(main->split_input[0]);
 	// (*commands)[1].command = &(main->split_input[1]);
 	// printf("command in parsing = %s\n", *((*commands)[0].command));
