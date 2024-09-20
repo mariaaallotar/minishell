@@ -6,7 +6,11 @@
 #    By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/06/03 14:44:03 by eberkowi          #+#    #+#              #
+<<<<<<< HEAD
+#    Updated: 2024/09/18 18:44:44 by eberkowi         ###   ########.fr        #
+=======
 #    Updated: 2024/09/19 14:39:49 by maheleni         ###   ########.fr        #
+>>>>>>> 5b9bd0a398d1f689de24fd440499ae8d26bbace8
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,9 +27,11 @@ CFILES := main.c \
 		parsing/add_elements_to_split_input.c \
 		parsing/parse_utilities.c \
 		parsing/add_quotes_and_special_elements.c \
+		environment/copy_environment.c \
+		input_and_signals/handle_inputs.c \
+		built_ins/exit_command.c
 		environment/environment_utils.c \
 		environment/print_environment.c \
-		input_and_signals/handle_inputs.c \
 
 HEADER := includes/minishell.h
 LIBFT := libft/libft.a
@@ -38,7 +44,7 @@ OBJS := $(CFILES:$(SRC_PATH)%.c=$(OBJ_PATH)%.o)
 all: $(OBJ_PATH) $(NAME)
 
 $(OBJ_PATH):
-	mkdir -p $(OBJ_PATH) $(OBJ_PATH)/parsing $(OBJ_PATH)/environment $(OBJ_PATH)/input_and_signals
+	mkdir -p $(OBJ_PATH) $(OBJ_PATH)/parsing $(OBJ_PATH)/environment $(OBJ_PATH)/input_and_signals $(OBJ_PATH)/built_ins
 
 $(OBJ_PATH)%.o: $(SRC_PATH)%.c $(HEADER)
 	$(CC) $(FLAGS) -c $< -o $@

@@ -3,35 +3,37 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 10:12:47 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/09/20 12:04:47 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/09/20 12:32:31 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-void	initialize_variables(t_main *main)
+void	initialize_variables(t_main *main, t_commands **commands)
 {
 	main->input = NULL;
 	main->split_input = NULL;
 	main->exit_code = 0;
+	*commands = NULL;
 	main->env_list = NULL;
 }
 
 int	main(int argc, char *argv[], char *envp[]) //what happens if ./minishell gets arguments?
 {
 	t_main 	main;
+	t_commands *commands;
 
-	initialize_variables(&main);
+	initialize_variables(&main, &commands);
 	copy_env(envp, &main);
 	// update_env(&main);	//do we do this at all?
 	//create_signals();
 	while (1)
 	{
 		handle_inputs(&main.input);
-		parsing(&main);
+		parsing(&main, &commands);
 		//apply_commands_in_tree();
 		//set_exit_status_of_last_line();
 	}
