@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 11:21:19 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/09/19 15:06:28 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/09/20 10:50:45 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,4 +91,6 @@ void	print_linked_list(t_list *env_list);
 //helper function for print_linked_list function
 void	print_list_content(void *content);
 
+//variable_key needs to have '=' sign!
+void	remove_variable(t_main *main, char *variable_key);
 #endif

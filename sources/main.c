@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 10:12:47 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/09/19 14:52:06 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/09/20 10:52:37 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,9 @@ int	main(int argc, char *argv[], char *envp[]) //what happens if ./minishell get
 
 	print_linked_list(main.env_list);
 	add_variable(&main, "MYVAR=hahah");
+	printf("\n\n");
+	print_linked_list(main.env_list);
+	remove_variable(&main, "MYVAR=");
 	printf("\n\n");
 	print_linked_list(main.env_list);
 

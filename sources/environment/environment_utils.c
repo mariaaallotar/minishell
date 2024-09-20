@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 14:37:05 by maheleni          #+#    #+#             */
-/*   Updated: 2024/09/19 15:05:08 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/09/20 10:50:48 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,26 @@ void    add_variable(t_main *main, char *content)
         free_environment(&(main->env_list));
     }
     ft_lstadd_back(&(main->env_list), new_node);
+}
+
+//variable_key needs to have '=' sign!
+void	remove_variable(t_main *main, char *variable_key)
+{
+	t_list	*previous_node;
+	t_list	*current_node;
+	t_list	*next_node;
+	int		key_len;
+
+	key_len = ft_strlen(variable_key);
+	current_node = main->env_list;
+    while (ft_strncmp(current_node->content, variable_key, key_len))
+	{
+		previous_node = current_node;
+		current_node = previous_node->next;
+	}
+	next_node = current_node->next;
+	free(current_node);
+	previous_node->next = next_node;
 }
 
 t_list	*copy_env(char *envp[], t_main *main)
