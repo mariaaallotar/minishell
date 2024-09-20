@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 14:37:05 by maheleni          #+#    #+#             */
-/*   Updated: 2024/09/20 10:50:48 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/09/20 11:44:24 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,6 @@ void    add_variable(t_main *main, char *content)
     ft_lstadd_back(&(main->env_list), new_node);
 }
 
-//variable_key needs to have '=' sign!
 void	remove_variable(t_main *main, char *variable_key)
 {
 	t_list	*previous_node;

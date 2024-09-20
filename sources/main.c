@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 10:12:47 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/09/20 10:52:37 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/09/20 12:04:47 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,26 +26,17 @@ int	main(int argc, char *argv[], char *envp[]) //what happens if ./minishell get
 
 	initialize_variables(&main);
 	copy_env(envp, &main);
-	//update_env(&main);	//do we do this at all?
-
-	print_linked_list(main.env_list);
-	add_variable(&main, "MYVAR=hahah");
-	printf("\n\n");
-	print_linked_list(main.env_list);
-	remove_variable(&main, "MYVAR=");
-	printf("\n\n");
-	print_linked_list(main.env_list);
-
-	// //create_signals();
-	// while (1)
-	// {
-	// 	handle_inputs(&main.input);
-	// 	parsing(&main);
-	// 	//apply_commands_in_tree();
-	// 	//set_exit_status_of_last_line();
-	// }
-	// if (main.input)
-	// 	free(main.input);
+	// update_env(&main);	//do we do this at all?
+	//create_signals();
+	while (1)
+	{
+		handle_inputs(&main.input);
+		parsing(&main);
+		//apply_commands_in_tree();
+		//set_exit_status_of_last_line();
+	}
+	if (main.input)
+		free(main.input);
 	free_environment(&(main.env_list));
 	//free_signals();
 	exit (main.exit_code);

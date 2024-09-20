@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 11:21:19 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/09/20 10:50:45 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/09/20 12:04:31 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,22 +75,49 @@ void add_special_character_element(t_main *main, char *input, int *i, int split_
 	//ENVIRONMENT
 /*****************************************************************************/
 
-//frees all nodes in the environment linked list (but not the content, because
-//the content is malloced by split?)
+/**
+ * Frees all nodes in the environment linked list (but not the content, because
+ * the content is malloced by split?)
+ * 
+ * @param env_list pointer to the linked list to free
+ */
 void    free_environment(t_list **env_list);
 
-//adds a variable to the environment (a new node to the linked list)
+/**
+ * Adds a variable to the environment (a new node to the linked list)
+ * 
+ * @param main pointer to the main struct
+ * @param content the content of the node
+ */
 void    add_variable(t_main *main, char *content);
 
-//copies the values from envp into a linked list
+/**
+ * Copies the values from envp into a linked list
+ * 
+ * @param envp the environment pointer gotten from main
+ * @param main the main struct of the program
+ */
 t_list	*copy_env(char *envp[], t_main *main);
 
-//prints the contents of all nodes of the linked list
+/**
+ * Prints the contents of all nodes of the linked list
+ * 
+ * @param env_list the linked list to print
+ */
 void	print_linked_list(t_list *env_list);
 
-//helper function for print_linked_list function
+/**
+ * Helper function for print_linked_list function
+ */
 void	print_list_content(void *content);
 
-//variable_key needs to have '=' sign!
+/**
+ * Removes one node from the linked list
+ * 
+ * @param main the main struct of the program
+ * @param variable_key the key of the variable to remove
+ * @note variable_key needs to have '=' sign! E.g. "PATH="
+ */
 void	remove_variable(t_main *main, char *variable_key);
+
 #endif
