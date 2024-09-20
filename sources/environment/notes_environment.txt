@@ -3,9 +3,9 @@
 -------------------------------------------------
 
 - copies the environment into our own variable
-- updates the environment
+(- updates the environment)
 - tranlates the values into char **envp for execve
-- holds all local variables
+(- holds all local variables)
 
 -------------------------------------------------
     Notes
@@ -22,3 +22,7 @@
  + OLDPWD
  - PPID is probably handled automatically
  - HISTFILE is not needed
+
+-------------------------------------------------
+    Questions
+-------------------------------------------------

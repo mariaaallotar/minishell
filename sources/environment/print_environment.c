@@ -1,19 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   copy_environment.c                                 :+:      :+:    :+:   */
+/*   print_environment.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/18 13:30:11 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/09/18 13:30:42 by eberkowi         ###   ########.fr       */
+/*   Created: 2024/09/19 09:38:46 by maheleni          #+#    #+#             */
+/*   Updated: 2024/09/19 14:38:57 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-void	copy_env()
+void	print_list_content(void *content)
 {
-	//do we get env from main envp or
-	//from getenv()
+	char	*str;
+
+	str = content;
+	printf("%s\n", str);
+}
+
+void	print_linked_list(t_list *env_list)
+{
+	ft_lstiter(env_list, print_list_content);
 }

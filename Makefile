@@ -3,16 +3,20 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+         #
+#    By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/06/03 14:44:03 by eberkowi          #+#    #+#              #
+<<<<<<< HEAD
 #    Updated: 2024/09/18 18:44:44 by eberkowi         ###   ########.fr        #
+=======
+#    Updated: 2024/09/19 14:39:49 by maheleni         ###   ########.fr        #
+>>>>>>> 5b9bd0a398d1f689de24fd440499ae8d26bbace8
 #                                                                              #
 # **************************************************************************** #
 
 NAME := minishell
 CC := cc
-FLAGS := -Wall -Wextra -Werror
+FLAGS := #-Wall -Wextra -Werror
 LINKFLAGS := -lreadline
 
 CFILES := main.c \
@@ -26,6 +30,8 @@ CFILES := main.c \
 		environment/copy_environment.c \
 		input_and_signals/handle_inputs.c \
 		built_ins/exit_command.c
+		environment/environment_utils.c \
+		environment/print_environment.c \
 
 HEADER := includes/minishell.h
 LIBFT := libft/libft.a

@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 11:21:19 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/09/20 11:58:04 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/09/20 12:31:46 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,17 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 
+/**
+ * char		*input;
+ * char		**split_input;
+ * t_list	*env_list;
+ * int		exit_code;
+ */
 typedef struct s_main
 {
 	char	*input;
 	char	**split_input;
+	t_list	*env_list;
 	int		exit_code;  //exit code of the exit command given by user?
 } t_main;
 
@@ -37,12 +44,19 @@ typedef struct s_commands
 	bool    redirect_heredoc;
 	char	**redirect_append;
 }	t_commands;
+/*****************************************************************************/
+	//INPUT AND SIGNALS
+/*****************************************************************************/
 
 //display prompt, readline, and save it in history
 void	handle_inputs(char **input);
 
 //error and exit for failed malloc in readline
 int	error_exit_handle_input(void);
+
+/*****************************************************************************/
+	//PARSING
+/*****************************************************************************/
 
 //Master parsing function that calls are other functions for parsing
 int	parsing(t_main *main, t_commands **commands);
@@ -70,5 +84,54 @@ void add_special_character_element(t_main *main, char *input, int *i, int split_
 
 //Checks for an exit command and exit-code and exits if found or shows error for incorrect format
 void	exit_command(t_main *main);
+
+/*****************************************************************************/
+	//ENVIRONMENT
+/*****************************************************************************/
+
+/**
+ * Frees all nodes in the environment linked list (but not the content, because
+ * the content is malloced by split?)
+ * 
+ * @param env_list pointer to the linked list to free
+ */
+void    free_environment(t_list **env_list);
+
+/**
+ * Adds a variable to the environment (a new node to the linked list)
+ * 
+ * @param main pointer to the main struct
+ * @param content the content of the node
+ */
+void    add_variable(t_main *main, char *content);
+
+/**
+ * Copies the values from envp into a linked list
+ * 
+ * @param envp the environment pointer gotten from main
+ * @param main the main struct of the program
+ */
+t_list	*copy_env(char *envp[], t_main *main);
+
+/**
+ * Prints the contents of all nodes of the linked list
+ * 
+ * @param env_list the linked list to print
+ */
+void	print_linked_list(t_list *env_list);
+
+/**
+ * Helper function for print_linked_list function
+ */
+void	print_list_content(void *content);
+
+/**
+ * Removes one node from the linked list
+ * 
+ * @param main the main struct of the program
+ * @param variable_key the key of the variable to remove
+ * @note variable_key needs to have '=' sign! E.g. "PATH="
+ */
+void	remove_variable(t_main *main, char *variable_key);
 
 #endif

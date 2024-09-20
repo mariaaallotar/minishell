@@ -3,15 +3,27 @@
 /*                                                        :::      ::::::::   */
 /*   ft_atoi.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 15:05:54 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/04/30 11:18:01 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/09/19 15:13:45 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
+/**
+* Converts the initial portion of the string pointed to by str to
+*	int representation.
+* Parameters:
+*	*str - string of numbers to convert to int
+* Returns:
+*	The number in int representation
+* Note:
+*	When INT overflows or underflows the function keeps returning numbers, 
+*		when LONG overflows the function returns -1 and when LONG underflows
+*		the function returns 0
+*/
 int	ft_atoi(const char *str)
 {
 	long	result;

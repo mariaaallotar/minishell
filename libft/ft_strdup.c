@@ -3,15 +3,24 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strdup.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 15:47:39 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/05/02 10:18:23 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/09/19 15:20:23 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
+/**
+* Allocates sufficient memory for a copy of the string s1, does the copy,
+*	and returns a pointer to it.  The pointer may subsequently be used as an
+*	argument to the function free
+* Parametes:
+*	*s1 - string to duplicate
+* Returns:
+*	Pointer to the duplicated string
+*/
 char	*ft_strdup(const char *s1)
 {
 	int		i;

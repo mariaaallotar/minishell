@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 10:12:47 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/09/20 10:32:41 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/09/20 12:32:31 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,16 +18,17 @@ void	initialize_variables(t_main *main, t_commands **commands)
 	main->split_input = NULL;
 	main->exit_code = 0;
 	*commands = NULL;
+	main->env_list = NULL;
 }
 
-int	main(void) //what happens if ./minishell gets arguments?
+int	main(int argc, char *argv[], char *envp[]) //what happens if ./minishell gets arguments?
 {
-	char 	*env_copy; //What data structure is this?
 	t_main 	main;
 	t_commands *commands;
 
 	initialize_variables(&main, &commands);
-	//copy_env();
+	copy_env(envp, &main);
+	// update_env(&main);	//do we do this at all?
 	//create_signals();
 	while (1)
 	{
@@ -38,7 +39,7 @@ int	main(void) //what happens if ./minishell gets arguments?
 	}
 	if (main.input)
 		free(main.input);
-	free(env_copy);
+	free_environment(&(main.env_list));
 	//free_signals();
 	exit (main.exit_code);
 }

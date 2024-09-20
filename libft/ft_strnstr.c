@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strnstr.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 15:54:15 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/04/26 15:33:56 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/09/19 15:22:17 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,18 @@ static int	ft_find_needle(const char *haystack, const char *needle)
 	return (1);
 }
 
+/**
+* Locates the first occurrence of the null-terminated string needle in the
+*	string haystack, where not more than len characters are searched
+* Parameters:
+*	*haystack - string to search from
+*	*needle - string to find in haystack
+*	len - amount of characters to search from (at most)
+* Returns:
+*	*haystack - needle is an empty string
+*	NULL - needle occurs nowhere in haystack
+*	pointer to the first character of the first occurrence of needle
+*/
 char	*ft_strnstr(const char *haystack, const char *needle, size_t len)
 {
 	if (!*needle)
