@@ -25,9 +25,9 @@ static int get_number_of_pipes(t_main *main)
 	return (result);	
 }
 
-static void	malloc_commands(t_main *main, t_commands **commands, int size)
+static void	malloc_commands(t_main *main, t_command **commands, int size)
 {
-	*commands = malloc((size) * sizeof(t_commands));
+	*commands = malloc((size) * sizeof(t_command));
 	if (!*commands)
 	{
 		ft_free_split(&main->split_input);
@@ -36,7 +36,7 @@ static void	malloc_commands(t_main *main, t_commands **commands, int size)
 	}	
 }
 
-static void	initialize_commands(t_commands **commands, int size)
+static void	initialize_commands(t_command **commands, int size)
 {
 	int i;
 
@@ -56,7 +56,7 @@ static void	initialize_commands(t_commands **commands, int size)
 	(*commands)[size -1].null_terminate = true;
 }
 
-static void malloc_and_init_commands(t_main *main, t_commands **commands)
+static void malloc_and_init_commands(t_main *main, t_command **commands)
 {
 	int num_of_pipes;
 
@@ -67,7 +67,7 @@ static void malloc_and_init_commands(t_main *main, t_commands **commands)
 
 //Left off here fighting with malloc for command arrays
 
-int	parsing(t_main *main, t_commands **commands)
+int	parsing(t_main *main, t_command **commands)
 {
 	//main functions
 	if (!split_input(main))

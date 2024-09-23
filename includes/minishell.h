@@ -139,6 +139,6 @@ void	remove_variable(t_main *main, char *variable_key);
 	//BUILTINS
 /*****************************************************************************/
 
-void    echo(t_command command);
+void    echo(t_command *command);
 
 #endif
