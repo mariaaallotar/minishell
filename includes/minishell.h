@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 11:21:19 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/09/24 10:46:37 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/09/24 12:16:06 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,21 @@ int	is_redirect(char c);
 
 //Free command struct, free split_input, and exit with the given code
 void free_and_exit_spl_and_cmd(t_main *main, t_command **command, int code);
+
+//Free the command_token utilizing ft_free_split
+void free_command_token(t_main *main, t_command **command);
+
+//Free command tokens, command struct, and split_input, then exit with given code
+void free_all_and_exit(t_main *main, t_command **command, int code);
+
+//Checks for a syntax error where there are two redirects in a row or a redirect then NULL
+void check_for_redirect_error(t_main *main, t_command **command);
+
+//Checks for and adds redirect_in and heredocs to the token struct
+void add_in_or_heredoc(t_main *main, t_command **command, int cmd_id, int *spl_id);
+
+//Checks for and adds redirect_out and redirect_append to the token struct
+void add_out_or_append(t_main *main, t_command **command, int cmd_id, int *spl_id);
 
 /*****************************************************************************/
 	//ENVIRONMENT

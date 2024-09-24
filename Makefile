@@ -6,7 +6,7 @@
 #    By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/20 15:07:12 by eberkowi          #+#    #+#              #
-#    Updated: 2024/09/24 10:46:56 by eberkowi         ###   ########.fr        #
+#    Updated: 2024/09/24 12:14:24 by eberkowi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,6 +25,7 @@ CFILES := main.c \
 		parsing/add_quotes_and_special_elements.c \
 		parsing/tokenize.c \
 		parsing/free_exit_parsing.c \
+		parsing/redirect_tokens.c \
 		input_and_signals/handle_inputs.c \
 		built_ins/exit_command.c \
 		environment/environment_utils.c \

@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 11:32:36 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/09/24 11:28:34 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/09/24 12:19:51 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,24 +133,16 @@ int	parsing(t_main *main, t_command **command)
 		printf("\n");
 	}
 	
-	//FREEING
-	int j = 0;
-	j = 0;
-	while (j < main->num_of_pipes + 1)
-	{
-		if ((*command)[j].command)
-			ft_free_split(&(*command)[j].command);
-		j++;
-	}
-	free(*command);
-
-	// ------------------------------------------------------------------------
-	
-	//free and null
-	if (main->split_input) //REMOVE
+	//Free and Null
+	if (main->split_input)
 	{
 		ft_free_split(&main->split_input);
 		main->split_input = NULL;
 	}
+
+	//Temporary free and null
+	free_command_token(main, command);
+	free(*command);
+	
 	return (1);
 }
