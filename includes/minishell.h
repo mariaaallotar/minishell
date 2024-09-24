@@ -157,4 +157,6 @@ int		forbidden_key(char *var);
 
 void	export(t_main *main, char *var);
 
+void	unset(t_main *main, char *var_key);
+
 #endif

@@ -61,3 +61,26 @@ void	export(t_main *main, char *var)
 	else
 		add_variable(main, var);
 }
+
+void	unset(t_main *main, char *var_key)
+{
+	t_list	*node;
+	char	*joined_str;
+
+	if (ft_strchr(var_key, '=') != NULL)
+	{
+		printf("invalid parameter name\n");
+		return ;
+	}
+	joined_str = ft_strjoin(var_key, "=");
+	if (joined_str == NULL)
+	{
+		//error;	TODO
+		exit(1);
+	}
+	node = find_node(main, joined_str);
+	if (node == NULL)
+		return ;
+	remove_variable(main, joined_str);
+	free(joined_str);
+}
