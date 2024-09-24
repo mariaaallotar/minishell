@@ -91,12 +91,20 @@ void	exit_command(t_main *main);
 /*****************************************************************************/
 
 /**
- * Frees all nodes in the environment linked list (but not the content, because
- * the content is malloced by split?)
+ * Frees all nodes an their content in the environment linked list
  * 
  * @param env_list pointer to the linked list to free
  */
 void    free_environment(t_list **env_list);
+
+/**
+ * Finds and returns a node with the same key as variable
+ * 
+ * @param main the main struct of the program
+ * @param variable a key-value pair in form KEY=value to find node for
+ * @returns pointer to a node with the same key as variable
+ */
+t_list	*find_node(t_main *main, char *variable);
 
 /**
  * Adds a variable to the environment (a new node to the linked list)
@@ -107,7 +115,7 @@ void    free_environment(t_list **env_list);
 void    add_variable(t_main *main, char *content);
 
 /**
- * Copies the values from envp into a linked list
+ * Duplicates (mallocs) the values from envp into a linked list
  * 
  * @param envp the environment pointer gotten from main
  * @param main the main struct of the program
@@ -127,7 +135,7 @@ void	print_linked_list(t_list *env_list);
 void	print_list_content(void *content);
 
 /**
- * Removes one node from the linked list
+ * Frees and removes the node that has key varaible_key from the linked list
  * 
  * @param main the main struct of the program
  * @param variable_key the key of the variable to remove
