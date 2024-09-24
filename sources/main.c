@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 10:12:47 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/09/23 10:18:19 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/09/24 17:50:28 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	initialize_variables(t_main *main, t_command **commands)
 }
 
 int	main(int argc, char *argv[], char *envp[]) //what happens if ./minishell gets arguments?
-{
+{	
 	t_main 	main;
 	t_command *commands;
 

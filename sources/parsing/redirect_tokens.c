@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/24 12:13:07 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/09/24 12:15:13 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/09/24 14:18:55 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,12 +55,12 @@ void check_for_redirect_error(t_main *main, t_command **command)
 			if (!(main->split_input[i + 1]))
 			{
 				printf("syntax error near unexpected token '\\n'\n");
-				free_and_exit_spl_and_cmd(main, command, 2);	
+				free_and_exit_spl_and_cmd(main, command, 2); //TODO change to not exit, just skip execution
 			}
 			if (is_redirect((main->split_input[i + 1])[0]))
 			{
 				printf("syntax error near unexpected token '%s'\n", main->split_input[i + 1]);
-				free_and_exit_spl_and_cmd(main, command, 2);
+				free_and_exit_spl_and_cmd(main, command, 2); //TODO change to not exit, just skip execution
 			}
 		}
 		i++;

@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/24 10:44:31 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/09/24 12:08:59 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/09/24 19:12:30 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,4 +38,22 @@ void free_all_and_exit(t_main *main, t_command **command, int code)
 	free_command_token(main, command);
 	free(*command);
 	exit (code);
+}
+
+void	free_and_null_input(t_main *main)
+{
+	if (*main->input)
+	{
+		free(main->input);
+		main->input = NULL;
+	}
+}
+
+void	free_and_null_split_input(t_main *main)
+{
+	if (main->split_input)
+	{
+		ft_free_split(&main->split_input);
+		main->split_input = NULL;
+	}
 }

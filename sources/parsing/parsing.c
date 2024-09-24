@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 11:32:36 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/09/24 12:19:51 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/09/24 19:08:33 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,49 +60,18 @@ static void malloc_and_init_commands(t_main *main, t_command **commands)
 	initialize_commands(commands, main->num_of_pipes + 1);
 }
 
-int	parsing(t_main *main, t_command **command)
+static void print_split_input(t_main *main) //REMOVE
 {
-	//main functions
-	if (!split_input(main))
-		return (0);
-
-	//print for testing
-	// int i = 0;
-	// while (main->split_input[i])
-	// {
-	// 	printf("input[%d] = %s\n", i, main->split_input[i]);
-	// 	i++;
-	// }
-	
-	//free input
-	if (*main->input)
+	int i = 0;
+	while (main->split_input[i])
 	{
-		free(main->input);
-		main->input = NULL;
+		printf("input[%d] = %s\n", i, main->split_input[i]);
+		i++;
 	}
-	
-	//exit command builtin
-	exit_command(main);
+}
 
-	// ------------------------------------------------------------------------
-	
-	//malloc commands array based on number of pipes
-	malloc_and_init_commands(main, command);
-
-	tokenize(main, command);
-
-	//Test for mallocing and assigning and printing REMOVE
-	
-	// int j = 0;
-	// while (j < main->num_of_pipes + 1)
-	// {
-	// 	(*command)[j].command = &(main->split_input[j]);
-	// 	printf("command = %s\n", *((*command)[j].command));
-	// 	j++;
-	// }
-
-	//Print command struct info for testing REMOVE
-
+static void print_command_structs(t_main *main, t_command **command)
+{
 	int command_number = 0;
 	int i = 0;
 	while (command_number < main->num_of_pipes + 1)
@@ -131,18 +100,24 @@ int	parsing(t_main *main, t_command **command)
 			printf("heredoc_bool = %d\n", (*command)[command_number].redirect_heredoc);
 		command_number++;
 		printf("\n");
-	}
-	
-	//Free and Null
-	if (main->split_input)
-	{
-		ft_free_split(&main->split_input);
-		main->split_input = NULL;
-	}
+	}	
+}
+
+int	parsing(t_main *main, t_command **command)
+{
+	if (!split_input(main))
+		return (0);
+	print_split_input(main); //REMOVE
+	free_and_null_input(main);
+	exit_command(main);
+	malloc_and_init_commands(main, command);
+	tokenize(main, command);
+	print_command_structs(main, command); //REMOVE
+	free_and_null_split_input(main);
 
 	//Temporary free and null
-	free_command_token(main, command);
-	free(*command);
+	free_command_token(main, command); //REMOVE
+	free(*command); //REMOVE
 	
 	return (1);
 }

@@ -6,13 +6,13 @@
 #    By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/20 15:07:12 by eberkowi          #+#    #+#              #
-#    Updated: 2024/09/24 12:14:24 by eberkowi         ###   ########.fr        #
+#    Updated: 2024/09/24 19:30:29 by eberkowi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME := minishell
 CC := cc
-FLAGS := -Wall -Wextra -Werror
+FLAGS := -Wall -Wextra -Werror -fsanitize=address
 LINKFLAGS := -lreadline
 
 CFILES := main.c \
@@ -21,7 +21,7 @@ CFILES := main.c \
 		parsing/split_input.c \
 		parsing/exit_parsing.c \
 		parsing/add_elements_to_split_input.c \
-		parsing/parse_utilities.c \
+		parsing/utilities.c \
 		parsing/add_quotes_and_special_elements.c \
 		parsing/tokenize.c \
 		parsing/free_exit_parsing.c \

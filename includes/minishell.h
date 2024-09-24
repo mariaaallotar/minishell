@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 11:21:19 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/09/24 12:16:06 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/09/24 19:31:28 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,6 +108,15 @@ void add_in_or_heredoc(t_main *main, t_command **command, int cmd_id, int *spl_i
 
 //Checks for and adds redirect_out and redirect_append to the token struct
 void add_out_or_append(t_main *main, t_command **command, int cmd_id, int *spl_id);
+
+//Free and null the input string (the basic input from the first readline)
+void	free_and_null_input(t_main *main);
+
+//Free and null the split_input
+void	free_and_null_split_input(t_main *main);
+
+//Checks for ' or "
+int	is_quote(char c);
 
 /*****************************************************************************/
 	//ENVIRONMENT
