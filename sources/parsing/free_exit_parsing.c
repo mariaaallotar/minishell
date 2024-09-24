@@ -1,28 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parse_utilities.c                                  :+:      :+:    :+:   */
+/*   free_exit_parsing.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/17 16:11:31 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/09/24 10:23:15 by eberkowi         ###   ########.fr       */
+/*   Created: 2024/09/24 10:44:31 by eberkowi          #+#    #+#             */
+/*   Updated: 2024/09/24 10:46:12 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-//Left off here, listing more special chars
-int	is_special(char c)
+void free_and_exit_spl_and_cmd(t_main *main, t_command **command, int code)
 {
-	if (c == '$' || c == '|' || c == '<' || c == '>' || c == '=')
-		return (1);
-	return (0);
-}
-
-int	is_redirect(char c)
-{
-	if (c == '<' || c == '>')
-		return (1);
-	return (0);
+	ft_free_split(&main->split_input);
+	free(*command);
+	exit (code);	
 }

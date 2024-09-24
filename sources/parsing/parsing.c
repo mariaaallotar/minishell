@@ -6,28 +6,26 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 11:32:36 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/09/20 15:15:16 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/09/24 11:28:34 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-static int get_number_of_pipes(t_main *main)
+static void get_number_of_pipes(t_main *main)
 {
 	int i;
-	int result;
 
 	i = 0;
-	result = 0;
+	main->num_of_pipes = 0;
 	while (main->split_input[i])
 		if (main->split_input[i++][0] == '|')
-			result++;
-	return (result);	
+			(main->num_of_pipes)++;
 }
 
 static void	malloc_commands(t_main *main, t_command **commands, int size)
 {
-	printf("size = %d\n", size);
+	//printf("size = %d\n", size); //REMOVE
 	*commands = malloc((size) * sizeof(t_command));
 	if (!*commands)
 	{
@@ -56,28 +54,25 @@ static void	initialize_commands(t_command **commands, int size)
 
 static void malloc_and_init_commands(t_main *main, t_command **commands)
 {
-	int num_of_pipes;
-
-	num_of_pipes = get_number_of_pipes(main);
-	main->num_of_command_structs = num_of_pipes + 1;
-	printf("num_of_pipes = %d\n", num_of_pipes);
-	malloc_commands(main, commands, num_of_pipes + 1);
-	initialize_commands(commands, num_of_pipes + 1);
+	get_number_of_pipes(main);
+	//printf("num_of_pipes = %d\n", main->num_of_pipes); //REMOVE
+	malloc_commands(main, commands, main->num_of_pipes + 1);
+	initialize_commands(commands, main->num_of_pipes + 1);
 }
 
-int	parsing(t_main *main, t_command **commands)
+int	parsing(t_main *main, t_command **command)
 {
 	//main functions
 	if (!split_input(main))
 		return (0);
 
 	//print for testing
-	int i = 0;
-	while (main->split_input[i])
-	{
-		printf("input[%d] = %s\n", i, main->split_input[i]);
-		i++;
-	}
+	// int i = 0;
+	// while (main->split_input[i])
+	// {
+	// 	printf("input[%d] = %s\n", i, main->split_input[i]);
+	// 	i++;
+	// }
 	
 	//free input
 	if (*main->input)
@@ -92,18 +87,62 @@ int	parsing(t_main *main, t_command **commands)
 	// ------------------------------------------------------------------------
 	
 	//malloc commands array based on number of pipes
-	malloc_and_init_commands(main, commands);
+	malloc_and_init_commands(main, command);
+
+	tokenize(main, command);
 
 	//Test for mallocing and assigning and printing REMOVE
-	int j = 0;
-	while (j < main->num_of_command_structs)
+	
+	// int j = 0;
+	// while (j < main->num_of_pipes + 1)
+	// {
+	// 	(*command)[j].command = &(main->split_input[j]);
+	// 	printf("command = %s\n", *((*command)[j].command));
+	// 	j++;
+	// }
+
+	//Print command struct info for testing REMOVE
+
+	int command_number = 0;
+	int i = 0;
+	while (command_number < main->num_of_pipes + 1)
 	{
-		(*commands)[j].command = &(main->split_input[j]);
-		printf("command = %s\n", *((*commands)[j].command));
-		j++;
+		printf("---COMMAND %d---\n", command_number);
+		i = 0;
+		if ((*command)[command_number].command)
+		{
+			printf("command =");
+			while ((*command)[command_number].command[i])
+			{
+				printf(" %s", (*command)[command_number].command[i]);
+				i++;
+			}
+			printf("\n");
+		}
+		if ((*command)[command_number].heredoc_delimiter)
+			printf("heredoc_delimiter = %s\n", *((*command)[command_number].heredoc_delimiter));
+		if ((*command)[command_number].redirect_in)
+			printf("redirect_in = %s\n", *((*command)[command_number].redirect_in));
+		if ((*command)[command_number].redirect_out)
+			printf("redirect_out = %s\n", *((*command)[command_number].redirect_out));
+		if ((*command)[command_number].redirect_append)
+			printf("redirect_append = %s\n", *((*command)[command_number].redirect_append));
+		if ((*command)[command_number].redirect_heredoc)
+			printf("heredoc_bool = %d\n", (*command)[command_number].redirect_heredoc);
+		command_number++;
+		printf("\n");
 	}
 	
-	free(*commands);
+	//FREEING
+	int j = 0;
+	j = 0;
+	while (j < main->num_of_pipes + 1)
+	{
+		if ((*command)[j].command)
+			ft_free_split(&(*command)[j].command);
+		j++;
+	}
+	free(*command);
 
 	// ------------------------------------------------------------------------
 	

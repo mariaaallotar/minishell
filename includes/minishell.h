@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 11:21:19 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/09/20 15:09:47 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/09/24 10:46:37 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ typedef struct s_main
 	char	**split_input;
 	t_list	*env_list;
 	int		exit_code;  //exit code of the exit command given by user?
-	int 	num_of_command_structs;
+	int 	num_of_pipes;
 } t_main;
 
 typedef struct s_command
@@ -84,6 +84,15 @@ void add_special_character_element(t_main *main, char *input, int *i, int split_
 
 //Checks for an exit command and exit-code and exits if found or shows error for incorrect format
 void	exit_command(t_main *main);
+
+//Our own kind of tokenizing function of the input
+void tokenize(t_main *main, t_command **command);
+
+//Utility to check for redirection (< or >)
+int	is_redirect(char c);
+
+//Free command struct, free split_input, and exit with the given code
+void free_and_exit_spl_and_cmd(t_main *main, t_command **command, int code);
 
 /*****************************************************************************/
 	//ENVIRONMENT
