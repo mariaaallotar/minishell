@@ -1,14 +1,26 @@
 
 #include "../../includes/minishell.h"
 
-void	unset()
+void	update_variable(t_main *main, char *var)
 {
+	t_list	*node;
+	char	*malloced_content;
 
+	node = find_node(main, var);
+	free(node->content);
+	malloced_content = ft_strdup(var);
+	if (malloced_content == NULL)
+	{
+		//TODO error
+		free_environment(&(main->env_list));
+		ft_free_split(&(main->split_input));
+	}
+	node->content = malloced_content;
 }
 
-int	existing_key(char *var)
+int	existing_key(t_main *main, char *var)
 {
-	if (find_key() != 0)
+	if (find_node(main, var) != NULL)
 		return (1);
 	return (0);
 }
@@ -35,10 +47,17 @@ void	export(t_main *main, char *var)
 	if (forbidden_key(var))
 	{
 		//TODO what error to print
-		//error();
+		printf("Forbidden key: ");
+		while (*var != '=' && *var)
+		{
+			printf("%c", *var);
+			var++;
+		}
+		printf("\n");
 		return ;
 	}
-	if (existing_key(var))
+	if (existing_key(main, var))
 		update_variable(main, var);
-	add_variable(main, var);
+	else
+		add_variable(main, var);
 }

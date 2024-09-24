@@ -149,4 +149,12 @@ void	remove_variable(t_main *main, char *variable_key);
 
 void    echo(t_command *command);
 
+void	update_variable(t_main *main, char *var);
+
+int		existing_key(t_main *main, char *var);
+
+int		forbidden_key(char *var);
+
+void	export(t_main *main, char *var);
+
 #endif

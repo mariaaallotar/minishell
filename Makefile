@@ -11,7 +11,7 @@
 # **************************************************************************** #
 
 NAME := minishell
-CC := cc
+CC := cc -g
 FLAGS := -Wall -Wextra -Werror
 LINKFLAGS := -lreadline
 
@@ -28,6 +28,7 @@ CFILES := main.c \
 		environment/environment_utils.c \
 		environment/print_environment.c \
 		built_ins/echo.c \
+		built_ins/export.c \
 
 HEADER := includes/minishell.h
 LIBFT := libft/libft.a
