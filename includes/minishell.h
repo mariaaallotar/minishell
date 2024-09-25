@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 11:21:19 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/09/24 19:31:28 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/09/25 10:39:01 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,6 +117,9 @@ void	free_and_null_split_input(t_main *main);
 
 //Checks for ' or "
 int	is_quote(char c);
+
+//Add command to token struct
+void add_command(t_main *main, t_command **command, int cmd_id, int *spl_id);
 
 /*****************************************************************************/
 	//ENVIRONMENT

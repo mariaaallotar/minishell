@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/01 10:14:04 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/09/24 19:12:03 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/09/25 10:19:38 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,6 @@ void	ft_free_split(char ***arr)
 
 	i = 0;
 	while ((*arr)[i])
-	{
 		free((*arr)[i++]);
-		(*arr)[i++] = NULL;
-	}	
 	free(*arr);
-	*arr = NULL;
 }

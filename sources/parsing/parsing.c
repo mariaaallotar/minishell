@@ -6,11 +6,54 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 11:32:36 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/09/24 19:08:33 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/09/25 11:17:01 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+
+static void print_split_input(t_main *main) //REMOVE
+{
+	printf("\033[0;33m---SPLIT_INPUT---\033[0m\n");
+	int i = 0;
+	while (main->split_input[i])
+	{
+		printf("input[%d] = %s\n", i, main->split_input[i]);
+		i++;
+	}
+	printf("\n");
+}
+
+static void print_command_structs(t_main *main, t_command **command) //REMOVE
+{
+	int command_number = 0;
+	int i = 0;
+	while (command_number < main->num_of_pipes + 1)
+	{
+		printf("\033[0;32m---COMMAND %d---\033[0m\n", command_number);
+		i = 0;
+		if ((*command)[command_number].command)
+		{
+			while ((*command)[command_number].command[i])
+			{
+				printf("\033[0;31mcommand[%d] = %s\033[0m\n", i, (*command)[command_number].command[i]);
+				i++;
+			}
+		}
+		if ((*command)[command_number].heredoc_delimiter)
+			printf("heredoc_delimiter = %s\n", *((*command)[command_number].heredoc_delimiter));
+		if ((*command)[command_number].redirect_in)
+			printf("redirect_in = %s\n", *((*command)[command_number].redirect_in));
+		if ((*command)[command_number].redirect_out)
+			printf("redirect_out = %s\n", *((*command)[command_number].redirect_out));
+		if ((*command)[command_number].redirect_append)
+			printf("redirect_append = %s\n", *((*command)[command_number].redirect_append));
+		if ((*command)[command_number].redirect_heredoc)
+			printf("heredoc_bool = %d\n", (*command)[command_number].redirect_heredoc);
+		command_number++;
+		printf("\n");
+	}	
+}
 
 static void get_number_of_pipes(t_main *main)
 {
@@ -58,49 +101,6 @@ static void malloc_and_init_commands(t_main *main, t_command **commands)
 	//printf("num_of_pipes = %d\n", main->num_of_pipes); //REMOVE
 	malloc_commands(main, commands, main->num_of_pipes + 1);
 	initialize_commands(commands, main->num_of_pipes + 1);
-}
-
-static void print_split_input(t_main *main) //REMOVE
-{
-	int i = 0;
-	while (main->split_input[i])
-	{
-		printf("input[%d] = %s\n", i, main->split_input[i]);
-		i++;
-	}
-}
-
-static void print_command_structs(t_main *main, t_command **command)
-{
-	int command_number = 0;
-	int i = 0;
-	while (command_number < main->num_of_pipes + 1)
-	{
-		printf("---COMMAND %d---\n", command_number);
-		i = 0;
-		if ((*command)[command_number].command)
-		{
-			printf("command =");
-			while ((*command)[command_number].command[i])
-			{
-				printf(" %s", (*command)[command_number].command[i]);
-				i++;
-			}
-			printf("\n");
-		}
-		if ((*command)[command_number].heredoc_delimiter)
-			printf("heredoc_delimiter = %s\n", *((*command)[command_number].heredoc_delimiter));
-		if ((*command)[command_number].redirect_in)
-			printf("redirect_in = %s\n", *((*command)[command_number].redirect_in));
-		if ((*command)[command_number].redirect_out)
-			printf("redirect_out = %s\n", *((*command)[command_number].redirect_out));
-		if ((*command)[command_number].redirect_append)
-			printf("redirect_append = %s\n", *((*command)[command_number].redirect_append));
-		if ((*command)[command_number].redirect_heredoc)
-			printf("heredoc_bool = %d\n", (*command)[command_number].redirect_heredoc);
-		command_number++;
-		printf("\n");
-	}	
 }
 
 int	parsing(t_main *main, t_command **command)

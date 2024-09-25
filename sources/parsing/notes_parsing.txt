@@ -107,13 +107,11 @@ grep 'The cost is $100' file.txt		-$ is NOT interpretted in single quotes
 grep "The cost is $100" file.txt		-$ IS interpretted in double quotes
 grep "It's a beautiful day" file.txt	-single quote is just char
 
-
 Non-Linear --------------------------------------
 
 ls $(echo /usr | cat)		-the content of () are executed first, then the "ls"
 ls "$(echo /usr | cat)"		-..
 ls `echo /usr`              - same thing but different syntax
-
 
 Heredoc -----------------------------------------
 
