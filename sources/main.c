@@ -45,15 +45,14 @@ int	main(int argc, char *argv[], char *envp[]) //what happens if ./minishell get
 	// if (main.input)
 	// 	free(main.input);
 
-	export(&main, "MARIA=me");
 	print_linked_list(main.env_list);
-	printf("\n");
-	export(&main, "MAR_IA=maybe");
-	print_linked_list(main.env_list);
-	printf("\n");
-	unset(&main, "MARIA=");
-	print_linked_list(main.env_list);
-	printf("\n");
+
+	chdir("..");							//works without PWD
+	char *my_argv[] = {"ls", NULL};
+	// char *buf = malloc (100);
+	// printf("\n%s\n", getcwd(buf, 100));		//works even without PWD
+	pwd();
+	execve("/bin/ls", my_argv, envp);
 
 	free_environment(&(main.env_list));
 	//free_signals();

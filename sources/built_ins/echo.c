@@ -12,32 +12,32 @@
 
 #include "../../includes/minishell.h"
 
-void	echo(t_command *command)
+void	echo(char **command)
 {
 	int	new_line;
 	int	i;
 
 	new_line = 1;
 	i = 0;
-	if (command->command[i] == NULL)
+	if (command[i] == NULL)
 	{
 		printf("First string NULL\n");
 		//error
 		return ;
 	}
 	i = 1;
-	if (ft_strncmp(command->command[i], "-n\0", 3) == 0)
+	if (ft_strncmp(command[i], "-n\0", 3) == 0)
 	{
 		new_line = 0;
 		i++;
 	}
-	while (command->command[i] != NULL)
+	while (command[i] != NULL)
 	{
-		printf("%s", command->command[i]);
+		printf("%s", command[i]);
 		i++;
-		if (command->command[i] == NULL && new_line)
+		if (command[i] == NULL && new_line)
 			printf("\n");
-		else if (command->command[i] == NULL)
+		else if (command[i] == NULL)
 			break;
 		else
 			printf(" ");

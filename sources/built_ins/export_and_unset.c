@@ -29,7 +29,7 @@ int	forbidden_key(char *var)
 {
 	int	i;
 
-	if (ft_isdigit(var[0]) || !ft_isprint(var[0]))
+	if (ft_isdigit(var[0]) || !ft_isalpha(var[0]) || var[0] != '_')
 		return (1);
 	i = 1;
 	while (var[i] && var[i] != '=')

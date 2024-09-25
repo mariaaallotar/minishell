@@ -115,6 +115,14 @@ t_list	*find_node(t_main *main, char *variable);
 void    add_variable(t_main *main, char *content);
 
 /**
+ * Updates the value of the variable key in the env linked list
+ * 
+ * @param main pointer to the main struct
+ * @param var the key value pair to update
+ */
+void	update_variable(t_main *main, char *var);
+
+/**
  * Duplicates (mallocs) the values from envp into a linked list
  * 
  * @param envp the environment pointer gotten from main
@@ -147,9 +155,7 @@ void	remove_variable(t_main *main, char *variable_key);
 	//BUILTINS
 /*****************************************************************************/
 
-void    echo(t_command *command);
-
-void	update_variable(t_main *main, char *var);
+void    echo(char **command);
 
 int		existing_key(t_main *main, char *var);
 
@@ -158,5 +164,7 @@ int		forbidden_key(char *var);
 void	export(t_main *main, char *var);
 
 void	unset(t_main *main, char *var_key);
+
+void	pwd(void);
 
 #endif

@@ -29,6 +29,7 @@ CFILES := main.c \
 		environment/print_environment.c \
 		built_ins/echo.c \
 		built_ins/export_and_unset.c \
+		built_ins/pwd.c
 
 HEADER := includes/minishell.h
 LIBFT := libft/libft.a
