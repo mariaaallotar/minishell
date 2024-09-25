@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 10:12:47 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/09/24 17:50:28 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/09/25 15:19:00 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,13 @@ void	initialize_variables(t_main *main, t_command **commands)
 	main->env_list = NULL;
 	main->num_of_pipes = 0;
 }
+
+//Does $VAR need to expand to an array of strings or just a string?
+//bash is able to execute something stored in a $, which implies that it's read as an array of strings
+//But if that's the case, wouldn't I need to perform a split parsing on the var itself similar to the
+//input split?
+
+//Maybe expand the VAR/heredoc in the split process! then you dont have to remalloc
 
 int	main(int argc, char *argv[], char *envp[]) //what happens if ./minishell gets arguments?
 {	

@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 11:32:36 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/09/25 11:17:01 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/09/25 13:34:15 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,6 +102,8 @@ static void malloc_and_init_commands(t_main *main, t_command **commands)
 	malloc_commands(main, commands, main->num_of_pipes + 1);
 	initialize_commands(commands, main->num_of_pipes + 1);
 }
+
+//If there is a syntax error, does it show before or after heredoc?
 
 int	parsing(t_main *main, t_command **command)
 {
