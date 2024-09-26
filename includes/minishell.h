@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 11:21:19 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/09/26 11:50:31 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/09/26 13:44:31 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -190,16 +190,52 @@ void	remove_variable(t_main *main, char *variable_key);
 	//BUILTINS
 /*****************************************************************************/
 
+/**
+ * Prints the words after echo. If flag -n is given, does not print the newline
+ * after last word.'
+ * 
+ * @param command list of command and its options
+ */
 void    echo(char **command);
 
+/**
+ * Checks if the given key is already in the env list.
+ * 
+ * @param main the main struct of the program
+ * @param var a variable in form VAR=value
+ * @returns 1 when key was found, 0 when not found
+ */
 int		existing_key(t_main *main, char *var);
 
+/**
+ * Checks if the key of the variable to export has forbidden characters or in
+ * forbidden form. I.e. a key kan only contain digits, letters and '_'. Digits
+ * can not be in the beginning.
+ * 
+ * @param var the variable in form VAR=value
+ * @returns 1 if key is forbidden, 0 if key is ok
+ */
 int		forbidden_key(char *var);
 
+/**
+ * Exports a variable of form VAR=value to the env list
+ * 
+ * @param main the main struct of the program
+ * @param var the variable in form VAR=value
+ */
 void	export(t_main *main, char *var);
 
+/**
+ * Unsets a variable from the env list.
+ * 
+ * @param main the main struct of the program
+ * @param var_key the key of the program in form VAR
+ */
 void	unset(t_main *main, char *var_key);
 
+/**
+ * Prints the current working directory
+ */
 void	pwd(void);
 
 #endif

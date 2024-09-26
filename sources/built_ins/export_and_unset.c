@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 10:33:07 by maheleni          #+#    #+#             */
-/*   Updated: 2024/09/26 10:33:10 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/09/26 12:57:44 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ int	forbidden_key(char *var)
 {
 	int	i;
 
-	if (ft_isdigit(var[0]) || !ft_isalpha(var[0]) || var[0] != '_')
+	if (ft_isdigit(var[0]) || (!ft_isalpha(var[0]) && var[0] != '_'))
 		return (1);
 	i = 1;
 	while (var[i] && var[i] != '=')
@@ -91,7 +91,10 @@ void	unset(t_main *main, char *var_key)
 	}
 	node = find_node(main, joined_str);
 	if (node == NULL)
+	{
+		free(joined_str);
 		return ;
+	}
 	remove_variable(main, joined_str);
 	free(joined_str);
 }
