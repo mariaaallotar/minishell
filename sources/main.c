@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 10:12:47 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/09/26 11:55:48 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/09/26 16:11:49 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,6 @@ int	main(int argc, char *argv[], char *envp[]) //what happens if ./minishell get
 		parsing(&main, &tokens);
 		//apply_commands_in_tree();
 		//set_exit_status_of_last_line();
-		break;
 	}
 	if (main.input)
 		free(main.input);

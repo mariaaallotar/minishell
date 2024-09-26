@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 11:32:36 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/09/26 11:56:03 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/09/26 16:51:20 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,15 +95,13 @@ static void	initialize_commands(t_tokens **tokens, int size)
 	}
 }
 
-static void malloc_and_init_commands(t_main *main, t_tokens **tokens)
+static void malloc_and_init_tokens(t_main *main, t_tokens **tokens)
 {
 	get_number_of_pipes(main);
 	//printf("num_of_pipes = %d\n", main->num_of_pipes); //REMOVE
 	malloc_commands(main, tokens, main->num_of_pipes + 1);
 	initialize_commands(tokens, main->num_of_pipes + 1);
 }
-
-//If there is a syntax error, does it show before or after heredoc?
 
 int	parsing(t_main *main, t_tokens **tokens)
 {
@@ -112,7 +110,8 @@ int	parsing(t_main *main, t_tokens **tokens)
 	print_split_input(main); //REMOVE
 	free_and_null_input(main);
 	exit_command(main);
-	malloc_and_init_commands(main, tokens);
+	expand_variables(main);
+	malloc_and_init_tokens(main, tokens);
 	tokenize(main, tokens);
 	print_command_structs(main, tokens); //REMOVE
 	free_and_null_split_input(main);

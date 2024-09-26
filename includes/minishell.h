@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 11:21:19 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/09/26 11:50:31 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/09/26 16:51:04 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,6 +120,9 @@ int	is_quote(char c);
 
 //Add command to token struct
 void add_command(t_main *main, t_tokens **command, int cmd_id, int *spl_id);
+
+//Expand the environment variables
+void expand_variables(t_main *main);
 
 /*****************************************************************************/
 	//ENVIRONMENT
