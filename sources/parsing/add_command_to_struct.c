@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/25 10:37:36 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/09/25 10:49:25 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/09/26 11:52:55 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,17 +43,17 @@ static char	*strdup_with_remove_quotes(const char *s1)
 	return (s2);
 }
 
-static void malloc_cmds(t_main *main, t_command **command, int cmd_id, int c)
+static void malloc_cmds(t_main *main, t_tokens **tokens, int cmd_id, int c)
 {
-	(*command)[cmd_id].command = malloc((c + 1) * sizeof(char *));
-	if (!(*command)[cmd_id].command)
+	(*tokens)[cmd_id].command = malloc((c + 1) * sizeof(char *));
+	if (!(*tokens)[cmd_id].command)
 	{
 		printf("Error: Failed to malloc command array in struct\n");
-		free_all_and_exit(main, command, 1);
+		free_all_and_exit(main, tokens, 1);
 	}
 }
 
-void add_command(t_main *main, t_command **command, int cmd_id, int *spl_id)
+void add_command(t_main *main, t_tokens **tokens, int cmd_id, int *spl_id)
 {
 	int element_count;
 	int i;
@@ -61,22 +61,22 @@ void add_command(t_main *main, t_command **command, int cmd_id, int *spl_id)
 	element_count = count_elements_in_command(main, *spl_id);
 	if (element_count == 0)
 		return ;
-	malloc_cmds(main, command, cmd_id, element_count);
+	malloc_cmds(main, tokens, cmd_id, element_count);
 	i = 0;
 	while (i < element_count)
 	{
-		(*command)[cmd_id].command[i] = NULL;
+		(*tokens)[cmd_id].command[i] = NULL;
 		if (is_quote((main->split_input[*spl_id])[0]))
-			(*command)[cmd_id].command[i] = strdup_with_remove_quotes(main->split_input[*spl_id]);
+			(*tokens)[cmd_id].command[i] = strdup_with_remove_quotes(main->split_input[*spl_id]);
 		else
-			(*command)[cmd_id].command[i] = ft_strdup(main->split_input[*spl_id]);
-		if (!(*command)[cmd_id].command[i])
+			(*tokens)[cmd_id].command[i] = ft_strdup(main->split_input[*spl_id]);
+		if (!(*tokens)[cmd_id].command[i])
 		{
 			printf("Error: Failed to malloc add element to command\n");
-			free_all_and_exit(main, command, 1);
+			free_all_and_exit(main, tokens, 1);
 		}
 		(*spl_id)++;
 		i++;
 	}
-	(*command)[cmd_id].command[i] = NULL;
+	(*tokens)[cmd_id].command[i] = NULL;
 }
