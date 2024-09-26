@@ -6,13 +6,13 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 10:12:47 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/09/20 13:27:45 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/09/26 10:48:40 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-void	initialize_variables(t_main *main, t_commands **commands)
+void	initialize_variables(t_main *main, t_command **commands)
 {
 	main->input = NULL;
 	main->split_input = NULL;
@@ -24,7 +24,7 @@ void	initialize_variables(t_main *main, t_commands **commands)
 int	main(int argc, char *argv[], char *envp[]) //what happens if ./minishell gets arguments?
 {
 	t_main 	main;
-	t_commands *commands;
+	t_command *commands;
 
 	(void)argc;
 	(void)*argv;
@@ -34,10 +34,11 @@ int	main(int argc, char *argv[], char *envp[]) //what happens if ./minishell get
 	//create_signals();
 	while (1)
 	{
-		handle_inputs(&main.input);
-		parsing(&main, &commands);
+		// handle_inputs(&main.input);
+		// parsing(&main, &commands);
 		//apply_commands_in_tree();
 		//set_exit_status_of_last_line();
+		break;
 	}
 	if (main.input)
 		free(main.input);

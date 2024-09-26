@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 11:21:19 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/09/20 13:27:46 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/09/26 10:57:10 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ typedef struct s_main
 	int		exit_code;  //exit code of the exit command given by user?
 } t_main;
 
-typedef struct s_commands
+typedef struct s_command
 {
 	bool	null_terminate;
 	char	**command;
@@ -43,7 +43,8 @@ typedef struct s_commands
 	char	**redirect_out;
 	bool    redirect_heredoc;
 	char	**redirect_append;
-}	t_commands;
+}	t_command;
+
 /*****************************************************************************/
 	//INPUT AND SIGNALS
 /*****************************************************************************/
@@ -59,7 +60,7 @@ int	error_exit_handle_input(void);
 /*****************************************************************************/
 
 //Master parsing function that calls are other functions for parsing
-int	parsing(t_main *main, t_commands **commands);
+int	parsing(t_main *main, t_command **commands);
 
 //A split for minishell copyright 2024
 int	split_input(t_main *main);
@@ -114,6 +115,14 @@ t_list	*find_node(t_main *main, char *variable);
 void    add_variable(t_main *main, char *content);
 
 /**
+ * Updates the value of the variable key in the env linked list
+ * 
+ * @param main pointer to the main struct
+ * @param var the key value pair to update
+ */
+void	update_variable(t_main *main, char *var);
+
+/**
  * Duplicates (mallocs) the values from envp into a linked list
  * 
  * @param envp the environment pointer gotten from main
@@ -141,5 +150,21 @@ void	print_list_content(void *content);
  * @note variable_key needs to have '=' sign! E.g. "PATH="
  */
 void	remove_variable(t_main *main, char *variable_key);
+
+/*****************************************************************************/
+	//BUILTINS
+/*****************************************************************************/
+
+void    echo(char **command);
+
+int		existing_key(t_main *main, char *var);
+
+int		forbidden_key(char *var);
+
+void	export(t_main *main, char *var);
+
+void	unset(t_main *main, char *var_key);
+
+void	pwd(void);
 
 #endif
