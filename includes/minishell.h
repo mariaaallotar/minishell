@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 11:21:19 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/09/25 10:39:01 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/09/26 11:06:00 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,12 +126,20 @@ void add_command(t_main *main, t_command **command, int cmd_id, int *spl_id);
 /*****************************************************************************/
 
 /**
- * Frees all nodes in the environment linked list (but not the content, because
- * the content is malloced by split?)
+ * Frees all nodes an their content in the environment linked list
  * 
  * @param env_list pointer to the linked list to free
  */
 void    free_environment(t_list **env_list);
+
+/**
+ * Finds and returns a node with the same key as variable
+ * 
+ * @param main the main struct of the program
+ * @param variable a key-value pair in form KEY=value to find node for
+ * @returns pointer to a node with the same key as variable
+ */
+t_list	*find_node(t_main *main, char *variable);
 
 /**
  * Adds a variable to the environment (a new node to the linked list)
@@ -142,7 +150,15 @@ void    free_environment(t_list **env_list);
 void    add_variable(t_main *main, char *content);
 
 /**
- * Copies the values from envp into a linked list
+ * Updates the value of the variable key in the env linked list
+ * 
+ * @param main pointer to the main struct
+ * @param var the key value pair to update
+ */
+void	update_variable(t_main *main, char *var);
+
+/**
+ * Duplicates (mallocs) the values from envp into a linked list
  * 
  * @param envp the environment pointer gotten from main
  * @param main the main struct of the program
@@ -162,12 +178,28 @@ void	print_linked_list(t_list *env_list);
 void	print_list_content(void *content);
 
 /**
- * Removes one node from the linked list
+ * Frees and removes the node that has key varaible_key from the linked list
  * 
  * @param main the main struct of the program
  * @param variable_key the key of the variable to remove
  * @note variable_key needs to have '=' sign! E.g. "PATH="
  */
 void	remove_variable(t_main *main, char *variable_key);
+
+/*****************************************************************************/
+	//BUILTINS
+/*****************************************************************************/
+
+void    echo(char **command);
+
+int		existing_key(t_main *main, char *var);
+
+int		forbidden_key(char *var);
+
+void	export(t_main *main, char *var);
+
+void	unset(t_main *main, char *var_key);
+
+void	pwd(void);
 
 #endif

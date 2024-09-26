@@ -3,11 +3,11 @@
 -------------------------------------------------
 
 - handles the execution of the required built ins
-    ◦ echo with option -n
+    ◦ echo with option -n	DONE
     ◦ cd with only a relative or absolute path
     ◦ pwd with no options
-    ◦ export with no options
-    ◦ unset with no options
+    ◦ export with no options	DONE?
+    ◦ unset with no options		DONE?
     ◦ env with no options or arguments
     ◦ exit with no options
 
@@ -19,6 +19,10 @@ echo --------------------------------------------
 
 - without flags: print WITH newline at end
 - with flag -n: print WITHOUT newline at end
+
+exeution:
+- if string after echo is equal to "-n " or "-n\n" print without newline
+- print all strings untill I find NULL
 
 cd ----------------------------------------------
 
@@ -42,3 +46,10 @@ pwd ---------------------------------------------
 exit --------------------------------------------
 
 - ethan is an exit master and can be trusted with decisions and builtins and everything
+
+unset -------------------------------------------
+
+- unset kan only take VAR not VAR=
+	- VAR= gives 
+		unset: VAR7=: invalid parameter name
+        TODO

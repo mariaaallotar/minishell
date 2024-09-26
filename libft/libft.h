@@ -39,6 +39,8 @@ char	*ft_substr(char const *s, unsigned int start, size_t len);
 char	*get_next_line(int fd);
 int		ft_abs(int nb);
 int		ft_atoi(const char *str);
+int		ft_islower(int c);
+int		ft_isupper(int c);
 int		ft_isalnum(int c);
 int		ft_isalpha(int c);
 int		ft_isascii(int c);

@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 10:12:47 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/09/25 15:19:00 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/09/26 11:10:41 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,10 +42,11 @@ int	main(int argc, char *argv[], char *envp[]) //what happens if ./minishell get
 	//create_signals();
 	while (1)
 	{
-		handle_inputs(&main.input);
-		parsing(&main, &commands);
+		// handle_inputs(&main.input);
+		// parsing(&main, &commands);
 		//apply_commands_in_tree();
 		//set_exit_status_of_last_line();
+		break;
 	}
 	if (main.input)
 		free(main.input);
