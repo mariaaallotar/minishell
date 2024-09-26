@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+         #
+#    By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2024/06/03 14:44:03 by eberkowi          #+#    #+#              #
-#    Updated: 2024/09/20 15:16:06 by maheleni         ###   ########.fr        #
+#    Created: 2024/09/20 15:07:12 by eberkowi          #+#    #+#              #
+#    Updated: 2024/09/26 11:14:34 by eberkowi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,12 +21,16 @@ CFILES := main.c \
 		parsing/split_input.c \
 		parsing/exit_parsing.c \
 		parsing/add_elements_to_split_input.c \
-		parsing/parse_utilities.c \
+		parsing/utilities.c \
 		parsing/add_quotes_and_special_elements.c \
-		input_and_signals/handle_inputs.c \
+		parsing/tokenize.c \
+		parsing/free_exit_parsing.c \
+		parsing/redirect_tokens.c \
+		parsing/add_command_to_struct.c \
 		built_ins/exit_command.c \
 		environment/environment_utils.c \
 		environment/print_environment.c \
+		input_and_signals/handle_inputs.c \
 		built_ins/echo.c \
 		built_ins/export_and_unset.c \
 		built_ins/pwd.c

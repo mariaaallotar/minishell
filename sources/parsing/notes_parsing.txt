@@ -16,6 +16,7 @@
         //      outfile
         //  }
         //how would we then handle the expansion (?) of 
+- expands $VARs
 
 -------------------------------------------------
     Parsing Cases
@@ -106,13 +107,11 @@ grep 'The cost is $100' file.txt		-$ is NOT interpretted in single quotes
 grep "The cost is $100" file.txt		-$ IS interpretted in double quotes
 grep "It's a beautiful day" file.txt	-single quote is just char
 
-
 Non-Linear --------------------------------------
 
 ls $(echo /usr | cat)		-the content of () are executed first, then the "ls"
 ls "$(echo /usr | cat)"		-..
 ls `echo /usr`              - same thing but different syntax
-
 
 Heredoc -----------------------------------------
 
@@ -133,8 +132,9 @@ echo $?     -exit status of the last commandline
 
 Maybe -------------------------------------------
 
-cat &			-suspends the command. maybe don't have to do this?
-cat<<<Makefile	-<<< is it's own special character that we DO NOT need to handle
+cat &					-suspends the command. maybe don't have to do this?
+cat<<<Makefile			-<<< is it's own special character that we DO NOT need to handle
+< infile cat < infile 	-cats infile twice (DONT HANDLE THIS SHIT just make sure it doesnt seg fault)
 
 
 
