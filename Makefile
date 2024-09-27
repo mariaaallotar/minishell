@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+         #
+#    By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/20 15:07:12 by eberkowi          #+#    #+#              #
-#    Updated: 2024/09/26 11:14:34 by eberkowi         ###   ########.fr        #
+#    Updated: 2024/09/27 12:12:45 by maheleni         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -46,7 +46,8 @@ OBJS := $(CFILES:$(SRC_PATH)%.c=$(OBJ_PATH)%.o)
 all: $(OBJ_PATH) $(NAME)
 
 $(OBJ_PATH):
-	mkdir -p $(OBJ_PATH) $(OBJ_PATH)/parsing $(OBJ_PATH)/environment $(OBJ_PATH)/input_and_signals $(OBJ_PATH)/built_ins
+	mkdir -p $(OBJ_PATH) $(OBJ_PATH)/parsing $(OBJ_PATH)/environment \
+	$(OBJ_PATH)/input_and_signals $(OBJ_PATH)/built_ins
 
 $(OBJ_PATH)%.o: $(SRC_PATH)%.c $(HEADER)
 	$(CC) $(FLAGS) -c $< -o $@

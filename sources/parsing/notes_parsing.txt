@@ -137,48 +137,84 @@ cat<<<Makefile			-<<< is it's own special character that we DO NOT need to handl
 < infile cat < infile 	-cats infile twice (DONT HANDLE THIS SHIT just make sure it doesnt seg fault)
 
 
+Whyyy?-cases ------------------------------------
+
+c1r4p6% ls > outfile | cat      - redirect_out and pipe
+includes
+libft
+Makefile
+minishell
+notes_general.txt
+objects
+outfile
+sources
+c1r4p6% cat outfile 
+includes
+libft
+Makefile
+minishell
+notes_general.txt
+objects
+outfile
+sources
+
+
+
+c1r4p6% ls > outfile | < TODO cat         - riderect_out, pipe and redirect_in
+includes
+libft
+Makefile
+minishell
+notes_general.txt
+objects
+outfile
+sources
+- live dit in vs code? //SPECIAL GERMAN TALK
+leave this in the vs code //ENGLISH TALK <- this is not what I wrote!!
+
+
+TOMORROW FRIDAY:
+- merge
+- do something
+-remove get_next_line and printf from libft?%
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+c1r4p6% ls > outfile1 > outfile2 | cat          -there can be however many redirects for the same command
+includes
+libft
+Makefile
+minishell
+notes_general.txt
+objects
+outfile
+outfile1
+outfile2
+sources
+TODO
+c1r4p6% cat outfile1
+includes
+libft
+Makefile
+minishell
+notes_general.txt
+objects
+outfile
+outfile1
+outfile2
+sources
+TODO
+c1r4p6% cat outfile2
+includes
+libft
+Makefile
+minishell
+notes_general.txt
+objects
+outfile
+outfile1
+outfile2
+sources
+TODO
+c1r4p6% 
