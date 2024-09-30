@@ -2,6 +2,16 @@
     Responsibilities of Execution
 -------------------------------------------------
 
+(Execution gets the main struct that holds
+    -the number of pipes, 
+    - the exit code and
+    - the environment-list.
+Execution also gets the array of tokens (commands),
+every token holds
+    - the in- and outfiles, and
+    - name of executable and its arguments
+)
+
 - loops through all the commands in the commandline
     - creates pipe if main->pipes > 0
     - creates fork

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 11:21:19 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/09/26 11:50:31 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/09/30 14:08:38 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 # include <stdbool.h>
 # include <readline/readline.h>
 # include <readline/history.h>
+# include <sys/wait.h>
 
 /**
  * char		*input;
@@ -201,5 +202,8 @@ void	export(t_main *main, char *var);
 void	unset(t_main *main, char *var_key);
 
 void	pwd(void);
+
+
+int	execute_commandline(t_main *main, t_tokens *tokens);
 
 #endif

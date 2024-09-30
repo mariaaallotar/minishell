@@ -18,7 +18,7 @@
 echo --------------------------------------------
 
 - without flags: print WITH newline at end
-- with flag -n: print WITHOUT newline at end
+- with flag -n or -nnnnnnnnnnnnnnnn...: print WITHOUT newline at end        //TODO
 
 exeution:
 - if string after echo is equal to "-n " or "-n\n" print without newline
@@ -46,6 +46,7 @@ pwd ---------------------------------------------
 exit --------------------------------------------
 
 - ethan is an exit master and can be trusted with decisions and builtins and everything
+- has ethan checked that exit can take an exitcode?
 
 unset -------------------------------------------
 
@@ -53,3 +54,8 @@ unset -------------------------------------------
 	- VAR= gives 
 		unset: VAR7=: invalid parameter name
         TODO
+
+
+export ------------------------------------------
+
+- export VAR=hello VAR1=world VAR2=!        -exports all variables //TODO
