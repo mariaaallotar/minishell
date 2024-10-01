@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 10:12:47 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/09/30 16:05:10 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/10/01 13:21:11 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,4 +52,18 @@ int	main(int argc, char *argv[], char *envp[]) //what happens if ./minishell get
 	free_environment(&(main.env_list));
 	//free_signals();
 	exit (main.exit_code);
+}
+
+int	main()
+{
+	struct stat	file_stat;
+
+	if(stat("outfile", &file_stat) == 0)
+	{
+		printf("Success\n");
+	}
+	else
+	{
+		printf("Fail\n");
+	}
 }

@@ -265,3 +265,13 @@ Whyyy?-cases ------------------------------------
             maheleni@c2r4p3:~/Documents/42cursus$ 
 
 
+            maheleni@c1r4p4:~/Documents/42cursus/minishell$ ls -l | < outfile cat   -redirect in overrides pipe
+            includes
+            libft
+            Makefile
+            minishell
+            notes_general.txt
+            objects
+            outfile
+            sources
+            TODO

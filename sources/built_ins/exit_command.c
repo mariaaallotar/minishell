@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit_command.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 18:38:06 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/09/18 19:26:12 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/10/01 15:17:58 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ static int	check_for_int_after_exit(char *element, int *temp_code)
 	return (0);
 }
 
-void	exit_command(t_main *main)
+void	exit_command(t_main *main)		//remember to print exit to stderr
 {	
 	int temp_code;
 

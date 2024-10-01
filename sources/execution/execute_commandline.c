@@ -6,50 +6,29 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 10:33:14 by maheleni          #+#    #+#             */
-/*   Updated: 2024/09/30 15:32:18 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/10/01 15:29:14 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-void	execute_command(t_tokens token, int i, int *pipe_left, int *pipe_right)
+void	execute_command(t_main main, t_tokens token)
 {
-	if (i == 0)
+	char	*path;
+	char	**env;
+
+	path = get_path(token.command, main.env_list);
+	if (path = NULL)
 	{
-		dup2(pipe_right[1], STDOUT_FILENO);
-		close(pipe_right[0]);
-		close(pipe_right[1]);
-		char *arg[] = {"sleep", "5"};
-		printf("Executing command 1\n");
-		if (execv(token.command[0], arg) == -1)
-		{
-			perror("Firs execve error ");
-			exit(1);
-		}
-	}
-	if (i == 1)
-	{
-		dup2(pipe_left[0], STDIN_FILENO);
-		close(pipe_left[0]);
-		dup2(pipe_right[1], STDOUT_FILENO);
-		close(pipe_right[1]);
-		char *arg[] = {"cat", NULL};
-		printf("Executing command 2\n");
-		if (execv(token.command[0], arg) == -1)
-		{
-			printf("Second execve error\n");
-			exit(1);
-		}
-	}
-	dup2(pipe_left[0], STDIN_FILENO);
-	close(pipe_left[0]);
-	close(pipe_left[1]);
-	char *arg[] = {"cat", NULL};
-	printf("Executing command 3\n");
-	if (execv(token.command[0], arg) == -1)
-	{
-		printf("Second execve error\n");
+		perror("Error in getting path to command:");
 		exit(1);
+	}
+	//dup stuff so that reading and writing happens in the correct files
+	env = transform_to_string_array(main.env_list);
+	if (execve(path, token.command, env) == -1)
+	{
+		free(path);
+		//error
 	}
 }
 
