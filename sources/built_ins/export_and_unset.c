@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 10:33:07 by maheleni          #+#    #+#             */
-/*   Updated: 2024/09/26 10:33:10 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/10/02 13:54:03 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ int	forbidden_key(char *var)
 
 void	export(t_main *main, char *var)
 {
+	//TODO how does export work without any arguments
 	if (forbidden_key(var))
 	{
 		//TODO what error to print
