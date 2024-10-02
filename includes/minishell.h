@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 11:21:19 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/09/26 13:44:31 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/10/02 12:54:49 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -221,17 +221,17 @@ int		forbidden_key(char *var);
  * Exports a variable of form VAR=value to the env list
  * 
  * @param main the main struct of the program
- * @param var the variable in form VAR=value
+ * @param token the token to be executed
  */
-void	export(t_main *main, char *var);
+void	export(t_main *main, t_tokens token);
 
 /**
  * Unsets a variable from the env list.
  * 
  * @param main the main struct of the program
- * @param var_key the key of the program in form VAR
+ * @param token the token to be executed
  */
-void	unset(t_main *main, char *var_key);
+void	unset(t_main *main, t_tokens token);
 
 /**
  * Prints the current working directory
