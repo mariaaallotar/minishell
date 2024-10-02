@@ -6,7 +6,7 @@
 #    By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/20 15:07:12 by eberkowi          #+#    #+#              #
-#    Updated: 2024/09/30 14:03:25 by maheleni         ###   ########.fr        #
+#    Updated: 2024/10/02 10:21:49 by maheleni         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -34,7 +34,9 @@ CFILES := main.c \
 		built_ins/echo.c \
 		built_ins/export_and_unset.c \
 		built_ins/pwd.c \
-		execution/execute_commandline.c
+		execution/execute_commandline.c \
+		execution/find_path.c \
+		execution/get_path.c \
 
 HEADER := includes/minishell.h
 LIBFT := libft/libft.a

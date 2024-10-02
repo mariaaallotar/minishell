@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 11:21:19 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/10/01 12:24:05 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/10/02 10:35:13 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -208,5 +208,17 @@ void	pwd(void);
 
 
 int	execute_commandline(t_main *main, t_tokens *tokens);
+void	close_pipes_in_parent(int i, int num_of_pipes, int *pipe_left, int *pipe_right);
+void	execute_command(t_main *main, t_tokens token);
+int	execute_builtin(t_main *main, t_tokens token);
+char	*find_path(t_main *main, char *command);
+char	*get_path_variable(t_main *main);
+char	**get_split_paths(char *path_variable);
+int	set_path_if_executable(char *env_path, char *command, char **command_path);
+char	*get_path(t_main *main, char **command);
+int	empty_command(char *command);
+int	is_direcotory(char *command);
+int	is_path_to_executable(char *command);
+int	is_path_to_file(char *command);
 
 #endif

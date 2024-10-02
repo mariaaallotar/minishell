@@ -235,8 +235,8 @@ Whyyy?-cases ------------------------------------
 
 
             maheleni@c2r4p3:~/Documents/42cursus$ ls > out1 > out2              -the last redirect out overwrites the previous riderects
-            maheleni@c2r4p3:~/Documents/42cursus$ cat out1
-            maheleni@c2r4p3:~/Documents/42cursus$ cat out2
+            maheleni@c2r4p3:~/Documents/42cursus$ cat out1                      -but we still need to save all redirect files since they
+            maheleni@c2r4p3:~/Documents/42cursus$ cat out2                      -need to be created and possibly truncated, or does that happen in parsing?
             fdf
             ft_printf
             get_next_line

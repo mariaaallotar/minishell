@@ -10,6 +10,7 @@
     ◦ unset with no options		DONE?
     ◦ env with no options or arguments
     ◦ exit with no options
+- exits all those processes if everything was ok
 
 -------------------------------------------------
     Notes
@@ -47,6 +48,17 @@ exit --------------------------------------------
 
 - ethan is an exit master and can be trusted with decisions and builtins and everything
 - has ethan checked that exit can take an exitcode?
+
+//TODO
+maheleni@c2r4p3:~/Documents/42cursus/minishell$ echo hello | exit > exitfile        - exit as part of child process exits that child process, but does not output exit 
+maheleni@c2r4p3:~/Documents/42cursus/minishell$ cat exitfile 
+maheleni@c2r4p3:~/Documents/42cursus/minishell$ 
+
+maheleni@c2r4p3:~/Documents/42cursus/minishell$ exit | echo hello
+hello
+maheleni@c2r4p3:~/Documents/42cursus/minishell$ exit
+exit
+
 
 unset -------------------------------------------
 
