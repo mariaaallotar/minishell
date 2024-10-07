@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 10:33:07 by maheleni          #+#    #+#             */
-/*   Updated: 2024/09/26 10:33:10 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/10/02 12:53:53 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ int	forbidden_key(char *var)
 {
 	int	i;
 
-	if (ft_isdigit(var[0]) || !ft_isalpha(var[0]) || var[0] != '_')
+	if (ft_isdigit(var[0]) || (!ft_isalpha(var[0]) && var[0] != '_'))
 		return (1);
 	i = 1;
 	while (var[i] && var[i] != '=')
@@ -53,45 +53,61 @@ int	forbidden_key(char *var)
 	return (0);
 }
 
-void	export(t_main *main, char *var)
+void	export(t_main *main, t_tokens token)
 {
-	if (forbidden_key(var))
+	int	i;
+
+	i = 1;
+	while (token.command[i] != NULL)
 	{
-		//TODO what error to print
-		printf("Forbidden key: ");
-		while (*var != '=' && *var)
+		if (forbidden_key(token.command[i]))
 		{
-			printf("%c", *var);
-			var++;
+			//TODO what error to print
+			printf("Forbidden key: ");
+			while (*(token.command[i]) != '=' && *(token.command[i]))
+			{
+				printf("%c", *token.command[i]);
+				(token.command[i])++;
+			}
+			printf("\n");
+			return ;
 		}
-		printf("\n");
-		return ;
+		if (existing_key(main, token.command[i]))
+			update_variable(main, token.command[i]);
+		else
+			add_variable(main, token.command[i]);
+		i++;
 	}
-	if (existing_key(main, var))
-		update_variable(main, var);
-	else
-		add_variable(main, var);
 }
 
-void	unset(t_main *main, char *var_key)
+void	unset(t_main *main, t_tokens token)
 {
 	t_list	*node;
 	char	*joined_str;
+	int		i;
 
-	if (ft_strchr(var_key, '=') != NULL)
+	i = 1;
+	while (token.command[i] != NULL)
 	{
-		printf("invalid parameter name\n");
-		return ;
+		if (ft_strchr(token.command[i], '=') != NULL)
+		{
+			printf("invalid parameter name\n");
+			return ;
+		}
+		joined_str = ft_strjoin(token.command[i], "=");
+		if (joined_str == NULL)
+		{
+			//error;	TODO
+			exit(1);
+		}
+		node = find_node(main, joined_str);
+		if (node == NULL)
+		{
+			free(joined_str);
+			return ;
+		}
+		remove_variable(main, joined_str);
+		free(joined_str);
+		i++;
 	}
-	joined_str = ft_strjoin(var_key, "=");
-	if (joined_str == NULL)
-	{
-		//error;	TODO
-		exit(1);
-	}
-	node = find_node(main, joined_str);
-	if (node == NULL)
-		return ;
-	remove_variable(main, joined_str);
-	free(joined_str);
 }
