@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 11:21:19 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/09/26 16:51:04 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/10/07 13:38:44 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,10 @@
 # include <stdbool.h>
 # include <readline/readline.h>
 # include <readline/history.h>
+# include <sys/wait.h>
+# include <fcntl.h>
+# include <errno.h>
+# include <sys/stat.h>
 
 /**
  * char		*input;
@@ -193,16 +197,105 @@ void	remove_variable(t_main *main, char *variable_key);
 	//BUILTINS
 /*****************************************************************************/
 
+/**
+ * Prints the words after echo. If flag -n is given, does not print the newline
+ * after last word.'
+ * 
+ * @param command list of command and its options
+ */
 void    echo(char **command);
 
+/**
+ * Checks if the given key is already in the env list.
+ * 
+ * @param main the main struct of the program
+ * @param var a variable in form VAR=value
+ * @returns 1 when key was found, 0 when not found
+ */
 int		existing_key(t_main *main, char *var);
 
+/**
+ * Checks if the key of the variable to export has forbidden characters or in
+ * forbidden form. I.e. a key kan only contain digits, letters and '_'. Digits
+ * can not be in the beginning.
+ * 
+ * @param var the variable in form VAR=value
+ * @returns 1 if key is forbidden, 0 if key is ok
+ */
 int		forbidden_key(char *var);
 
-void	export(t_main *main, char *var);
+/**
+ * Exports a variable of form VAR=value to the env list
+ * 
+ * @param main the main struct of the program
+ * @param token the token to be executed
+ */
+void	export(t_main *main, t_tokens token);
 
-void	unset(t_main *main, char *var_key);
+/**
+ * Unsets a variable from the env list.
+ * 
+ * @param main the main struct of the program
+ * @param token the token to be executed
+ */
+void	unset(t_main *main, t_tokens token);
 
+/**
+ * Prints the current working directory
+ */
 void	pwd(void);
+
+/*****************************************************************************/
+	//EXECUTION
+/*****************************************************************************/
+
+/**
+ * Executes one commandline, by creating the necessary pipes and forking into
+ * childprocesses when applicable. 
+ * 
+ * @param main the main struct of the program
+ * @param tokens array of tokens to execute
+ * @returns the exitstatus of the last executable
+ */
+int	execute_commandline(t_main *main, t_tokens *tokens);
+
+/**
+ * Closes the necessary pipe-filedescriptors depending on the executed commands
+ * position in the command line.
+ * 
+ * @param i index of the command executed in commandline
+ * @param num_of_pipes number of pipes left in commandline
+ * @param pipe_left array of filedescriptors for the left-hand side pipe of command
+ * @param pipe_right array of filedescriptors for the right-hand side pipe of command
+ */
+void	close_pipes_in_parent(int i, int num_of_pipes, int *pipe_left, int *pipe_right);
+
+/**
+ * Finds path to the command and execues it with execve
+ * 
+ * @param main the main struct of the program
+ * @param token  the token to execute
+ */
+void	execute_command(t_main *main, t_tokens token);
+
+int	execute_builtin(t_main *main, t_tokens token);
+
+char	*find_path(t_main *main, char *command);
+
+char	*get_path_variable(t_main *main);
+
+char	**get_split_paths(char *path_variable);
+
+int	set_path_if_executable(char *env_path, char *command, char **command_path);
+
+char	*get_path(t_main *main, char **command);
+
+int	empty_command(char *command);
+
+int	is_direcotory(char *command);
+
+int	is_path_to_executable(char *command);
+
+int	is_path_to_file(char *command);
 
 #endif

@@ -2,13 +2,26 @@
     Responsibilities of Execution
 -------------------------------------------------
 
-- loops through all the command in the commandline      //make sure that if a command is dependet on some other commands
-                                                        //output that they are executed in the right order
-    - creates pipe
+(Execution gets the main struct that holds
+    -the number of pipes, 
+    - the exit code and
+    - the environment-list.
+Execution also gets the array of tokens (commands),
+every token holds
+    - the in- and outfiles, and
+    - name of executable and its arguments
+)
+
+- loops through all the commands in the commandline
+    - creates pipe if main->pipes > 0
     - creates fork
     - executes (or sets correct errno and exits that process)
+        - checks here if command is a builtin or not
+            - if builtin, call that builtins function to execute it and then exit that process
+            - if 'normal' command, make sure to get the path and execute with execve
     - returns the last processes exit
     //basically pipex
+    //we do not need to have firstchild, middlechild and lastchild right?
 
 -------------------------------------------------
     Errors
@@ -45,7 +58,7 @@
         exit = 127
     - CASE: command is a path
         - CASE: file exists
-            - CASE: but is a directory (not executable)
+            - CASE: but is a directory (not executable)     //this does not work correctly in my pipex
                 errno = 21 (EISDIR)
                 message = is a directory
                 exit = 126
@@ -66,3 +79,11 @@
             errno = 127
             message = command not found
             exit = 127
+
+-------------------------------------------------
+    Questions
+-------------------------------------------------
+
+- so we will remove (*tokens)[i].redirect_heredoc = false; ?
+    - and also heredoc delimiter, if it is done in parsing?
+- how does execute know if outfile is STDOUT or a pipe? Same with infile?

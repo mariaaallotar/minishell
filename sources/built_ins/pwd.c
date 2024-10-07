@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 10:33:16 by maheleni          #+#    #+#             */
-/*   Updated: 2024/09/26 10:56:45 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/10/01 14:56:18 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,10 @@ void	pwd(void)
 		}
 		buf = getcwd(buf, size);
 		if (buf == NULL)
+		{
+			free(buf);
 			size *= 2;
+		}
 		else
 			break ;
 	}
