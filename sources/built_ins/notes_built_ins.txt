@@ -27,6 +27,9 @@ exeution:
 
 cd ----------------------------------------------
 
+- note: cd can not be executed in the child process since the changes will
+    not be made in the main program
+
 - absolute path:
     - /home/user/documents
     - /var/log
@@ -62,12 +65,16 @@ exit
 
 unset -------------------------------------------
 
+- this needs to happen in parent process so that env_list is actually modified (in parent)
 - unset kan only take VAR not VAR=
 	- VAR= gives 
 		unset: VAR7=: invalid parameter name
         TODO
-
-
+        
 export ------------------------------------------
 
 - export VAR=hello VAR1=world VAR2=!        -exports all variables //TODO
+- this needs to happen in parent process so that env_list is actually modified (in parent)
+
+
+

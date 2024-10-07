@@ -194,16 +194,52 @@ void	remove_variable(t_main *main, char *variable_key);
 	//BUILTINS
 /*****************************************************************************/
 
+/**
+ * Prints the words after echo. If flag -n is given, does not print the newline
+ * after last word.'
+ * 
+ * @param command list of command and its options
+ */
 void    echo(char **command);
 
+/**
+ * Checks if the given key is already in the env list.
+ * 
+ * @param main the main struct of the program
+ * @param var a variable in form VAR=value
+ * @returns 1 when key was found, 0 when not found
+ */
 int		existing_key(t_main *main, char *var);
 
+/**
+ * Checks if the key of the variable to export has forbidden characters or in
+ * forbidden form. I.e. a key kan only contain digits, letters and '_'. Digits
+ * can not be in the beginning.
+ * 
+ * @param var the variable in form VAR=value
+ * @returns 1 if key is forbidden, 0 if key is ok
+ */
 int		forbidden_key(char *var);
 
-void	export(t_main *main, char *var);
+/**
+ * Exports a variable of form VAR=value to the env list
+ * 
+ * @param main the main struct of the program
+ * @param token the token to be executed
+ */
+void	export(t_main *main, t_tokens token);
 
-void	unset(t_main *main, char *var_key);
+/**
+ * Unsets a variable from the env list.
+ * 
+ * @param main the main struct of the program
+ * @param token the token to be executed
+ */
+void	unset(t_main *main, t_tokens token);
 
+/**
+ * Prints the current working directory
+ */
 void	pwd(void);
 
 /*****************************************************************************/

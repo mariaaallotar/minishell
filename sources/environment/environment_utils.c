@@ -66,6 +66,7 @@ void	remove_variable(t_main *main, char *variable_key)
 
 	key_len = ft_strlen(variable_key);
 	current_node = main->env_list;
+	previous_node = NULL;
     while (ft_strncmp(current_node->content, variable_key, key_len))
 	{
 		previous_node = current_node;
@@ -74,7 +75,10 @@ void	remove_variable(t_main *main, char *variable_key)
 	next_node = current_node->next;
 	free(current_node->content);
 	free(current_node);
-	previous_node->next = next_node;
+	if (previous_node == NULL)
+		main->env_list = next_node;
+	else
+		previous_node->next = next_node;
 }
 
 t_list	*copy_env(char *envp[], t_main *main)
