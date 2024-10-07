@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 10:33:07 by maheleni          #+#    #+#             */
-/*   Updated: 2024/10/02 12:53:53 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/10/02 13:54:03 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,10 +55,8 @@ int	forbidden_key(char *var)
 
 void	export(t_main *main, t_tokens token)
 {
-	int	i;
-
-	i = 1;
-	while (token.command[i] != NULL)
+	//TODO how does export work without any arguments
+	if (forbidden_key(var))
 	{
 		if (forbidden_key(token.command[i]))
 		{

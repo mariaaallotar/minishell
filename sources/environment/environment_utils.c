@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 14:37:05 by maheleni          #+#    #+#             */
-/*   Updated: 2024/09/26 12:47:10 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/10/01 13:56:23 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void    free_environment(t_list **env_list)
 	}
 }
 
-t_list	*find_node(t_main *main, char *variable)
+t_list	*find_node(t_main *main, char *variable)	//TODO maybe change param main to just take a linked_list?
 {
 	int		key_len;
 	t_list	*current_node;

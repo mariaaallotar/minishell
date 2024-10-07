@@ -3,19 +3,10 @@
 -------------------------------------------------
 
 - parses one commandline into tokens
+- if the command line has several parts that 
 - if the first token is 'exit' exits minishell
         //TODO is there any other case where the program does not proceed?
-- organises those tokens into a datastructure
-        //TODO what is that datastucture?
-        //does it make to have a struct like this:
-        //  struct command
-        //  {
-        //      name_of_command
-        //      flag
-        //      infile
-        //      outfile
-        //  }
-        //how would we then handle the expansion (?) of 
+- organises those tokens into an array of tokens structs
 - expands $VARs
 
 -------------------------------------------------
@@ -24,7 +15,7 @@
 
 Basic -------------------------------------------
 
-ls					-	
+ls				
 ls -a				-"ls" "-a" are two seperate tokens?
 ls -l -a			-two flags seperate (same outcome as: ls -la)
 ls -la      		-two flags in one (same outcome as: ls -l -a)
@@ -84,8 +75,8 @@ export
 
 Pipes -------------------------------------------
 
-ls | wc								-basic pipe
-< infile cat | wc > outfile			-pipex imitation
+ls | wc				        -basic pipe
+< infile cat | wc > outfile		-pipex imitation
 < infile cat | wc >> outfile		->> appends the outfile instead of overwrite
 < infile notcat | ls > outfile		-pipex bad command
 < infile sleep 10 | ls > outfile	-pipex sleep test
@@ -117,6 +108,13 @@ Heredoc -----------------------------------------
 
 << cat | wc		-Basic heredoc
 grep "Hello World" << end   -heredoc in the middle (as any file)
+<< end << x cat         -cat only outputs the things written after end and before x
+<< end | cat            - does not print anything, but reads heredoc
+cat << END
+ > $var1
+ > $var2
+ > $PWD
+ > END                  - prints the expanded values
 
 Variables ---------------------------------------
 
@@ -137,48 +135,143 @@ cat<<<Makefile			-<<< is it's own special character that we DO NOT need to handl
 < infile cat < infile 	-cats infile twice (DONT HANDLE THIS SHIT just make sure it doesnt seg fault)
 
 
+Whyyy?-cases ------------------------------------
+
+
+    ONLY IN ZSH:
+            c1r4p6% ls > outfile | cat      - redirect_out and pipe
+            includes
+            libft
+            Makefile
+            minishell
+            notes_general.txt
+            objects
+            outfile
+            sources
+            c1r4p6% cat outfile 
+            includes
+            libft
+            Makefile
+            minishell
+            notes_general.txt
+            objects
+            outfile
+            sources
+
+
+
+            c1r4p6% ls > outfile | < TODO cat         - riderect_out, pipe and redirect_in
+            includes
+            libft
+            Makefile
+            minishell
+            notes_general.txt
+            objects
+            outfile
+            sources
+            - live dit in vs code? //SPECIAL GERMAN TALK
+            leave this in the vs code //ENGLISH TALK <- this is not what I wrote!!
+
+
+            TOMORROW FRIDAY:
+            - merge
+            - do something
+            -remove get_next_line and printf from libft?%
 
 
 
 
+            c1r4p6% ls > outfile1 > outfile2 | cat          -there can be however many redirects for the same command
+            includes
+            libft
+            Makefile
+            minishell
+            notes_general.txt
+            objects
+            outfile
+            outfile1
+            outfile2
+            sources
+            TODO
+            c1r4p6% cat outfile1
+            includes
+            libft
+            Makefile
+            minishell
+            notes_general.txt
+            objects
+            outfile
+            outfile1
+            outfile2
+            sources
+            TODO
+            c1r4p6% cat outfile2
+            includes
+            libft
+            Makefile
+            minishell
+            notes_general.txt
+            objects
+            outfile
+            outfile1
+            outfile2
+            sources
+            TODO
+            c1r4p6%
+    
+    IN BASH:
+            maheleni@c2r4p3:~/Documents/42cursus$ ls > outfile1 | cat           -redirect out overrides pipe
+            maheleni@c2r4p3:~/Documents/42cursus$ cat outfile1 
+            fdf
+            ft_printf
+            get_next_line
+            hiekkalaatikko
+            libft
+            minishell
+            minishell (copy)
+            outfile1
+            pipex
+            push_swap
 
 
+            maheleni@c2r4p3:~/Documents/42cursus$ ls > out1 > out2              -the last redirect out overwrites the previous riderects
+            maheleni@c2r4p3:~/Documents/42cursus$ cat out1                      -but we still need to save all redirect files since they
+            maheleni@c2r4p3:~/Documents/42cursus$ cat out2                      -need to be created and possibly truncated, or does that happen in parsing?
+            fdf
+            ft_printf
+            get_next_line
+            hiekkalaatikko
+            libft
+            minishell
+            minishell (copy)
+            out1
+            out2
+            pipex
+            push_swap
+            maheleni@c2r4p3:~/Documents/42cursus$ rm out1
+            maheleni@c2r4p3:~/Documents/42cursus$ rm out2 
+            maheleni@c2r4p3:~/Documents/42cursus$ ls > out1 | cat
+            maheleni@c2r4p3:~/Documents/42cursus$ cat out1 
+            fdf
+            ft_printf
+            get_next_line
+            hiekkalaatikko
+            libft
+            minishell
+            minishell (copy)
+            out1
+            pipex
+            push_swap
+            maheleni@c2r4p3:~/Documents/42cursus$ 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+            maheleni@c1r4p4:~/Documents/42cursus/minishell$ ls -l | < outfile cat   -redirect in overrides pipe
+            includes
+            libft
+            Makefile
+            minishell
+            notes_general.txt
+            objects
+            outfile
+            sources
+            TODO

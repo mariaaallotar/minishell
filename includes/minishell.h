@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 11:21:19 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/10/02 12:54:49 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/10/02 13:54:05 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,10 @@
 # include <stdbool.h>
 # include <readline/readline.h>
 # include <readline/history.h>
+# include <sys/wait.h>
+# include <fcntl.h>
+# include <errno.h>
+# include <sys/stat.h>
 
 /**
  * char		*input;
@@ -237,5 +241,58 @@ void	unset(t_main *main, t_tokens token);
  * Prints the current working directory
  */
 void	pwd(void);
+
+/*****************************************************************************/
+	//EXECUTION
+/*****************************************************************************/
+
+/**
+ * Executes one commandline, by creating the necessary pipes and forking into
+ * childprocesses when applicable. 
+ * 
+ * @param main the main struct of the program
+ * @param tokens array of tokens to execute
+ * @returns the exitstatus of the last executable
+ */
+int	execute_commandline(t_main *main, t_tokens *tokens);
+
+/**
+ * Closes the necessary pipe-filedescriptors depending on the executed commands
+ * position in the command line.
+ * 
+ * @param i index of the command executed in commandline
+ * @param num_of_pipes number of pipes left in commandline
+ * @param pipe_left array of filedescriptors for the left-hand side pipe of command
+ * @param pipe_right array of filedescriptors for the right-hand side pipe of command
+ */
+void	close_pipes_in_parent(int i, int num_of_pipes, int *pipe_left, int *pipe_right);
+
+/**
+ * Finds path to the command and execues it with execve
+ * 
+ * @param main the main struct of the program
+ * @param token  the token to execute
+ */
+void	execute_command(t_main *main, t_tokens token);
+
+int	execute_builtin(t_main *main, t_tokens token);
+
+char	*find_path(t_main *main, char *command);
+
+char	*get_path_variable(t_main *main);
+
+char	**get_split_paths(char *path_variable);
+
+int	set_path_if_executable(char *env_path, char *command, char **command_path);
+
+char	*get_path(t_main *main, char **command);
+
+int	empty_command(char *command);
+
+int	is_direcotory(char *command);
+
+int	is_path_to_executable(char *command);
+
+int	is_path_to_file(char *command);
 
 #endif

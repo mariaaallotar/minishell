@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 10:12:47 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/09/26 13:46:25 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/10/02 10:18:05 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void	initialize_variables(t_main *main, t_tokens **tokens)
 int	main(int argc, char *argv[], char *envp[]) //what happens if ./minishell gets arguments?
 {	
 	t_main 	main;
-	t_tokens *tokens;
+	t_tokens *tokens;		//why is tokens array not in main struct?
 
 	(void)argc;
 	(void)*argv;
@@ -44,9 +44,8 @@ int	main(int argc, char *argv[], char *envp[]) //what happens if ./minishell get
 	{
 		handle_inputs(&main.input);
 		parsing(&main, &tokens);
-		//apply_commands_in_tree();
+		execute_commandline(&main, tokens);
 		//set_exit_status_of_last_line();
-		break;
 	}
 	if (main.input)
 		free(main.input);

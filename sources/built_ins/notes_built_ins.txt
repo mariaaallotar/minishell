@@ -10,6 +10,7 @@
     ◦ unset with no options		DONE?
     ◦ env with no options or arguments
     ◦ exit with no options
+- exits all those processes if everything was ok
 
 -------------------------------------------------
     Notes
@@ -18,7 +19,7 @@
 echo --------------------------------------------
 
 - without flags: print WITH newline at end
-- with flag -n: print WITHOUT newline at end
+- with flag -n or -nnnnnnnnnnnnnnnn...: print WITHOUT newline at end        //TODO
 
 exeution:
 - if string after echo is equal to "-n " or "-n\n" print without newline
@@ -49,6 +50,18 @@ pwd ---------------------------------------------
 exit --------------------------------------------
 
 - ethan is an exit master and can be trusted with decisions and builtins and everything
+- has ethan checked that exit can take an exitcode?
+
+//TODO
+maheleni@c2r4p3:~/Documents/42cursus/minishell$ echo hello | exit > exitfile        - exit as part of child process exits that child process, but does not output exit 
+maheleni@c2r4p3:~/Documents/42cursus/minishell$ cat exitfile 
+maheleni@c2r4p3:~/Documents/42cursus/minishell$ 
+
+maheleni@c2r4p3:~/Documents/42cursus/minishell$ exit | echo hello
+hello
+maheleni@c2r4p3:~/Documents/42cursus/minishell$ exit
+exit
+
 
 unset -------------------------------------------
 
@@ -57,7 +70,11 @@ unset -------------------------------------------
 	- VAR= gives 
 		unset: VAR7=: invalid parameter name
         TODO
-
+        
 export ------------------------------------------
 
+- export VAR=hello VAR1=world VAR2=!        -exports all variables //TODO
 - this needs to happen in parent process so that env_list is actually modified (in parent)
+
+
+

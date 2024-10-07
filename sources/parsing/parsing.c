@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 11:32:36 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/09/26 11:56:03 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/10/01 11:41:54 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,8 +118,8 @@ int	parsing(t_main *main, t_tokens **tokens)
 	free_and_null_split_input(main);
 
 	//Temporary free and null
-	free_command_token(main, tokens); //REMOVE
-	free(*tokens); //REMOVE
+	//free_command_token(main, tokens); //REMOVE
+	//free(*tokens); //REMOVE
 	
 	return (1);
 }
