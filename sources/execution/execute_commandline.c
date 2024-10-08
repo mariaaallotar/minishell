@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 10:33:14 by maheleni          #+#    #+#             */
-/*   Updated: 2024/10/07 15:42:34 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/10/08 15:46:18 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,40 +112,97 @@ void	execute_command(t_main *main, t_tokens token)
 	}
 }
 
-void	handle_outfile(t_tokens token, int* pipe_left)
+void	dup2_outfile(t_tokens token)
 {
-	
+	int				outfile;
+	t_redirect_node	node;
+
+	node = token.outfiles;
+	while (node != NULL)
+	{
+		if (node.type == OUTFILE)
+			outfile = open(node.name, O_WRONLY | O_TRUNC | O_CREAT, 0644);
+		else if (node.type == APPEND)
+			outfile = open(node.name, O_WRONLY | O_APPEND | O_CREAT, 0644);		//CHECK THAT IS CORRECT
+		if (outfile == -1)
+		{
+			perror("In handle outfile");
+			exit(1);
+		}
+		node = node.next;
+	}
+	if (dup2(outfile, STDIN_FILENO) == -1)
+	{
+		perror("dup2");
+		//TODO is this correct?
+		exit(1);
+	}
+	close(outfile);
+}
+
+void	handle_outfile(t_tokens token, int* pipe_right)
+{
+	int	outfile;
+
+	if (pipe_right != NULL)
+	{
+		if (dup2(pipe_right[1], STDOUT_FILENO) == -1)
+		{
+			perror("dup2");
+			//TODO is this correct?
+			exit(1);
+		}
+		close(pipe_right[0]);
+		close(pipe_right[1]);
+	}
+	if (token.outfiles != NULL)
+		dup2_outfile(token);
+}
+
+int	dup2_infile(t_tokens token)
+{
+	int	infile;
+	t_redirect_node	node;
+
+	node = token.infiles;
+	while(node != NULL)
+	{
+		if (node != token.infiles)
+			close(infile);
+		infile = open(node, O_RDONLY);
+		if (infile == -1)
+		{
+			//TODO handle error
+			printf("Open error\n");
+			exit(1);
+		}
+		node = node.next;
+	}
+	if (dup2(infile, STDIN_FILENO) == -1)
+	{
+		perror("dup2");
+		//TODO is this correct?
+		exit(1);
+	}
+	close(infile);
 }
 
 void	handle_infile(t_tokens token, int* pipe_left)
 {
-	int	infile;
-	int	i;
-
 	if (pipe_left != NULL)
 	{
-		dup2(pipe_left[0], STDIN_FILENO);
+		if (dup2(pipe_left[0], STDIN_FILENO) == -1)
+		{
+			perror("dup2");
+			//TODO is this correct?
+			exit(1);
+		}
 		close(pipe_left[0]);
 		close(pipe_left[1]);
 	}
-	i = 0;
-	if (token.redirect_in[i] != NULL)
+	if (token.infiles != NULL)
 	{
-		while(token.redirect_in[i] != NULL)
-		{
-			if (i > 0)
-				close(infile);
-			infile = open(token.redirect_in[i], O_RDONLY);
-			if (infile == -1)
-			{
-				//TODO handle error
-				printf("Open error\n");
-				exit(1);
-			}
-			i++;
-		}
-		dup2(infile, STDIN_FILENO);
-		close(infile);
+		dup2_infile(token);
 	}
 }
 
@@ -163,64 +220,121 @@ void	close_pipes_in_parent(int i, int num_of_pipes, int *pipe_left, int *pipe_ri
 	}
 }
 
+void	handle_infile_and_outfile(int i, int num_of_pipes, int **pipe_array, t_tokens token)
+{
+	if (i == 0 && num_of_pipes == 0)
+	{
+		handle_infile(token, NULL);
+		handle_outfile(token, NULL);
+	}
+	else if (i > 0 && num_of_pipes == 0)
+	{
+		handle_infile(token, pipe_array[0]);
+		handle_outfile(token, NULL);
+	}
+	else if (i == 0)
+	{
+		handle_infile(token, NULL);
+		handle_outfile(token, pipe_array[1]);
+	}
+	else
+	{
+		handle_infile(token, pipe_array[0]);
+		handle_outfile(token, pipe_array[1]);
+	}
+}
+
+int	*malloc_pids(int amount)
+{
+	int	*pids;
+
+	pids = malloc ((amount) * sizeof(int));
+	if (pids == NULL)
+	{
+		perror(NULL);
+		exit(1);
+	}
+	return (pids);
+}
+
+void	create_pipe(int **pipe_array)
+{
+	if (pipe(pipe_array[1]) == -1)
+	{
+		//some error
+		printf("Pipe error\n");
+		exit(1);
+	}
+}
+
+int	create_fork(void)
+{
+	int	pid;
+
+	pid = fork();
+	if (pid == -1)
+	{
+		printf("Fork error\n");
+		//error(NULL);
+		exit(1);
+	}
+	return (pid);
+}
+
+void	execute_child_process(t_main *main, t_tokens token)
+{
+	int	status;
+
+	if (is_builtin(token))
+	{
+		printf("Executing builtin in childprocess\n");
+		status = execute_builtin(main, token);
+		exit(status);
+	}
+	execute_command(main, token);
+}
+
+void	reassign_pipe(int **pipe_array)
+{
+	pipe_array[0][0] = pipe_array[1][0];
+	pipe_array[0][1] = pipe_array[1][1];
+}
+
 int	execute_commandline(t_main *main, t_tokens *tokens)
 {
-	int	pipe_left[2];
-	int	pipe_right[2];
+	int	pipe_array[2][2];
 	int	*pids;
 	int	num_of_pipes;
 	int	i;
 	int	status;		//just main->exit_code?
 
 	num_of_pipes = main->num_of_pipes;
-	pids = malloc ((num_of_pipes + 1) * sizeof(int));
+	pids = malloc_pids(num_of_pipes + 1);
 	i = 0;
 	while (num_of_pipes >= 0)
 	{
 		if (is_builtin(tokens[i]) && num_of_pipes == 0 && i == 0)
 		{
-			printf("Executing builtin in parent\n");
 			handle_infile(tokens[i], NULL);
 			handle_outfile(tokens[i], NULL);
+			printf("Executing builtin in parent\n");
 			execute_builtin(main, tokens[i]);
 		}
 		else
 		{
 			if (i > 0)
-			{
-				pipe_left[0] = pipe_right[0];
-				pipe_left[1] = pipe_right[1];
-			}
+				reassign_pipe(pipe_array);
 			if (num_of_pipes > 0)
-			{
-				if (pipe(pipe_right) == -1)
-				{
-					//some error
-					printf("Pipe error\n");
-					exit(1);
-				}
-			}
-			pids[i] = fork();
-			if (pids[i] == -1)
-			{
-				printf("Fork error\n");
-				//error(NULL);
-				exit(1);
-			}
+				create_pipe(pipe_array);
+			pids[i] = create_fork();
 			if (pids[i] == 0)
-			{		//TODO where and when does in- and output duping happen?
-				if (is_builtin(tokens[i]))
-				{
-					printf("Executing builtin in childprocess\n");
-					status = execute_builtin(main, tokens[i]);
-					exit(status);
-				}
-				handle_in_and_out_files(tokens[i]);
-				execute_command(main, tokens[i]);
+			{
+				handle_infile_and_outfile(i, num_of_pipes, pipe_array, tokens[i]);
+				execute_child_process(main, tokens[i]);
 			}
 			else
 			{
-				close_pipes_in_parent(i, num_of_pipes, pipe_left, pipe_right);
+				close_pipes_in_parent(i, num_of_pipes, pipe_array[0], pipe_array[1]);
 				printf("Pipes closed\n");
 			}
 		}
