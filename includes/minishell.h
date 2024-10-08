@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 11:21:19 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/10/07 13:38:44 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/10/08 15:00:47 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,12 @@
 # include <errno.h>
 # include <sys/stat.h>
 
+#define INFILE 100
+#define HEREDOC 101
+#define OUTFILE 102
+#define APPEND 103
+
+
 /**
  * char		*input;
  * char		**split_input;
@@ -38,14 +44,25 @@ typedef struct s_main
 	int 	num_of_pipes;
 } t_main;
 
+typedef struct s_redirect_node t_redirect_node;
+
+struct s_redirect_node
+{
+	char *name;
+	int type;
+	t_redirect_node *next;
+};
+
 typedef struct s_tokens
 {
 	char	**command;
 	char	**heredoc_delimiter;
-	char	**redirect_in;
-	char	**redirect_out;
-	bool    redirect_heredoc;
-	char	**redirect_append;
+	//char	**redirect_in;
+	//char	**redirect_out;
+	//bool    redirect_heredoc;
+	//char	**redirect_append;
+	t_redirect_node *infiles;
+	t_redirect_node *outfiles;
 }	t_tokens;
 
 /*****************************************************************************/
@@ -84,7 +101,7 @@ void add_single_quotes_element(t_main *main, char *input, int *id_input, int id_
 void add_double_quotes_element(t_main *main, char *input, int *id_input, int id_split);
 
 //Add special character elements to the split_input array
-void add_special_character_element(t_main *main, char *input, int *i, int split_index);
+void add_redirect_element(t_main *main, char *input, int *i, int split_index);
 
 //Checks for an exit command and exit-code and exits if found or shows error for incorrect format
 void	exit_command(t_main *main);

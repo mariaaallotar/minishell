@@ -6,13 +6,13 @@
 #    By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/20 15:07:12 by eberkowi          #+#    #+#              #
-#    Updated: 2024/10/07 13:38:53 by eberkowi         ###   ########.fr        #
+#    Updated: 2024/10/07 13:51:28 by eberkowi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME := minishell
 CC := cc -g
-FLAGS := -Wall -Wextra -Werror -fsanitize=address
+FLAGS := -Wall -Wextra -Werror
 LINKFLAGS := -lreadline
 
 CFILES := main.c \

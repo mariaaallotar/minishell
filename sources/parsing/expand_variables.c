@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 16:50:02 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/09/26 17:09:26 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/10/07 14:24:14 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,9 +59,6 @@ static void find_var_and_remalloc(t_main *main, int i, char *env[])
 		j++;
 	}
 }
-
-//LEft off here. Need to now "delete" an element in split_input if
-//the $VAR does not exist in env :(
 
 void expand_variables(t_main *main)
 {
