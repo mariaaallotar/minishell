@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 11:39:13 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/09/18 11:41:46 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/10/08 11:19:45 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ static size_t get_quote_element_length(char *element, char c)
 	return (result);
 }
 
-void add_special_character_element(t_main *main, char *input, int *i, int split_index)
+void add_redirect_element(t_main *main, char *input, int *i, int split_index)
 {
 	//check for << and >>
 	if ((input[*i] == '<' && input[*i + 1] == '<') ||
@@ -46,7 +46,7 @@ void add_special_character_element(t_main *main, char *input, int *i, int split_
 	{
 		main->split_input[split_index] = malloc(2);
 		if (!main->split_input[split_index])
-		exit_free_split_element_malloc_failed(main, split_index); //TODO check this memory
+			exit_free_split_element_malloc_failed(main, split_index); //TODO check this memory
 		main->split_input[split_index][0] = input[*i];
 		main->split_input[split_index][1] = '\0';
 		*i += 1;

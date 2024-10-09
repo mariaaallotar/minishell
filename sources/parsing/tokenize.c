@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 10:23:05 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/09/26 11:55:21 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/10/08 10:39:26 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,8 @@ static void check_for_pipe_error(t_main *main, t_tokens **tokens)
 	}
 }
 
+//Need to change redirect tokens to array of strings to hold multiple infiles/outfiles
+
 void tokenize(t_main *main, t_tokens **tokens)
 {
 	int cmd_id;
@@ -40,18 +42,14 @@ void tokenize(t_main *main, t_tokens **tokens)
 	spl_id = 0;
 	while (cmd_id < main->num_of_pipes + 1)
 	{
-		//printf("# 1 cmd_id = %d, spl_id = %d\n", cmd_id, spl_id); //REMOVE
 		add_in_or_heredoc(main, tokens, cmd_id, &spl_id);
-		//printf("# 2 cmd_id = %d, spl_id = %d\n", cmd_id, spl_id); //REMOVE
 		add_out_or_append(main, tokens, cmd_id, &spl_id);
-		//printf("# 3 cmd_id = %d, spl_id = %d\n", cmd_id, spl_id); //REMOVE
 		add_command(main, tokens, cmd_id, &spl_id);
-		//printf("# 4 cmd_id = %d, spl_id = %d\n", cmd_id, spl_id); //REMOVE
 		if (!main->split_input[spl_id] || main->split_input[spl_id][0] == '|')
 		{
 			cmd_id++;
 			spl_id++;
-		}	
+		}
 	}
 	//TODO function for expanding heredocs with a temp_file that holds the input
 }

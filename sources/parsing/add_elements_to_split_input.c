@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 11:56:14 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/09/18 13:01:19 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/10/08 13:13:19 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,31 @@ static void add_regular_element(t_main *main, char *input, int *id_input, int id
 	main->split_input[id_split][i] = '\0';
 }
 
+static void check_for_bonus_symbols_in_front(t_main *main, char *input, int id_input, int id_split)
+{
+	if ((input[id_input] == '|' && input[id_input + 1] == '|')
+		|| input[id_input] == '&' || input[id_input] == '*')
+	{
+		printf("Error: Invalid symbol\n");
+		exit_free_split_element_malloc_failed(main, id_split - 1);
+	}
+}
+
+static void check_for_bonus_symbols_in_middle(t_main *main, char *input, int id_input, int id_split)
+{
+	while (input[id_input] && input[id_input] != ' ' 
+		&& input[id_input] != '\t')
+	{
+		if ((input[id_input] == '|' && input[id_input + 1] == '|') 
+			|| input[id_input] == '&' || input[id_input] == '*')
+		{
+			printf("Error: Invalid symbol\n");
+			exit_free_split_element_malloc_failed(main, id_split - 1);
+		}
+		id_input++;
+	}
+}
+
 void	add_elements_to_split_input(t_main *main, char *input)
 {
 	int id_split;
@@ -68,14 +93,18 @@ void	add_elements_to_split_input(t_main *main, char *input)
 	{
 		while (input[id_input] && (input[id_input] == ' ' || input[id_input] == '\t'))
 			id_input++;
+		check_for_bonus_symbols_in_front(main, input, id_input, id_split);
 		if (input[id_input] == '\"')
 			add_double_quotes_element(main, input, &id_input, id_split);
 		else if (input[id_input] == '\'')
 			add_single_quotes_element(main, input, &id_input, id_split);
 		else if (is_special(input[id_input]))
-			add_special_character_element(main, input, &id_input, id_split);
+			add_redirect_element(main, input, &id_input, id_split);
 		else
+		{
+			check_for_bonus_symbols_in_middle(main, input, id_input, id_split);
 			add_regular_element(main, input, &id_input, id_split);
+		}
 		id_split++;
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 11:19:25 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/09/18 12:07:45 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/10/08 11:18:09 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ static int	get_split_length(t_main *main, char *input)
 static int	malloc_split_input_array(t_main *main)
 {
 	int split_length;
-	
+
 	split_length = 0;
 	if (main->input)
 		split_length = get_split_length(main, main->input);
@@ -109,7 +109,6 @@ static int	malloc_split_input_array(t_main *main)
 		main->split_input[split_length] =  NULL;
 		split_length--;
 	}
-
 	return (1);
 }
 
