@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/25 10:37:36 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/09/26 11:52:55 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/10/08 10:16:51 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,9 @@ static int count_elements_in_command(t_main *main, int spl_id)
 	result = 0;
 	while (main->split_input[spl_id] && !is_special(main->split_input[spl_id][0]))
 	{
+		if (main->split_input[spl_id][0] != '$')
+			result++;
 		spl_id++;
-		result++;
 	}
 	return (result);
 }
@@ -66,6 +67,8 @@ void add_command(t_main *main, t_tokens **tokens, int cmd_id, int *spl_id)
 	while (i < element_count)
 	{
 		(*tokens)[cmd_id].command[i] = NULL;
+		if (main->split_input[*spl_id][0] == '$')
+			(*spl_id)++;
 		if (is_quote((main->split_input[*spl_id])[0]))
 			(*tokens)[cmd_id].command[i] = strdup_with_remove_quotes(main->split_input[*spl_id]);
 		else

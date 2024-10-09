@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 10:12:47 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/10/02 10:18:05 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/10/08 15:16:03 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,9 @@ void	initialize_variables(t_main *main, t_tokens **tokens)
 
 //Maybe expand the VAR/heredoc in the split process! then you dont have to remalloc
 
+//Left off on linked lists. Need to add malloc checks, and need to add freeing of linked lists
+//to the exit_error functions
+
 int	main(int argc, char *argv[], char *envp[]) //what happens if ./minishell gets arguments?
 {	
 	t_main 	main;
@@ -39,15 +42,18 @@ int	main(int argc, char *argv[], char *envp[]) //what happens if ./minishell get
 	initialize_variables(&main, &tokens);
 	copy_env(envp, &main);
 	// update_env(&main);	//do we do this at all?
-	//create_signals();
+	// create_signals();
 	while (1)
 	{
 		handle_inputs(&main.input);
 		parsing(&main, &tokens);
-		execute_commandline(&main, tokens);
+		//execute_commandline(&main, tokens);
 		//set_exit_status_of_last_line();
+		free_and_null_split_input(&main);
+		free_command_token(&main, &tokens);
+		free(tokens);
 	}
-	if (main.input)
+	if (main.input) //REMOVE?
 		free(main.input);
 	free_environment(&(main.env_list));
 	//free_signals();
