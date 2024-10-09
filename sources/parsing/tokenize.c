@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 10:23:05 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/10/08 10:39:26 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/10/09 16:04:48 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ void tokenize(t_main *main, t_tokens **tokens)
 		{
 			cmd_id++;
 			spl_id++;
+			main->found_command = 0;
 		}
 	}
 	//TODO function for expanding heredocs with a temp_file that holds the input

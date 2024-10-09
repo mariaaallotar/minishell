@@ -6,7 +6,7 @@
 #    By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/20 15:07:12 by eberkowi          #+#    #+#              #
-#    Updated: 2024/10/07 13:51:28 by eberkowi         ###   ########.fr        #
+#    Updated: 2024/10/09 12:07:56 by eberkowi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,7 +19,6 @@ CFILES := main.c \
 		error_exit.c \
 		parsing/parsing.c \
 		parsing/split_input.c \
-		parsing/exit_parsing.c \
 		parsing/add_elements_to_split_input.c \
 		parsing/utilities.c \
 		parsing/add_quotes_and_special_elements.c \
@@ -28,6 +27,7 @@ CFILES := main.c \
 		parsing/redirect_tokens.c \
 		parsing/add_command_to_struct.c \
 		parsing/expand_variables.c \
+		parsing/linked_list_utils.c \
 		built_ins/exit_command.c \
 		environment/environment_utils.c \
 		environment/print_environment.c \

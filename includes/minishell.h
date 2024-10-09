@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 11:21:19 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/10/08 15:00:47 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/10/09 15:23:53 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ typedef struct s_main
 	t_list	*env_list;
 	int		exit_code;  //exit code of the exit command given by user?
 	int 	num_of_pipes;
+	int		found_command;
 } t_main;
 
 typedef struct s_redirect_node t_redirect_node;
@@ -57,10 +58,6 @@ typedef struct s_tokens
 {
 	char	**command;
 	char	**heredoc_delimiter;
-	//char	**redirect_in;
-	//char	**redirect_out;
-	//bool    redirect_heredoc;
-	//char	**redirect_append;
 	t_redirect_node *infiles;
 	t_redirect_node *outfiles;
 }	t_tokens;
@@ -116,7 +113,7 @@ int	is_redirect(char c);
 void free_and_exit_spl_and_cmd(t_main *main, t_tokens **command, int code);
 
 //Free the command_token utilizing ft_free_split
-void free_command_token(t_main *main, t_tokens **command);
+void free_token_commands(t_main *main, t_tokens **command);
 
 //Free command tokens, command struct, and split_input, then exit with given code
 void free_all_and_exit(t_main *main, t_tokens **command, int code);
@@ -144,6 +141,17 @@ void add_command(t_main *main, t_tokens **command, int cmd_id, int *spl_id);
 
 //Expand the environment variables
 void expand_variables(t_main *main);
+
+//Utilities for creating and adding elements to a linked list
+t_redirect_node	*lstnew_redirect_node(char *name, int type);
+t_redirect_node	*lstlast_redirect_node(t_redirect_node *lst);
+void lstadd_back_redirect_node(t_redirect_node **lst, t_redirect_node *new);
+
+//Free the redirect linked lists of the tokens
+void free_token_redirects(t_main *main, t_tokens **tokens);
+
+//Free everything if a linked list node fails to malloc
+void free_and_exit_node_malloc_failed(t_main *main, t_tokens **tokens);
 
 /*****************************************************************************/
 	//ENVIRONMENT
