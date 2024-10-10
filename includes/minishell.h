@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 11:21:19 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/10/09 15:23:53 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/10/10 14:22:05 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ typedef struct s_tokens
 /*****************************************************************************/
 
 //display prompt, readline, and save it in history
-void	handle_inputs(char **input);
+int	handle_inputs(char **input);
 
 //error and exit for failed malloc in readline
 int	error_exit_handle_input(void);
@@ -104,13 +104,13 @@ void add_redirect_element(t_main *main, char *input, int *i, int split_index);
 void	exit_command(t_main *main);
 
 //Our own kind of tokenizing function of the input
-void tokenize(t_main *main, t_tokens **command);
+int tokenize(t_main *main, t_tokens **command);
 
 //Utility to check for redirection (< or >)
 int	is_redirect(char c);
 
 //Free command struct, free split_input, and exit with the given code
-void free_and_exit_spl_and_cmd(t_main *main, t_tokens **command, int code);
+void free_spl_and_cmd(t_main *main, t_tokens **command);
 
 //Free the command_token utilizing ft_free_split
 void free_token_commands(t_main *main, t_tokens **command);
@@ -119,7 +119,7 @@ void free_token_commands(t_main *main, t_tokens **command);
 void free_all_and_exit(t_main *main, t_tokens **command, int code);
 
 //Checks for a syntax error where there are two redirects in a row or a redirect then NULL
-void check_for_redirect_error(t_main *main, t_tokens **command);
+int check_for_redirect_error(t_main *main, t_tokens **command);
 
 //Checks for and adds redirect_in and heredocs to the token struct
 void add_in_or_heredoc(t_main *main, t_tokens **command, int cmd_id, int *spl_id);

@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 10:12:47 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/10/09 15:48:53 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/10/10 15:14:05 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,20 +23,10 @@ void	initialize_variables(t_main *main, t_tokens **tokens)
 	main->found_command = 0;
 }
 
-//Does $VAR need to expand to an array of strings or just a string?
-//bash is able to execute something stored in a $, which implies that it's read as an array of strings
-//But if that's the case, wouldn't I need to perform a split parsing on the var itself similar to the
-//input split?
-
-//Maybe expand the VAR/heredoc in the split process! then you dont have to remalloc
-
-//Left off on linked lists. Need to add malloc checks, and need to add freeing of linked lists
-//to the exit_error functions
-
 int	main(int argc, char *argv[], char *envp[]) //what happens if ./minishell gets arguments?
 {	
 	t_main 	main;
-	t_tokens *tokens;		//why is tokens array not in main struct?
+	t_tokens *tokens;
 
 	(void)argc;
 	(void)*argv;
@@ -46,9 +36,11 @@ int	main(int argc, char *argv[], char *envp[]) //what happens if ./minishell get
 	// create_signals();
 	while (1)
 	{
-		handle_inputs(&main.input);
-		parsing(&main, &tokens);
-		//execute_commandline(&main, tokens);
+		if (!handle_inputs(&main.input))
+			continue;
+		if (parsing(&main, &tokens))
+			continue;
+		execute_commandline(&main, tokens);
 		//set_exit_status_of_last_line();
 		free_and_null_split_input(&main);
 		free_token_commands(&main, &tokens);

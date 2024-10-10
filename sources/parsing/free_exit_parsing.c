@@ -6,17 +6,16 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/24 10:44:31 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/10/09 15:25:44 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/10/10 15:13:40 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-void free_and_exit_spl_and_cmd(t_main *main, t_tokens **tokens, int code)
+void free_spl_and_cmd(t_main *main, t_tokens **tokens)
 {
 	ft_free_split(&main->split_input);
 	free(*tokens);
-	exit (code);	
 }
 
 void free_all_and_exit(t_main *main, t_tokens **tokens, int code)
