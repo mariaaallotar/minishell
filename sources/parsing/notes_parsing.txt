@@ -83,9 +83,13 @@ ls | wc				        -basic pipe
 
 Redirection -------------------------------------
 
-cat < infile	-cat is reading from infile
-< infile cat	-same
-cat infile		-same
+cat < infile	        - cat is reading from infile
+< infile cat	        - same
+cat infile		        - same
+ls > outfile1 | cat     - redirect out overrides pipe
+ls -l | < outfile cat   - redirect in overrides pipe
+ls > out1 > out2        - the last redirect out overwrites the previous riderects
+< infile < infile2 cat  - the last redirect in overwrites the previous riderects
 
 Combination of single and double quotes ---------
 
@@ -134,144 +138,3 @@ cat &					-suspends the command. maybe don't have to do this?
 cat<<<Makefile			-<<< is it's own special character that we DO NOT need to handle
 < infile cat < infile 	-cats infile twice (DONT HANDLE THIS SHIT just make sure it doesnt seg fault)
 > outfile				-does something like heredoc to outfile
-
-Whyyy?-cases ------------------------------------
-
-
-    ONLY IN ZSH:
-            c1r4p6% ls > outfile | cat      - redirect_out and pipe
-            includes
-            libft
-            Makefile
-            minishell
-            notes_general.txt
-            objects
-            outfile
-            sources
-            c1r4p6% cat outfile 
-            includes
-            libft
-            Makefile
-            minishell
-            notes_general.txt
-            objects
-            outfile
-            sources
-
-
-
-            c1r4p6% ls > outfile | < TODO cat         - riderect_out, pipe and redirect_in
-            includes
-            libft
-            Makefile
-            minishell
-            notes_general.txt
-            objects
-            outfile
-            sources
-            - live dit in vs code? //SPECIAL GERMAN TALK
-            leave this in the vs code //ENGLISH TALK <- this is not what I wrote!!
-
-
-            TOMORROW FRIDAY:
-            - merge
-            - do something
-            -remove get_next_line and printf from libft?%
-
-
-
-
-            c1r4p6% ls > outfile1 > outfile2 | cat          -there can be however many redirects for the same command
-            includes
-            libft
-            Makefile
-            minishell
-            notes_general.txt
-            objects
-            outfile
-            outfile1
-            outfile2
-            sources
-            TODO
-            c1r4p6% cat outfile1
-            includes
-            libft
-            Makefile
-            minishell
-            notes_general.txt
-            objects
-            outfile
-            outfile1
-            outfile2
-            sources
-            TODO
-            c1r4p6% cat outfile2
-            includes
-            libft
-            Makefile
-            minishell
-            notes_general.txt
-            objects
-            outfile
-            outfile1
-            outfile2
-            sources
-            TODO
-            c1r4p6%
-    
-    IN BASH:
-            maheleni@c2r4p3:~/Documents/42cursus$ ls > outfile1 | cat           -redirect out overrides pipe
-            maheleni@c2r4p3:~/Documents/42cursus$ cat outfile1 
-            fdf
-            ft_printf
-            get_next_line
-            hiekkalaatikko
-            libft
-            minishell
-            minishell (copy)
-            outfile1
-            pipex
-            push_swap
-
-
-            maheleni@c2r4p3:~/Documents/42cursus$ ls > out1 > out2              -the last redirect out overwrites the previous riderects
-            maheleni@c2r4p3:~/Documents/42cursus$ cat out1                      -but we still need to save all redirect files since they
-            maheleni@c2r4p3:~/Documents/42cursus$ cat out2                      -need to be created and possibly truncated, or does that happen in parsing?
-            fdf
-            ft_printf
-            get_next_line
-            hiekkalaatikko
-            libft
-            minishell
-            minishell (copy)
-            out1
-            out2
-            pipex
-            push_swap
-            maheleni@c2r4p3:~/Documents/42cursus$ rm out1
-            maheleni@c2r4p3:~/Documents/42cursus$ rm out2 
-            maheleni@c2r4p3:~/Documents/42cursus$ ls > out1 | cat
-            maheleni@c2r4p3:~/Documents/42cursus$ cat out1 
-            fdf
-            ft_printf
-            get_next_line
-            hiekkalaatikko
-            libft
-            minishell
-            minishell (copy)
-            out1
-            pipex
-            push_swap
-            maheleni@c2r4p3:~/Documents/42cursus$ 
-
-
-            maheleni@c1r4p4:~/Documents/42cursus/minishell$ ls -l | < outfile cat   -redirect in overrides pipe
-            includes
-            libft
-            Makefile
-            minishell
-            notes_general.txt
-            objects
-            outfile
-            sources
-            TODO
