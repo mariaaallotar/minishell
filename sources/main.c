@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 10:12:47 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/10/10 11:28:07 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/10/10 11:31:00 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ int	main(int argc, char *argv[], char *envp[]) //what happens if ./minishell get
 	{
 		handle_inputs(&main.input);
 		parsing(&main, &tokens);
-		//execute_commandline(&main, tokens);
+		execute_commandline(&main, tokens);
 		//set_exit_status_of_last_line();
 		free_and_null_split_input(&main);
 		free_command_token(&main, &tokens);
