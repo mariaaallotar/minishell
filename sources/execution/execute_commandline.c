@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 10:33:14 by maheleni          #+#    #+#             */
-/*   Updated: 2024/10/09 16:08:15 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/10/10 14:18:04 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,41 +15,40 @@
 int	execute_builtin(t_main *main, t_tokens token)
 {
 	char	*command;
+	int		cmd_len;
 
 	(void)main;
 	command = token.command[0];
+	cmd_len = ft_strlen(command);
 	//make sure that in- and outfiles are correct at this point and pipes closed
-	if (ft_strncmp(command, "echo\0", ft_strlen("echo\0")) == 0)
+	if (ft_strncmp(command, "echo\0", cmd_len) == 0)
 	{
-		// return (echo(token.command));
-		printf("Executing echo\n");
+		return (echo(main, token));
 	}
-	else if (ft_strncmp(command, "cd\0", ft_strlen("cd\0")) == 0)
+	else if (ft_strncmp(command, "cd\0", cmd_len) == 0)
 	{
 		// return (cd());
 		printf("Executing cd\n");
 	}
-	else if (ft_strncmp(command, "pwd\0", ft_strlen("pwd\0")) == 0)
+	else if (ft_strncmp(command, "pwd\0", cmd_len) == 0)
 	{
-		// return (pwd());
-		printf("Executing pwd\n");
+		return (pwd(main, token));
 	}
-	else if (ft_strncmp(command, "export\0", ft_strlen("export\0")) == 0)
+	else if (ft_strncmp(command, "export\0", cmd_len) == 0)
 	{
 		// return (export(main, token));
 		printf("Executing export\n");
 	}
-	else if (ft_strncmp(command, "unset\0", ft_strlen("unset\0")) == 0)
+	else if (ft_strncmp(command, "unset\0", cmd_len) == 0)
 	{
 		// return (unset(main, token));
 		printf("Executing unset\n");
 	}
-	else if (ft_strncmp(command, "env\0", ft_strlen("env\0")) == 0)
+	else if (ft_strncmp(command, "env\0", cmd_len) == 0)
 	{
-		// return (env(main, token));
-		printf("Executing env\n");
+		return (env(main, token));
 	}
-	else if (ft_strncmp(command, "exit\0", ft_strlen("exit\0")) == 0)
+	else if (ft_strncmp(command, "exit\0", cmd_len) == 0)
 	{
 		printf("Executing exit\n");
 		//return(exit_command(main));
@@ -95,6 +94,7 @@ void	execute_command(t_main *main, t_tokens token)
 	path = get_path(main, token.command);
 	if (path == NULL)
 	{
+		dup2(STDERR_FILENO, STDOUT_FILENO);
 		if (errno == 127)
 			printf("Command not found: %s\n", token.command[0]);
 		else
@@ -294,7 +294,7 @@ void	execute_child_process(t_main *main, t_tokens token)
 
 	if (is_builtin(token))
 	{
-		printf("Executing builtin in childprocess\n");
+		//printf("Executing builtin in childprocess\n");
 		status = execute_builtin(main, token);
 		exit(status);
 	}
@@ -327,6 +327,7 @@ int	execute_commandline(t_main *main, t_tokens *tokens)
 	int	*pids;
 	int	num_of_pipes;
 	int	i;
+	int	status;
 
 	num_of_pipes = main->num_of_pipes;
 	pids = malloc_pids(num_of_pipes + 1);
@@ -356,12 +357,12 @@ int	execute_commandline(t_main *main, t_tokens *tokens)
 	i = 0;
 	while (i < main->num_of_pipes + 1)
 	{
-		// printf("Process id %d\n", pids[i]);
-		waitpid(pids[i], &main->exit_code, 0);
-		if (WIFEXITED(main->exit_code))
-			return (main->exit_code);
+		//TODO make this robust, has to work with signals as well
+		waitpid(pids[i], &status, 0);
+		if (WIFEXITED(status))
+			main->exit_code = WEXITSTATUS(status);
 		i++;
 	}
 	free(pids);
-	return (1);	//correct?
+	return (main->exit_code);	//correct?
 }

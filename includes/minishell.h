@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 11:21:19 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/10/08 15:00:47 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/10/10 14:18:02 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -216,11 +216,13 @@ void	remove_variable(t_main *main, char *variable_key);
 
 /**
  * Prints the words after echo. If flag -n is given, does not print the newline
- * after last word.'
+ * after last word.
  * 
- * @param command list of command and its options
+ * @param main the main struct of the program
+ * @param token the token that echo command is part of
+ * @returns 0 on success, 1 on error
  */
-void    echo(char **command);
+int    echo(t_main *main, t_tokens token);
 
 /**
  * Checks if the given key is already in the env list.
@@ -259,8 +261,21 @@ void	unset(t_main *main, t_tokens token);
 
 /**
  * Prints the current working directory
+ * 
+ * @param main the main struct of the program
+ * @param token the token that pwd command is part of
+ * @returns 0 on success, 1 on error
  */
-void	pwd(void);
+int	pwd(t_main *main, t_tokens token);
+
+/**
+ * Prints the updated environment variables
+ * 
+ * @param main the main struct of the program
+ * @param token the token that env command is part of
+ * @returns 0 on success, 1 on error
+ */
+int env(t_main *main, t_tokens token);
 
 /*****************************************************************************/
 	//EXECUTION
