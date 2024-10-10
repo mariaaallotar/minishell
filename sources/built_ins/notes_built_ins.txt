@@ -6,8 +6,8 @@
     ◦ echo with option -n	DONE
     ◦ cd with only a relative or absolute path
     ◦ pwd with no options
-    ◦ export with no options	DONE?
-    ◦ unset with no options		DONE?
+    ◦ export with no options
+    ◦ unset with no options
     ◦ env with no options or arguments
     ◦ exit with no options
 - exits all those processes if everything was ok
@@ -19,11 +19,7 @@
 echo --------------------------------------------
 
 - without flags: print WITH newline at end
-- with flag -n or -nnnnnnnnnnnnnnnn...: print WITHOUT newline at end        //TODO
-
-exeution:
-- if string after echo is equal to "-n " or "-n\n" print without newline
-- print all strings untill I find NULL
+- with flag -n or -nnnnnnnnnnnnnnnn...: print WITHOUT newline at end
 
 cd ----------------------------------------------
 
@@ -52,20 +48,13 @@ exit --------------------------------------------
 - ethan is an exit master and can be trusted with decisions and builtins and everything
 - has ethan checked that exit can take an exitcode?
 
-//TODO
-maheleni@c2r4p3:~/Documents/42cursus/minishell$ echo hello | exit > exitfile        - exit as part of child process exits that child process, but does not output exit 
-maheleni@c2r4p3:~/Documents/42cursus/minishell$ cat exitfile 
-maheleni@c2r4p3:~/Documents/42cursus/minishell$ 
+//TODO exit function does not print exit, but execution of builtin in parent prints exit when command is exit
 
-maheleni@c2r4p3:~/Documents/42cursus/minishell$ exit | echo hello
-hello
-maheleni@c2r4p3:~/Documents/42cursus/minishell$ exit
-exit
-
+echo hello | exit > exitfile                    - exit as part of child process exits that child process,
+                                                but does not output exit
 
 unset -------------------------------------------
 
-- this needs to happen in parent process so that env_list is actually modified (in parent)
 - unset kan only take VAR not VAR=
 	- VAR= gives 
 		unset: VAR7=: invalid parameter name
@@ -73,8 +62,4 @@ unset -------------------------------------------
         
 export ------------------------------------------
 
-- export VAR=hello VAR1=world VAR2=!        -exports all variables //TODO
-- this needs to happen in parent process so that env_list is actually modified (in parent)
-
-
-
+- export VAR=hello VAR1=world VAR2=!        -exports all variables
