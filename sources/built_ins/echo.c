@@ -3,43 +3,67 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 14:52:20 by maheleni          #+#    #+#             */
-/*   Updated: 2024/09/26 11:56:42 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/10/10 10:59:20 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-void	echo(char **tokens)
+int	has_no_newline_flag(char *str)
 {
-	int	new_line;
 	int	i;
 
-	new_line = 1;
 	i = 0;
-	if (tokens[i] == NULL)
-	{
-		printf("First string NULL\n");
-		//error
-		return ;
-	}
-	i = 1;
-	if (ft_strncmp(tokens[i], "-n\0", 3) == 0)
-	{
-		new_line = 0;
+	if (str[i] == '-')
 		i++;
-	}
-	while (tokens[i] != NULL)
-	{
-		printf("%s", tokens[i]);
+	else
+		return (0);
+	while (str[i] == 'n')
 		i++;
-		if (tokens[i] == NULL && new_line)
+	if (str[i] != '\0')
+		return (0);
+	return (1);
+}
+
+void	print_echo_arguments(int i, int has_new_line, t_tokens token)
+{
+	//Handle error when printf fails?
+	while (token.command[i] != NULL)
+	{
+		printf("%s", token.command[i]);
+		i++;
+		if (token.command[i] == NULL && has_new_line)
 			printf("\n");
-		else if (tokens[i] == NULL)
+		else if (token.command[i] == NULL)
 			break;
 		else
 			printf(" ");
 	}
+}
+
+int	echo(t_main *main, t_tokens token)
+{
+	int	has_new_line;
+	int	i;
+
+	(void)main;
+	has_new_line = 1;
+	i = 0;
+	if (token.command[i] == NULL)
+	{
+		printf("First string NULL\n");
+		//error
+		return (1);
+	}
+	i = 1;
+	if (has_no_newline_flag(token.command[i]))
+	{
+		has_new_line = 0;
+		i++;
+	}
+	print_echo_arguments(i, has_new_line, token);
+	return (0);
 }

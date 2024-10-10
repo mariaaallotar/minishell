@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 11:21:19 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/10/08 15:00:47 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/10/10 10:04:44 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -220,7 +220,7 @@ void	remove_variable(t_main *main, char *variable_key);
  * 
  * @param command list of command and its options
  */
-void    echo(char **command);
+int    echo(t_main *main, t_tokens token);
 
 /**
  * Checks if the given key is already in the env list.
