@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 10:33:07 by maheleni          #+#    #+#             */
-/*   Updated: 2024/10/07 13:16:02 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/10/10 14:59:54 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ int	forbidden_key(char *var)
 	return (0);
 }
 
-void	export(t_main *main, t_tokens token)
+int	export(t_main *main, t_tokens token)
 {
 	int	i;
 	//TODO how to handle export without arguments
@@ -70,7 +70,7 @@ void	export(t_main *main, t_tokens token)
 				(token.command[i])++;
 			}
 			printf("\n");
-			return ;
+			return (1);
 		}
 		if (existing_key(main, token.command[i]))
 			update_variable(main, token.command[i]);
@@ -78,9 +78,10 @@ void	export(t_main *main, t_tokens token)
 			add_variable(main, token.command[i]);
 		i++;
 	}
+	return (0);
 }
 
-void	unset(t_main *main, t_tokens token)
+int	unset(t_main *main, t_tokens token)
 {
 	t_list	*node;
 	char	*joined_str;
@@ -92,7 +93,7 @@ void	unset(t_main *main, t_tokens token)
 		if (ft_strchr(token.command[i], '=') != NULL)
 		{
 			printf("invalid parameter name\n");
-			return ;
+			return (1);
 		}
 		joined_str = ft_strjoin(token.command[i], "=");
 		if (joined_str == NULL)
@@ -104,10 +105,11 @@ void	unset(t_main *main, t_tokens token)
 		if (node == NULL)
 		{
 			free(joined_str);
-			return ;
+			return (1);
 		}
 		remove_variable(main, joined_str);
 		free(joined_str);
 		i++;
 	}
+	return (0);
 }

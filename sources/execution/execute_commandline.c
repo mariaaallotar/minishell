@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 10:33:14 by maheleni          #+#    #+#             */
-/*   Updated: 2024/10/10 14:18:04 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/10/10 16:32:55 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@ int	execute_builtin(t_main *main, t_tokens token)
 	(void)main;
 	command = token.command[0];
 	cmd_len = ft_strlen(command);
-	//make sure that in- and outfiles are correct at this point and pipes closed
 	if (ft_strncmp(command, "echo\0", cmd_len) == 0)
 	{
 		return (echo(main, token));
@@ -36,13 +35,11 @@ int	execute_builtin(t_main *main, t_tokens token)
 	}
 	else if (ft_strncmp(command, "export\0", cmd_len) == 0)
 	{
-		// return (export(main, token));
-		printf("Executing export\n");
+		return (export(main, token));
 	}
 	else if (ft_strncmp(command, "unset\0", cmd_len) == 0)
 	{
-		// return (unset(main, token));
-		printf("Executing unset\n");
+		return (unset(main, token));
 	}
 	else if (ft_strncmp(command, "env\0", cmd_len) == 0)
 	{
@@ -294,7 +291,6 @@ void	execute_child_process(t_main *main, t_tokens token)
 
 	if (is_builtin(token))
 	{
-		//printf("Executing builtin in childprocess\n");
 		status = execute_builtin(main, token);
 		exit(status);
 	}
@@ -309,9 +305,13 @@ void	reassign_pipe_right_to_left(int pipe_array[2][2])
 
 void	execute_builtin_in_parent(int i, t_tokens *tokens, t_main *main)
 {
+	int	outfile_fd;
+
+	outfile_fd = -1;
 	handle_infile(tokens[i], NULL);
 	handle_outfile(tokens[i], NULL);
 	execute_builtin(main, tokens[i]);
+	//work here
 }
 
 int	is_builtin_not_part_of_pipeline(t_tokens *tokens, int num_of_pipes, int i)
