@@ -6,7 +6,7 @@
 #    By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/20 15:07:12 by eberkowi          #+#    #+#              #
-#    Updated: 2024/10/10 15:18:54 by eberkowi         ###   ########.fr        #
+#    Updated: 2024/10/11 10:23:41 by maheleni         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -37,6 +37,8 @@ CFILES := main.c \
 		built_ins/pwd.c \
 		built_ins/env.c \
 		execution/execute_commandline.c \
+		execution/handle_redirects.c \
+		execution/execute_command.c \
 		execution/find_path.c \
 		execution/get_path.c \
 

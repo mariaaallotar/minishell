@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 11:21:19 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/10/10 15:19:00 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/10/11 10:42:21 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -256,16 +256,18 @@ int		forbidden_key(char *var);
  * 
  * @param main the main struct of the program
  * @param token the token to be executed
+ * @returns 0 on success, 1 on error
  */
-void	export(t_main *main, t_tokens token);
+int	export(t_main *main, t_tokens token);
 
 /**
  * Unsets a variable from the env list.
  * 
  * @param main the main struct of the program
  * @param token the token to be executed
+ * @returns 0 on success, 1 on error
  */
-void	unset(t_main *main, t_tokens token);
+int	unset(t_main *main, t_tokens token);
 
 /**
  * Prints the current working directory
@@ -300,6 +302,14 @@ int env(t_main *main, t_tokens token);
 int	execute_commandline(t_main *main, t_tokens *tokens);
 
 /**
+ * Checks if command is a builtin or not
+ * 
+ * @param the token that command is part of
+ * @returns 1 if command is builtin, 0 if not
+ */
+int	is_builtin(t_tokens token);
+
+/**
  * Closes the necessary pipe-filedescriptors depending on the executed commands
  * position in the command line.
  * 
@@ -318,7 +328,33 @@ void	close_pipes_in_parent(int i, int num_of_pipes, int *pipe_left, int *pipe_ri
  */
 void	execute_command(t_main *main, t_tokens token);
 
+/**
+ * Calls the right builtin function to execute it
+ * 
+ * @param main the main struct of the program
+ * @param token  the token to execute
+ */
 int	execute_builtin(t_main *main, t_tokens token);
+
+/**
+ * Executes either a builtin or a command as a child process.
+ * If a builtin is executed, the process is exited with the return
+ * value of the builtin-function.
+ * 
+ * @param main the main struct of the program
+ * @param token  the token to execute
+ */
+void	execute_child_process(t_main *main, t_tokens token);
+
+/**
+ * Executes a bultin in the parent process. Redirects STDIN and STDOUT
+ * to correct files if necessary. After execution restores STDIN and SDTOUT
+ * filedescriptors.
+ * 
+ * @param main the main struct of the program
+ * @param token  the token to execute
+ */
+void	execute_builtin_in_parent(t_main *main, t_tokens token);
 
 char	*find_path(t_main *main, char *command);
 
@@ -337,5 +373,56 @@ int	is_direcotory(char *command);
 int	is_path_to_executable(char *command);
 
 int	is_path_to_file(char *command);
+
+/**
+ * Makes sure that STDIN and STDOUT are redirected to the right files
+ * based on number of pipes and position of command in pipeline
+ * 
+ * @param i position of command in pipeline, first command: i = 0;
+ * @param num_of_pipes the number of pipes left to be written into in
+ * the pipeline
+ */
+void	handle_infile_and_outfile(int i, int num_of_pipes,
+	int pipe_array[2][2], t_tokens token);
+
+/**
+ * Redirects STDIN with dup2 to:
+ * (1) pipe: if there is a pipe and no infile
+ * (2) infile: if there is infile(s)
+ * (3) nowhere: if there is no pipe and no infile(s)
+ * 
+ * @param token the token to handle infile for
+ * @param pipe_left array of ints for the left-hand side pipe,
+ * 	NULL if there is no pipe
+ */
+void	handle_infile(t_tokens token, int* pipe_left);
+
+/**
+ * Redirects STDOUT with dup2 to:
+ * (1) pipe: if there is a pipe and no outfile
+ * (2) outfile: if there is outfile(s)
+ * (3) nowhere: if there is no pipe and no outfile(s)
+ * 
+ * @param token the token to handle outfile for
+ * @param pipe_right array of ints for the right-hand side pipe,
+ * 	NULL if there is no pipe
+ */
+void	handle_outfile(t_tokens token, int* pipe_right);
+
+/**
+ * Loops through all infiles, opens them and redirects STDIN with dup2
+ * to the last one.
+ * 
+ * @param token the token to handle infile for
+ */
+void	dup2_infile(t_tokens token);
+
+/**
+ * Loops through all outfiles, opens them and redirects STDOUT with dup2
+ * to the last one.
+ * 
+ * @param token the token to handle outfile for
+ */
+void	dup2_outfile(t_tokens token);
 
 #endif
