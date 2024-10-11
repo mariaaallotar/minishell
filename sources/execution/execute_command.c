@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 10:00:41 by maheleni          #+#    #+#             */
-/*   Updated: 2024/10/11 10:33:16 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/10/11 12:36:55 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,34 +15,24 @@
 void	execute_command(t_main *main, t_tokens token)
 {
 	char	*path;
-	// char	**env;
+	char	**env;
 
 	path = get_path(main, token.command);
 	if (path == NULL)
 	{
-		dup2(STDERR_FILENO, STDOUT_FILENO);
+		dup2(STDERR_FILENO, 1);
 		if (errno == 127)
 			printf("Command not found: %s\n", token.command[0]);
 		else
 			perror("Error in getting path to command:");
 		exit(1);
 	}
-
-	//make sure that in- and outfiles are correct at this point and pipes closed
-
-	// env = transform_to_string_array(main->env_list);		//TODO
-	// if (execve(path, token.command, env) == -1)
-	// {
-	// 	free(path);
-	// 	//error
-	// }
-
-	//this is just for testing without env
-	if (execv(path, token.command) == -1)
+	env = convert_list_to_array(main->env_list);
+	if (execve(path, token.command, env) == -1)
 	{
-		//make sure that path is always allocated by execution
-		printf("Execv error on command %s\n", token.command[0]);
+		free(env);
 		free(path);
+		exit(1);
 		//error
 	}
 }

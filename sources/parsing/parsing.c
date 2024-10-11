@@ -3,26 +3,26 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 11:32:36 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/10/10 15:53:29 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/10/11 11:41:42 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-// static void print_split_input(t_main *main) //REMOVE
-// {
-// 	printf("\033[0;33m---SPLIT_INPUT---\033[0m\n");
-// 	int i = 0;
-// 	while (main->split_input[i])
-// 	{
-// 		printf("input[%d] = %s\n", i, main->split_input[i]);
-// 		i++;
-// 	}
-// 	printf("\n");
-// }
+static void print_split_input(t_main *main) //REMOVE
+{
+	printf("\033[0;33m---SPLIT_INPUT---\033[0m\n");
+	int i = 0;
+	while (main->split_input[i])
+	{
+		printf("input[%d] = %s\n", i, main->split_input[i]);
+		i++;
+	}
+	printf("\n");
+}
 
 static void print_tokens(t_main *main, t_tokens **tokens) //REMOVE
 {

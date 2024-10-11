@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 13:47:16 by maheleni          #+#    #+#             */
-/*   Updated: 2024/10/02 10:46:43 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/10/11 12:36:49 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,20 +58,22 @@ char	*get_path_variable(t_main *main)
 	if (node == NULL)
 	{
 		errno = ENOENT;
-		//error
+		return (NULL);
 	}
 	return (node->content);
 }
 
 char	*find_path(t_main *main, char *command)
 {
-	char	*path_varible;
+	char	*path_variable;
 	char	**env_paths;
 	char	*command_path;
 	int		i;
 
-	path_varible = get_path_variable(main);
-	env_paths = get_split_paths(path_varible);
+	path_variable = get_path_variable(main);
+	if (path_variable == NULL)
+		return (NULL);
+	env_paths = get_split_paths(path_variable);
 	i = 0;
 	while (env_paths[i])
 	{

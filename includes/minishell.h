@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 11:21:19 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/10/11 10:42:21 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/10/11 12:20:27 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -217,6 +217,8 @@ void	print_list_content(void *content);
  * @note variable_key needs to have '=' sign! E.g. "PATH="
  */
 void	remove_variable(t_main *main, char *variable_key);
+
+char	**convert_list_to_array(t_list *env_list);
 
 /*****************************************************************************/
 	//BUILTINS

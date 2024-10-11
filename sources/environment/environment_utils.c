@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 14:37:05 by maheleni          #+#    #+#             */
-/*   Updated: 2024/10/01 13:56:23 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/10/11 12:15:34 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,58 +27,31 @@ void    free_environment(t_list **env_list)
 	}
 }
 
-t_list	*find_node(t_main *main, char *variable)	//TODO maybe change param main to just take a linked_list?
+char	**convert_list_to_array(t_list *env_list)
 {
-	int		key_len;
-	t_list	*current_node;
+	int		size;
+	char	**array;
+	t_list	*node;
+	int		i;
 
-	key_len = ft_strchr(variable, '=') - variable;
-	current_node = main->env_list;
-	while (current_node != NULL)
+	size = ft_lstsize(env_list);
+	array = malloc ((size + 1) * sizeof(char *));
+	if (array == NULL)
 	{
-		if (ft_strncmp(variable, current_node->content, key_len) == 0)
-			return (current_node);
-		current_node = current_node->next;
+		//TODO handle error;
+		perror("In convert_list_to_array");
+		exit(1);
 	}
-	return (NULL);
-}
-
-void    add_variable(t_main *main, char *content)
-{
-    t_list  *new_node;
-
-    new_node = ft_lstnew(ft_strdup(content));
-    if (new_node == NULL)
-    {
-        perror("Error");
-        ft_free_split(&(main->split_input));
-        free_environment(&(main->env_list));
-    }
-    ft_lstadd_back(&(main->env_list), new_node);
-}
-
-void	remove_variable(t_main *main, char *variable_key)
-{
-	t_list	*previous_node;
-	t_list	*current_node;
-	t_list	*next_node;
-	int		key_len;
-
-	key_len = ft_strlen(variable_key);
-	current_node = main->env_list;
-	previous_node = NULL;
-    while (ft_strncmp(current_node->content, variable_key, key_len))
+	node = env_list;
+	i = 0;
+	while (node != NULL)
 	{
-		previous_node = current_node;
-		current_node = previous_node->next;
+		array[i] = node->content;
+		i++;
+		node = node->next;
 	}
-	next_node = current_node->next;
-	free(current_node->content);
-	free(current_node);
-	if (previous_node == NULL)
-		main->env_list = next_node;
-	else
-		previous_node->next = next_node;
+	array[i] = NULL;
+	return (array);
 }
 
 t_list	*copy_env(char *envp[], t_main *main)
