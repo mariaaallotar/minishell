@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/24 12:13:07 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/10/10 14:21:56 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/10/11 14:41:55 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,7 @@ void add_in_or_heredoc(t_main *main, t_tokens **tokens, int cmd_id, int *spl_id)
 		if (!(*tokens)[cmd_id].infiles)
 			(*tokens)[cmd_id].infiles = new_node;
 		else
-			lstadd_back_redirect_node(&(*tokens)[cmd_id].infiles, new_node);		
-		(*tokens)[cmd_id].heredoc_delimiter = &main->split_input[*spl_id + 1];
+			lstadd_back_redirect_node(&(*tokens)[cmd_id].infiles, new_node);
 		(*spl_id) += 2;
 	}
 }

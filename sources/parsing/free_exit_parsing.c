@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/24 10:44:31 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/10/10 15:13:40 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/10/11 14:55:12 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,8 @@ void free_token_redirects(t_main *main, t_tokens **tokens)
 		while (temp)
 		{
 			temp_next = temp->next;
+			if (temp->type == HEREDOC)
+				free(temp->name);
 			free(temp);
 			temp = temp_next;
 		}

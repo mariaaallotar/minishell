@@ -6,7 +6,7 @@
 #    By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/20 15:07:12 by eberkowi          #+#    #+#              #
-#    Updated: 2024/10/11 10:23:41 by maheleni         ###   ########.fr        #
+#    Updated: 2024/10/11 14:11:24 by eberkowi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,6 @@ FLAGS := -Wall -Wextra -Werror
 LINKFLAGS := -lreadline
 
 CFILES := main.c \
-		error_exit.c \
 		parsing/parsing.c \
 		parsing/split_input.c \
 		parsing/add_elements_to_split_input.c \
@@ -28,6 +27,7 @@ CFILES := main.c \
 		parsing/add_command_to_struct.c \
 		parsing/expand_variables.c \
 		parsing/linked_list_utils.c \
+		parsing/create_heredoc.c \
 		built_ins/exit_command.c \
 		environment/environment_utils.c \
 		environment/print_environment.c \

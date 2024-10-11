@@ -6,23 +6,23 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 11:32:36 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/10/10 15:53:29 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/10/11 14:41:45 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-// static void print_split_input(t_main *main) //REMOVE
-// {
-// 	printf("\033[0;33m---SPLIT_INPUT---\033[0m\n");
-// 	int i = 0;
-// 	while (main->split_input[i])
-// 	{
-// 		printf("input[%d] = %s\n", i, main->split_input[i]);
-// 		i++;
-// 	}
-// 	printf("\n");
-// }
+static void print_split_input(t_main *main) //REMOVE
+{
+	printf("\033[0;33m---SPLIT_INPUT---\033[0m\n");
+	int i = 0;
+	while (main->split_input[i])
+	{
+		printf("input[%d] = %s\n", i, main->split_input[i]);
+		i++;
+	}
+	printf("\n");
+}
 
 static void print_tokens(t_main *main, t_tokens **tokens) //REMOVE
 {
@@ -43,10 +43,6 @@ static void print_tokens(t_main *main, t_tokens **tokens) //REMOVE
 				i++;
 			}
 		}
-		if ((*tokens)[token_number].heredoc_delimiter)
-			printf("heredoc_delimiter = %s\n", *((*tokens)[token_number].heredoc_delimiter));
-		
-
 		
 		//PRINT INFILES AND HEREDOCS
 		j = 0;
@@ -78,6 +74,7 @@ static void print_tokens(t_main *main, t_tokens **tokens) //REMOVE
 
 		token_number++;
 		printf("\n");
+		printf("============================================\n");
 	}
 }
 
@@ -111,7 +108,6 @@ static void	initialize_commands(t_tokens **tokens, int size)
 	while (i < size)
 	{
 		(*tokens)[i].command = NULL;
-		(*tokens)[i].heredoc_delimiter = NULL;
 		(*tokens)[i].infiles = NULL;
 		(*tokens)[i].outfiles = NULL;
 		i++;
@@ -136,6 +132,7 @@ int	parsing(t_main *main, t_tokens **tokens)
 	malloc_and_init_tokens(main, tokens);
 	if (tokenize(main, tokens))
 		return (1);
+	create_heredoc(main, tokens);
 	print_tokens(main, tokens); //REMOVE
 	return (0);
 }

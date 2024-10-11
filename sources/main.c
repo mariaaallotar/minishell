@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 10:12:47 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/10/10 15:18:54 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/10/11 15:22:52 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,15 +40,14 @@ int	main(int argc, char *argv[], char *envp[]) //what happens if ./minishell get
 			continue;
 		if (parsing(&main, &tokens))
 			continue;
-		execute_commandline(&main, tokens);
+		//execute_commandline(&main, tokens);
 		//set_exit_status_of_last_line();
 		free_and_null_split_input(&main);
 		free_token_commands(&main, &tokens);
 		free_token_redirects(&main, &tokens);
 		free(tokens);
+		printf("============================================\n");
 	}
-	if (main.input) //REMOVE?
-		free(main.input);
 	free_environment(&(main.env_list));
 	//free_signals();
 	exit (main.exit_code);

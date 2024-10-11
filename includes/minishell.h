@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 11:21:19 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/10/11 10:42:21 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/10/11 14:41:09 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,6 @@ struct s_redirect_node
 typedef struct s_tokens
 {
 	char	**command;
-	char	**heredoc_delimiter;
 	t_redirect_node *infiles;
 	t_redirect_node *outfiles;
 }	t_tokens;
@@ -68,9 +67,6 @@ typedef struct s_tokens
 
 //display prompt, readline, and save it in history
 int	handle_inputs(char **input);
-
-//error and exit for failed malloc in readline
-int	error_exit_handle_input(void);
 
 /*****************************************************************************/
 	//PARSING
@@ -152,6 +148,9 @@ void free_token_redirects(t_main *main, t_tokens **tokens);
 
 //Free everything if a linked list node fails to malloc
 void free_and_exit_node_malloc_failed(t_main *main, t_tokens **tokens);
+
+//Create and readline the heredoc fd's and put them in the tokens
+void create_heredoc(t_main *main, t_tokens **tokens);
 
 /*****************************************************************************/
 	//ENVIRONMENT
