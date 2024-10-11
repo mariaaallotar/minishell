@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 11:32:36 by eberkowi          #+#    #+#             */
 /*   Updated: 2024/10/10 15:53:29 by maheleni         ###   ########.fr       */
@@ -24,60 +24,62 @@
 // 	printf("\n");
 // }
 
-// static void print_tokens(t_main *main, t_tokens **tokens) //REMOVE
-// {
-// 	int command_number = 0;
-// 	int i = 0;
-// 	int j = 0;
-// 	t_redirect_node *temp;
-	
-// 	while (command_number < main->num_of_pipes + 1)
-// 	{
-// 		printf("\033[0;32m---COMMAND %d---\033[0m\n", command_number);
-// 		i = 0;
-// 		if ((*tokens)[command_number].command)
-// 		{
-// 			while ((*tokens)[command_number].command[i])
-// 			{
-// 				printf("\033[0;31mcommand[%d] = %s\033[0m\n", i, (*tokens)[command_number].command[i]);
-// 				i++;
-// 			}
-// 		}
-// 		if ((*tokens)[command_number].heredoc_delimiter)
-// 			printf("heredoc_delimiter = %s\n", *((*tokens)[command_number].heredoc_delimiter));
-			
-// 		//PRINT INFILES AND HEREDOCS
-// 		j = 0;
-// 		temp = (*tokens)[command_number].infiles;
-// 		while (temp)
-// 		{
-// 			printf("infile[%d] name = %s, ", j, temp->name);
-// 			if (temp->type == 100)
-// 				printf("type = INFILE\n");
-// 			else 
-// 				printf("type = HEREDOC\n");
-// 			temp = temp->next;
-// 			j++;
-// 		}
-		
-// 		//PRINT OUTFILES AND APPENDS
-// 		j = 0;
-// 		temp = (*tokens)[command_number].outfiles;
-// 		while (temp)
-// 		{
-// 			printf("outfile[%d] name = %s, ", j, temp->name);
-// 			if (temp->type == 102)
-// 				printf("type = OUTFILE\n");
-// 			else 
-// 				printf("type = APPEND\n");
-// 			temp = temp->next;
-// 			j++;
-// 		}
+static void print_tokens(t_main *main, t_tokens **tokens) //REMOVE
+{
+	int token_number = 0;
+	int i = 0;
+	int j = 0;
+	t_redirect_node *temp;
 
-// 		command_number++;
-// 		printf("\n");
-// 	}	
-// }
+	while (token_number < main->num_of_pipes + 1)
+	{
+		printf("\033[0;32m---COMMAND %d---\033[0m\n", token_number);
+		i = 0;
+		if ((*tokens)[token_number].command)
+		{
+			while ((*tokens)[token_number].command[i])
+			{
+				printf("\033[0;31mcommand[%d] = %s\033[0m\n", i, (*tokens)[token_number].command[i]);
+				i++;
+			}
+		}
+		if ((*tokens)[token_number].heredoc_delimiter)
+			printf("heredoc_delimiter = %s\n", *((*tokens)[token_number].heredoc_delimiter));
+		
+
+		
+		//PRINT INFILES AND HEREDOCS
+		j = 0;
+		temp = (*tokens)[token_number].infiles;
+		while (temp)
+		{
+			printf("infile[%d] name = %s, ", j, temp->name);
+			if (temp->type == 100)
+				printf("type = INFILE\n");
+			else 
+				printf("type = HEREDOC\n");
+			temp = temp->next;
+			j++;
+		}
+		
+		//PRINT OUTFILES AND APPENDS
+		j = 0;
+		temp = (*tokens)[token_number].outfiles;
+		while (temp)
+		{
+			printf("outfile[%d] name = %s, ", j, temp->name);
+			if (temp->type == 102)
+				printf("type = OUTFILE\n");
+			else 
+				printf("type = APPEND\n");
+			temp = temp->next;
+			j++;
+		}
+
+		token_number++;
+		printf("\n");
+	}
+}
 
 static void get_number_of_pipes(t_main *main)
 {
@@ -126,13 +128,14 @@ static void malloc_and_init_tokens(t_main *main, t_tokens **tokens)
 int	parsing(t_main *main, t_tokens **tokens)
 {
 	if (!split_input(main))
-		return (0);
-	// print_split_input(main); //REMOVE
+		return (1);
+	print_split_input(main); //REMOVE
 	free_and_null_input(main);
 	exit_command(main);
 	expand_variables(main);
 	malloc_and_init_tokens(main, tokens);
-	tokenize(main, tokens);
-	// print_tokens(main, tokens); //REMOVE
-	return (1);
+	if (tokenize(main, tokens))
+		return (1);
+	print_tokens(main, tokens); //REMOVE
+	return (0);
 }
