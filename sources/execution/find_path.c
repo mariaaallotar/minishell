@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 13:47:16 by maheleni          #+#    #+#             */
-/*   Updated: 2024/10/11 12:36:49 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/10/14 13:53:36 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,20 +19,20 @@ int	set_path_if_executable(char *env_path, char *command, char **command_path)
 	path = ft_strjoin(env_path, "/");
 	if (path == NULL)
 	{
-		perror("In set_path_if_executable");
+		perror(NULL);
+		//maria free everything in child
 		exit(1);
 	}
 	*command_path = ft_strjoin(path, command);
+	free(path);
 	if (command_path == NULL)
 	{
-		perror("In set_path_if_executable");
+		perror(NULL);
+		//maria free everything in child
 		exit(1);
 	}
-	free(path);
 	if (access(*command_path, F_OK) == 0)
-	{
 		return (1);
-	}
 	free(*command_path);
 	return (0);
 }
@@ -45,6 +45,7 @@ char	**get_split_paths(char *path_variable)
 	if (env_paths == NULL)
 	{
 		perror(NULL);
+		//maria free everything in child
 		exit(1);
 	}
 	return (env_paths);
@@ -83,7 +84,7 @@ char	*find_path(t_main *main, char *command)
 			return (command_path);
 		}
 		i++;
-	}
+	} 
 	errno = 127;
 	ft_free_split(&env_paths);
 	return (NULL);

@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 13:45:33 by maheleni          #+#    #+#             */
-/*   Updated: 2024/10/02 10:39:16 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/10/14 13:54:27 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,8 @@ int	is_direcotory(char *command)
 		}
 		else
 		{
-			perror("stat");
+			perror(NULL);
+			//maria free everything in child
 			exit(1);
 		}
 	}

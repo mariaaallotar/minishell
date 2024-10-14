@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 09:57:31 by maheleni          #+#    #+#             */
-/*   Updated: 2024/10/11 10:02:05 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/10/14 14:13:40 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,21 +20,25 @@ void	dup2_outfile(t_tokens token)
 	node = token.outfiles;
 	while (node != NULL)
 	{
+		if (node != token.outfiles)
+			close(outfile);
 		if (node->type == OUTFILE)
 			outfile = open(node->name, O_WRONLY | O_TRUNC | O_CREAT, 0644);
 		else if (node->type == APPEND)
 			outfile = open(node->name, O_WRONLY | O_APPEND | O_CREAT, 0644);		//CHECK THAT IS CORRECT
 		if (outfile == -1)
 		{
-			perror("In dup2_outfile");
+			perror(node->name);
+			//maria free everything in child
 			exit(1);
 		}
 		node = node->next;
 	}
 	if (dup2(outfile, STDOUT_FILENO) == -1)
 	{
-		perror("dup2 in dup2_outfile");
-		//TODO is this correct?
+		close(outfile);
+		perror(NULL);
+		//maria free everything in child
 		exit(1);
 	}
 	close(outfile);
@@ -42,12 +46,14 @@ void	dup2_outfile(t_tokens token)
 
 void	handle_outfile(t_tokens token, int* pipe_right)
 {
-	if (pipe_right != NULL && token.outfiles == NULL)
+	if (pipe_right != NULL)
 	{
 		if (dup2(pipe_right[1], STDOUT_FILENO) == -1)
 		{
-			perror("dup2 in handle_outfile");
-			//TODO is this correct?
+			close(pipe_right[0]);
+			close(pipe_right[1]);
+			perror(NULL);
+			//maria free everything in child
 			exit(1);
 		}
 		close(pipe_right[0]);
@@ -70,16 +76,16 @@ void	dup2_infile(t_tokens token)
 		infile = open(node->name, O_RDONLY);
 		if (infile == -1)
 		{
-			//TODO handle error
-			perror("In dup2_infile");
+			perror(node->name);
+			//maria free everything in child
 			exit(1);
 		}
 		node = node->next;
 	}
 	if (dup2(infile, STDIN_FILENO) == -1)
 	{
-		perror("dup2 in dup2_infile");
-		//TODO is this correct?
+		perror(NULL);
+		//maria free everything in child
 		exit(1);
 	}
 	close(infile);
@@ -87,21 +93,21 @@ void	dup2_infile(t_tokens token)
 
 void	handle_infile(t_tokens token, int* pipe_left)
 {
-	if (pipe_left != NULL && token.infiles == NULL)
+	if (pipe_left != NULL)
 	{
 		if (dup2(pipe_left[0], STDIN_FILENO) == -1)
 		{
-			perror("dup2 in handle_infile");
-			//TODO is this correct?
+			close(pipe_left[0]);
+			close(pipe_left[1]);
+			perror(NULL);
+			//maria free everything in child
 			exit(1);
 		}
 		close(pipe_left[0]);
 		close(pipe_left[1]);
 	}
 	if (token.infiles != NULL)
-	{
 		dup2_infile(token);
-	}
 }
 
 void	handle_infile_and_outfile(int i, int num_of_pipes,

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_commandline.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 10:33:14 by maheleni          #+#    #+#             */
-/*   Updated: 2024/10/11 10:33:52 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/10/14 16:06:38 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,20 +62,20 @@ int	*malloc_pids(int amount)
 	pids = malloc ((amount) * sizeof(int));
 	if (pids == NULL)
 	{
-		perror("In malloc_pids");
-		exit(1);
+		perror(NULL);
+		return (NULL);
 	}
 	return (pids);
 }
 
-void	create_pipe(int pipe_array[2][2])
+int	create_pipe(int pipe_array[2][2])
 {
 	if (pipe(pipe_array[1]) == -1)
 	{
-		//some error
-		printf("In create_pipe");
-		exit(1);
+		perror(NULL);
+		return (0);
 	}
+	return (1);
 }
 
 int	create_fork(void)
@@ -84,11 +84,7 @@ int	create_fork(void)
 
 	pid = fork();
 	if (pid == -1)
-	{
-		perror("In create_fork");
-		//error(NULL);
-		exit(1);
-	}
+		perror("Create fork");
 	return (pid);
 }
 
@@ -105,6 +101,12 @@ int	is_builtin_not_part_of_pipeline(t_tokens *tokens, int num_of_pipes, int i)
 	return (0);
 }
 
+void	close_pipes_on_error(int *pipe)
+{
+	close(pipe[0]);
+	close(pipe[1]);
+}
+
 int	execute_commandline(t_main *main, t_tokens *tokens)
 {
 	int	pipe_array[2][2];
@@ -115,6 +117,11 @@ int	execute_commandline(t_main *main, t_tokens *tokens)
 
 	num_of_pipes = main->num_of_pipes;
 	pids = malloc_pids(num_of_pipes + 1);
+	if (pids == NULL)
+	{
+		free(pids);
+		return (1);
+	}
 	i = 0;
 	while (num_of_pipes >= 0)
 	{
@@ -125,8 +132,25 @@ int	execute_commandline(t_main *main, t_tokens *tokens)
 			if (i > 0)
 				reassign_pipe_right_to_left(pipe_array);
 			if (num_of_pipes > 0)
-				create_pipe(pipe_array);
+			{
+				if (create_pipe(pipe_array) == 0)
+				{
+					if (i > 0)
+						close_pipes_on_error(pipe_array[0]);
+					free(pids);
+					return (1);
+				}
+			}
 			pids[i] = create_fork();
+			if (pids[i] == -1)
+			{
+				if (i > 0)
+					close_pipes_on_error(pipe_array[0]);
+				if (num_of_pipes > 0)
+					close_pipes_on_error(pipe_array[1]);
+				free(pids);
+				return (1);
+			}
 			if (pids[i] == 0)
 			{
 				handle_infile_and_outfile(i, num_of_pipes, pipe_array, tokens[i]);
@@ -148,5 +172,5 @@ int	execute_commandline(t_main *main, t_tokens *tokens)
 		i++;
 	}
 	free(pids);
-	return (main->exit_code);	//correct?
+	return (main->exit_code);
 }

@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 11:21:19 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/10/11 12:20:27 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/10/14 15:14:26 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,23 +28,6 @@
 #define OUTFILE 102
 #define APPEND 103
 
-
-/**
- * char		*input;
- * char		**split_input;
- * t_list	*env_list;
- * int		exit_code;
- */
-typedef struct s_main
-{
-	char	*input;
-	char	**split_input;
-	t_list	*env_list;
-	int		exit_code;  //exit code of the exit command given by user?
-	int 	num_of_pipes;
-	int		found_command;
-} t_main;
-
 typedef struct s_redirect_node t_redirect_node;
 
 struct s_redirect_node
@@ -61,6 +44,23 @@ typedef struct s_tokens
 	t_redirect_node *infiles;
 	t_redirect_node *outfiles;
 }	t_tokens;
+
+/**
+ * char		*input;
+ * char		**split_input;
+ * t_list	*env_list;
+ * int		exit_code;
+ */
+typedef struct s_main
+{
+	char	*input;
+	char	**split_input;
+	t_list	*env_list;
+	t_tokens	**tokens;
+	int		exit_code;
+	int 	num_of_pipes;
+	int		found_command;
+} t_main;
 
 /*****************************************************************************/
 	//INPUT AND SIGNALS
