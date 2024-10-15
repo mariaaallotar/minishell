@@ -6,7 +6,7 @@
 #    By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/20 15:07:12 by eberkowi          #+#    #+#              #
-#    Updated: 2024/10/11 11:56:30 by maheleni         ###   ########.fr        #
+#    Updated: 2024/10/15 16:12:17 by maheleni         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -36,6 +36,7 @@ CFILES := main.c \
 		built_ins/echo.c \
 		built_ins/export_and_unset.c \
 		built_ins/pwd.c \
+		built_ins/cd.c \
 		built_ins/env.c \
 		execution/execute_commandline.c \
 		execution/handle_redirects.c \

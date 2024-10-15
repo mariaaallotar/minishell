@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 11:21:19 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/10/14 15:14:26 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/10/15 16:05:06 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -280,6 +280,8 @@ int	unset(t_main *main, t_tokens token);
  */
 int	pwd(t_main *main, t_tokens token);
 
+int	cd(t_main *main, t_tokens token);
+
 /**
  * Prints the updated environment variables
  * 
@@ -328,7 +330,7 @@ void	close_pipes_in_parent(int i, int num_of_pipes, int *pipe_left, int *pipe_ri
  * @param main the main struct of the program
  * @param token  the token to execute
  */
-void	execute_command(t_main *main, t_tokens token);
+void	execute_command(t_main *main, t_tokens token, int *pids);
 
 /**
  * Calls the right builtin function to execute it
@@ -346,7 +348,7 @@ int	execute_builtin(t_main *main, t_tokens token);
  * @param main the main struct of the program
  * @param token  the token to execute
  */
-void	execute_child_process(t_main *main, t_tokens token);
+void	execute_child_process(t_main *main, t_tokens token, int *pids);
 
 /**
  * Executes a bultin in the parent process. Redirects STDIN and STDOUT
@@ -358,15 +360,15 @@ void	execute_child_process(t_main *main, t_tokens token);
  */
 void	execute_builtin_in_parent(t_main *main, t_tokens token);
 
-char	*find_path(t_main *main, char *command);
+char	*find_path(t_main *main, char *command, int *pids);
 
 char	*get_path_variable(t_main *main);
 
-char	**get_split_paths(char *path_variable);
+char	**get_split_paths(char *path_variable, t_main *main, int *pids);
 
 int	set_path_if_executable(char *env_path, char *command, char **command_path);
 
-char	*get_path(t_main *main, char **command);
+char	*get_path(t_main *main, char **command, int *pids);
 
 int	empty_command(char *command);
 
@@ -384,7 +386,7 @@ int	is_path_to_file(char *command);
  * @param num_of_pipes the number of pipes left to be written into in
  * the pipeline
  */
-void	handle_infile_and_outfile(int i, int num_of_pipes,
+int	handle_infile_and_outfile(int i, int num_of_pipes,
 	int pipe_array[2][2], t_tokens token);
 
 /**
@@ -397,7 +399,7 @@ void	handle_infile_and_outfile(int i, int num_of_pipes,
  * @param pipe_left array of ints for the left-hand side pipe,
  * 	NULL if there is no pipe
  */
-void	handle_infile(t_tokens token, int* pipe_left);
+int	handle_infile(t_tokens token, int* pipe_left);
 
 /**
  * Redirects STDOUT with dup2 to:
@@ -409,7 +411,7 @@ void	handle_infile(t_tokens token, int* pipe_left);
  * @param pipe_right array of ints for the right-hand side pipe,
  * 	NULL if there is no pipe
  */
-void	handle_outfile(t_tokens token, int* pipe_right);
+int	handle_outfile(t_tokens token, int* pipe_right);
 
 /**
  * Loops through all infiles, opens them and redirects STDIN with dup2
@@ -417,7 +419,7 @@ void	handle_outfile(t_tokens token, int* pipe_right);
  * 
  * @param token the token to handle infile for
  */
-void	dup2_infile(t_tokens token);
+int	dup2_infile(t_tokens token);
 
 /**
  * Loops through all outfiles, opens them and redirects STDOUT with dup2
@@ -425,6 +427,8 @@ void	dup2_infile(t_tokens token);
  * 
  * @param token the token to handle outfile for
  */
-void	dup2_outfile(t_tokens token);
+int	dup2_outfile(t_tokens token);
+
+void	free_all_in_child(t_main *main, int *pids);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 18:38:06 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/10/01 15:17:58 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/10/15 11:35:48 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,8 @@ void	exit_command(t_main *main)		//remember to print exit to stderr
 		{
 			free(main->input);
 			ft_free_split(&main->split_input);
+			rl_clear_history();
+			free_environment(&(main->env_list));
 			printf("exit\n");
 			exit (main->exit_code);
 		}
@@ -62,6 +64,8 @@ void	exit_command(t_main *main)		//remember to print exit to stderr
 			{
 				free(main->input);
 				ft_free_split(&main->split_input);
+				rl_clear_history();
+				free_environment(&(main->env_list));
 				printf("exit\n");
 				exit(temp_code);
 			}

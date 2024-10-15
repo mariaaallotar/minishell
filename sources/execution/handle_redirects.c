@@ -6,16 +6,16 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 09:57:31 by maheleni          #+#    #+#             */
-/*   Updated: 2024/10/14 14:13:40 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/10/15 14:13:40 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-void	dup2_outfile(t_tokens token)
+int	dup2_outfile(t_tokens token)
 {
-	int				outfile;
 	t_redirect_node	*node;
+	int				outfile;
 
 	node = token.outfiles;
 	while (node != NULL)
@@ -29,8 +29,7 @@ void	dup2_outfile(t_tokens token)
 		if (outfile == -1)
 		{
 			perror(node->name);
-			//maria free everything in child
-			exit(1);
+			return (-1);
 		}
 		node = node->next;
 	}
@@ -38,13 +37,13 @@ void	dup2_outfile(t_tokens token)
 	{
 		close(outfile);
 		perror(NULL);
-		//maria free everything in child
-		exit(1);
+		return (-1);
 	}
 	close(outfile);
+	return (0);
 }
 
-void	handle_outfile(t_tokens token, int* pipe_right)
+int	handle_outfile(t_tokens token, int* pipe_right)
 {
 	if (pipe_right != NULL)
 	{
@@ -53,17 +52,17 @@ void	handle_outfile(t_tokens token, int* pipe_right)
 			close(pipe_right[0]);
 			close(pipe_right[1]);
 			perror(NULL);
-			//maria free everything in child
-			exit(1);
+			return (-1);
 		}
 		close(pipe_right[0]);
 		close(pipe_right[1]);
 	}
 	if (token.outfiles != NULL)
-		dup2_outfile(token);
+		return (dup2_outfile(token));
+	return (0);
 }
 
-void	dup2_infile(t_tokens token)
+int	dup2_infile(t_tokens token)
 {
 	int	infile;
 	t_redirect_node	*node;
@@ -77,21 +76,20 @@ void	dup2_infile(t_tokens token)
 		if (infile == -1)
 		{
 			perror(node->name);
-			//maria free everything in child
-			exit(1);
+			return (-1);
 		}
 		node = node->next;
 	}
 	if (dup2(infile, STDIN_FILENO) == -1)
 	{
 		perror(NULL);
-		//maria free everything in child
-		exit(1);
+		return (-1);
 	}
 	close(infile);
+	return (0);
 }
 
-void	handle_infile(t_tokens token, int* pipe_left)
+int	handle_infile(t_tokens token, int* pipe_left)
 {
 	if (pipe_left != NULL)
 	{
@@ -100,37 +98,39 @@ void	handle_infile(t_tokens token, int* pipe_left)
 			close(pipe_left[0]);
 			close(pipe_left[1]);
 			perror(NULL);
-			//maria free everything in child
-			exit(1);
+			return (-1);
 		}
 		close(pipe_left[0]);
 		close(pipe_left[1]);
 	}
 	if (token.infiles != NULL)
-		dup2_infile(token);
+		return (dup2_infile(token));
+	return (0);
 }
 
-void	handle_infile_and_outfile(int i, int num_of_pipes,
+int	handle_infile_and_outfile(int i, int num_of_pipes,
 	int pipe_array[2][2], t_tokens token)
 {
-	if (i == 0 && num_of_pipes == 0)
-	{
-		handle_infile(token, NULL);
-		handle_outfile(token, NULL);
-	}
-	else if (i > 0 && num_of_pipes == 0)
-	{
-		handle_infile(token, pipe_array[0]);
-		handle_outfile(token, NULL);
-	}
-	else if (i == 0)
-	{
-		handle_infile(token, NULL);
-		handle_outfile(token, pipe_array[1]);
-	}
+	int	return_value;
+
+	if (i == 0)
+		return_value = handle_infile(token, NULL);
 	else
+		return_value = handle_infile(token, pipe_array[0]);
+	if (return_value == -1)
 	{
-		handle_infile(token, pipe_array[0]);
-		handle_outfile(token, pipe_array[1]);
+		if (num_of_pipes > 0)
+		{
+			close(pipe_array[1][0]);
+			close(pipe_array[1][1]);
+		}
+		return (-1);
 	}
+	if (num_of_pipes == 0)
+		return_value = handle_outfile(token, NULL);
+	else
+		return_value = handle_outfile(token, pipe_array[1]);
+	if (return_value == -1)
+		return (-1);
+	return (0);
 }

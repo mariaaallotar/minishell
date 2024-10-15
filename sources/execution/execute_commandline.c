@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 10:33:14 by maheleni          #+#    #+#             */
-/*   Updated: 2024/10/14 16:06:38 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/10/15 14:39:22 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,7 @@ int	is_builtin(t_tokens token)
 	int		str_len;
 
 	if (token.command == NULL)
-	{
-		printf("Command NULL\n");
 		return (0);
-	}
 	command = token.command[0];
 	str_len = ft_strlen(command);
 	if (ft_strncmp(command, "echo\0", str_len) == 0)
@@ -107,7 +104,7 @@ void	close_pipes_on_error(int *pipe)
 	close(pipe[1]);
 }
 
-int	execute_commandline(t_main *main, t_tokens *tokens)
+int	execute_commandline(t_main *main, t_tokens *tokens)	//does this need to be return int?
 {
 	int	pipe_array[2][2];
 	int	*pids;
@@ -116,53 +113,55 @@ int	execute_commandline(t_main *main, t_tokens *tokens)
 	int	status;
 
 	num_of_pipes = main->num_of_pipes;
+	i = 0;
+	if (is_builtin_not_part_of_pipeline(tokens, num_of_pipes, i))
+	{
+		execute_builtin_in_parent(main, tokens[i]);
+		return (main->exit_code);
+	}
 	pids = malloc_pids(num_of_pipes + 1);
 	if (pids == NULL)
-	{
-		free(pids);
-		return (1);
-	}
-	i = 0;
+		return (errno);
 	while (num_of_pipes >= 0)
 	{
-		if (is_builtin_not_part_of_pipeline(tokens, num_of_pipes, i))
-			execute_builtin_in_parent(main, tokens[i]);
-		else
+		if (i > 0)
+			reassign_pipe_right_to_left(pipe_array);
+		if (num_of_pipes > 0)
 		{
-			if (i > 0)
-				reassign_pipe_right_to_left(pipe_array);
-			if (num_of_pipes > 0)
-			{
-				if (create_pipe(pipe_array) == 0)
-				{
-					if (i > 0)
-						close_pipes_on_error(pipe_array[0]);
-					free(pids);
-					return (1);
-				}
-			}
-			pids[i] = create_fork();
-			if (pids[i] == -1)
+			if (create_pipe(pipe_array) == 0)
 			{
 				if (i > 0)
 					close_pipes_on_error(pipe_array[0]);
-				if (num_of_pipes > 0)
-					close_pipes_on_error(pipe_array[1]);
 				free(pids);
 				return (1);
 			}
-			if (pids[i] == 0)
-			{
-				handle_infile_and_outfile(i, num_of_pipes, pipe_array, tokens[i]);
-				execute_child_process(main, tokens[i]);
-			}
-			else
-				close_pipes_in_parent(i, num_of_pipes, pipe_array[0], pipe_array[1]);
 		}
+		pids[i] = create_fork();
+		if (pids[i] == -1)
+		{
+			if (i > 0)
+				close_pipes_on_error(pipe_array[0]);
+			if (num_of_pipes > 0)
+				close_pipes_on_error(pipe_array[1]);
+			free(pids);
+			return (1);
+		}
+		if (pids[i] == 0)
+		{
+			if (handle_infile_and_outfile(i, num_of_pipes, pipe_array, tokens[i]) == -1)
+			{
+				free_all_in_child(main, pids);
+				exit(errno);
+			}
+			execute_child_process(main, tokens[i], pids);
+		}
+		else
+			close_pipes_in_parent(i, num_of_pipes, pipe_array[0], pipe_array[1]);
 		num_of_pipes--;
 		i++;
 	}
 	i = 0;
+	status = 0;
 	while (i < main->num_of_pipes + 1)
 	{
 		//TODO make this robust, has to work with signals as well

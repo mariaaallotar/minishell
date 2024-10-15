@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 10:12:47 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/10/14 10:31:31 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/10/15 10:34:06 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,7 @@ int	main(int argc, char *argv[], char *envp[]) //what happens if ./minishell get
 	if (main.input) //REMOVE?
 		free(main.input);
 	free_environment(&(main.env_list));
+	rl_clear_history();
 	//free_signals();
 	exit (main.exit_code);
 }
