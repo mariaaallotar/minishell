@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit_command.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 18:38:06 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/10/01 15:17:58 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/10/14 15:16:19 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,6 @@ void	exit_command(t_main *main)		//remember to print exit to stderr
 		//Check for no other elements
 		if (!main->split_input[1])
 		{
-			free(main->input);
 			ft_free_split(&main->split_input);
 			printf("exit\n");
 			exit (main->exit_code);
@@ -60,7 +59,6 @@ void	exit_command(t_main *main)		//remember to print exit to stderr
 		{
 			if (temp_code >= 0 && temp_code <= 255)
 			{
-				free(main->input);
 				ft_free_split(&main->split_input);
 				printf("exit\n");
 				exit(temp_code);

@@ -6,33 +6,26 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/24 10:44:31 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/10/11 14:55:12 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/10/17 12:47:59 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-void free_spl_and_cmd(t_main *main, t_tokens **tokens)
+void	free_split_and_tokens(t_main *main, t_tokens **tokens)
 {
 	ft_free_split(&main->split_input);
 	free(*tokens);
 }
 
-void free_all_and_exit(t_main *main, t_tokens **tokens, int code)
+void	free_all_and_exit(t_main *main, t_tokens **tokens)
 {
-	ft_free_split(&main->split_input);
+	free_and_null_split_input(main);
 	free_token_commands(main, tokens);
+	free_token_redirects(main, tokens);
 	free(*tokens);
-	exit (code);
-}
-
-void	free_and_null_input(t_main *main)
-{
-	if (*main->input)
-	{
-		free(main->input);
-		main->input = NULL;
-	}
+	free_environment(&(main->env_list));
+	exit (1);
 }
 
 void	free_and_null_split_input(t_main *main)
@@ -58,8 +51,8 @@ void	exit_free_split_element_malloc_failed(t_main *main, int i)
 
 void	free_token_commands(t_main *main, t_tokens **tokens)
 {
-	int i;
-	
+	int	i;
+
 	i = 0;
 	while (i < main->num_of_pipes + 1)
 	{
@@ -69,13 +62,11 @@ void	free_token_commands(t_main *main, t_tokens **tokens)
 	}
 }
 
-//Left off here trying to free linked list, test isn't printing right?
-
-void free_token_redirects(t_main *main, t_tokens **tokens)
+void	free_token_redirects(t_main *main, t_tokens **tokens)
 {
-	int token_number;
-	t_redirect_node *temp;
-	t_redirect_node *temp_next;
+	int				token_number;
+	t_redirect_node	*temp;
+	t_redirect_node	*temp_next;
 
 	token_number = 0;
 	while (token_number < main->num_of_pipes + 1)
@@ -84,7 +75,7 @@ void free_token_redirects(t_main *main, t_tokens **tokens)
 		while (temp)
 		{
 			temp_next = temp->next;
-			if (temp->type == HEREDOC)
+			if (temp->type == HEREDOC && temp->name)
 				free(temp->name);
 			free(temp);
 			temp = temp_next;
@@ -100,12 +91,39 @@ void free_token_redirects(t_main *main, t_tokens **tokens)
 	}
 }
 
-void free_and_exit_node_malloc_failed(t_main *main, t_tokens **tokens)
+void	free_and_exit_node_malloc_failed(t_main *main, t_tokens **tokens)
 {
 	printf("Error: Failed to malloc node for redirect linked list\n");
 	ft_free_split(&main->split_input);
 	free_token_commands(main, tokens);
 	free_token_redirects(main, tokens);
 	free(*tokens);
+	free_environment(&(main->env_list));
+	exit (1);
+}
+
+void	free_and_exit_variable_malloc_failed(t_main *main, int i)
+{
+	while (main->split_input[i++])
+		free(main->split_input[i]);
+	ft_free_split(&main->split_input);
+	exit (1);
+}
+
+void	free_and_exit_quote_malloc_failed(t_main *main, t_tokens **tokens, int token_id, int cmd_id)
+{
+	int i;
+
+	i = 1;
+	while ((*tokens)[token_id].command[cmd_id + i])
+	{
+		free((*tokens)[token_id].command[cmd_id + i]);
+		i++;
+	}
+	free_and_null_split_input(main);
+	free_token_commands(main, tokens);
+	free_token_redirects(main, tokens);
+	free(*tokens);
+	free_environment(&(main->env_list));
 	exit (1);
 }

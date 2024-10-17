@@ -6,15 +6,15 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 11:39:13 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/10/08 11:19:45 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/10/17 14:32:13 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-static size_t get_quote_element_length(char *element, char c)
+static size_t	get_single_quote_length(char *element, char c)
 {
-	size_t result;
+	size_t	result;
 
 	result = 1;
 	element++;
@@ -28,95 +28,158 @@ static size_t get_quote_element_length(char *element, char c)
 	return (result);
 }
 
-void add_redirect_element(t_main *main, char *input, int *i, int split_index)
+// static size_t	get_double_quote_length(char *element)
+// {
+// 	size_t	result;
+
+// 	result = 1;
+// 	element++;
+// 	while (*element)
+// 	{
+// 		result++;
+// 		if (!*element || *element == ' ' || *element == '\t')
+// 			return (result);
+// 		element++;
+// 	}
+// 	return (result);
+// }
+
+void	add_redirect_element(t_main *main, char *input, int *i, int split_index)
 {
-	//check for << and >>
-	if ((input[*i] == '<' && input[*i + 1] == '<') ||
-		(input[*i] == '>' && input[*i + 1] == '>'))
+	main->split_input[split_index] = NULL;
+	if ((input[*i] == '<' && input[*i + 1] == '<')
+		|| (input[*i] == '>' && input[*i + 1] == '>'))
 	{
 		main->split_input[split_index] = malloc(3);
 		if (!main->split_input[split_index])
-			exit_free_split_element_malloc_failed(main, split_index); //TODO check this memory
-		main->split_input[split_index][0] = input[*i];
-		main->split_input[split_index][1] = input[*i + 1];
+		{
+			printf("Error: Failed to malloc redirect in split_input\n");
+			exit_free_split_element_malloc_failed(main, split_index);
+		}
+		main->split_input[split_index][0] = input[(*i)++];
+		main->split_input[split_index][1] = input[(*i)++];
 		main->split_input[split_index][2] = '\0';
-		*i += 2;
 	}
 	else
 	{
 		main->split_input[split_index] = malloc(2);
 		if (!main->split_input[split_index])
-			exit_free_split_element_malloc_failed(main, split_index); //TODO check this memory
-		main->split_input[split_index][0] = input[*i];
+		{
+			printf("Error: Failed to malloc redirect in split_input\n");
+			exit_free_split_element_malloc_failed(main, split_index);
+		}
+		main->split_input[split_index][0] = input[(*i)++];
 		main->split_input[split_index][1] = '\0';
-		*i += 1;
 	}
 }
 
-void add_double_quotes_element(t_main *main, char *input, int *id_input, int id_split)
+static void check_for_odd_number_of_double_quotes(t_main *main, char *input, int id_input)
 {
-	size_t element_length;
-	int i;
-		
-	//get element length
-	element_length = get_quote_element_length(input + *id_input, '\"');
-	
-	//check for empty double quotes ""
-	if (element_length == 2)
+	int num_of_quotes;
+
+	num_of_quotes = 0;
+	while (input[id_input] && input[id_input] != ' ' && input[id_input] != '\t')
 	{
-		printf("Error: Empty double quotes \"\""); //TODO replace with actual "" handling
-		exit_free_split_element_malloc_failed(main, id_split - 1); //TODO fix this memory shit
+		if (input[id_input] == '\"')
+			num_of_quotes++;
+		id_input++;
 	}
-
-	//malloc space for element
-	main->split_input[id_split] = malloc(element_length + 1);
-	if (!main->split_input[id_split]) //TODO maybe need to double check this works?
-		exit_free_split_element_malloc_failed(main, id_split - 1);
-
-	//put quotes and chars into element
-	i = 0;
-	while (input[*id_input])
+	if (num_of_quotes % 2 != 0)
 	{
-		main->split_input[id_split][i++] = input[*id_input];
+		printf("Error: Unclosed double quotes\n");
+		free(main->input);
+		ft_free_split(&main->split_input);
+		exit (1);
+	}
+}
+
+void malloc_double_quotes(t_main *main, char *input, int id_input, int id_spl)
+{
+	size_t	element_length;
+
+	(void)main;
+	(void)id_spl;
+	element_length = 0;
+	while (input[id_input] && input[id_input] != ' ' && input[id_input] != '\t')
+	{
+		element_length++;
+		id_input++;
+	}
+	main->split_input[id_spl] = NULL;
+	main->split_input[id_spl] = malloc(element_length + 1);
+	if (!main->split_input[id_spl])
+	{
+		printf("Error: Failed to malloc double-quote element in split\n");
+		exit_free_split_element_malloc_failed(main, id_spl - 1);
+	}
+}
+
+void add_double_quotes(t_main *main, char *input, int *id_input, int id_spl)
+{
+	int i;
+
+	i = 0;
+	check_for_odd_number_of_double_quotes(main, input, *id_input);
+	malloc_double_quotes(main, input, *id_input, id_spl);
+	while (input[*id_input] && input[*id_input] != ' ' && input[*id_input] != '\t')
+	{
+		main->split_input[id_spl][i++] = input[*id_input];
 		(*id_input)++;
-		if (input[*id_input] == '\"')
-			break ;
 	}
-	(*id_input)++;
-	main->split_input[id_split][i] = '\"';
-	main->split_input[id_split][i + 1] = '\0';
+	main->split_input[id_spl][i] = '\0';
 }
 
-void add_single_quotes_element(t_main *main, char *input, int *id_input, int id_split)
+// void	add_double_quotes(t_main *main, char *input, int *id_input, int id_spl)
+// {
+// 	size_t	element_length;
+// 	int		i;
+
+// 	//element_length = get_single_quote_length(input + *id_input, '\"');
+// 	element_length = get_double_quote_length(input + *id_input);
+// 	main->split_input[id_spl] = NULL;
+// 	main->split_input[id_spl] = malloc(element_length + 1);
+// 	if (!main->split_input[id_spl])
+// 	{
+// 		printf("Error: Failed to malloc double-quote element in tokens\n");
+// 		exit_free_split_element_malloc_failed(main, id_spl - 1);
+// 	}
+// 	i = 0;
+// 	while (input[*id_input])
+// 	{
+// 		main->split_input[id_spl][i++] = input[*id_input];
+// 		(*id_input)++;
+// 		//if (input[*id_input] == '\"')
+// 		if (input[*id_input] == ' ' || input[*id_input] == '\t')
+// 			break ;
+// 	}
+// 	(*id_input)++;
+// 	//main->split_input[id_spl][i] = '\"';
+// 	//main->split_input[id_spl][i + 1] = '\0';
+// 	main->split_input[id_spl][i] = '\0';
+// }
+
+void	add_single_quotes(t_main *main, char *input, int *id_input, int id_spl)
 {
-	size_t element_length;
-	int i;
-		
-	//get element length
-	element_length = get_quote_element_length(input + *id_input, '\'');
-	
-	//check for empty single quotes ''
-	if (element_length == 2)
+	size_t	element_length;
+	int		i;
+
+	element_length = get_single_quote_length(input + *id_input, '\'');
+	main->split_input[id_spl] = NULL;
+	main->split_input[id_spl] = malloc(element_length + 1);
+	if (!main->split_input[id_spl])
 	{
-		printf("Error: Empty single quotes \'\'"); //TODO replace with actual "" handling
-		exit_free_split_element_malloc_failed(main, id_split - 1); //TODO fix this memory shit
+		printf("Error: Failed to malloc single-quote element in tokens\n");
+		exit_free_split_element_malloc_failed(main, id_spl - 1);
 	}
-
-	//malloc space for element
-	main->split_input[id_split] = malloc(element_length + 1);
-	if (!main->split_input[id_split]) //TODO maybe need to double check this works?
-		exit_free_split_element_malloc_failed(main, id_split - 1);
-
-	//put quotes and chars into element
 	i = 0;
 	while (input[*id_input])
 	{
-		main->split_input[id_split][i++] = input[*id_input];
+		main->split_input[id_spl][i++] = input[*id_input];
 		(*id_input)++;
 		if (input[*id_input] == '\'')
 			break ;
 	}
 	(*id_input)++;
-	main->split_input[id_split][i] = '\'';
-	main->split_input[id_split][i + 1] = '\0';
+	main->split_input[id_spl][i] = '\'';
+	main->split_input[id_spl][i + 1] = '\0';
 }

@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 12:11:12 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/10/10 14:00:45 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/10/15 11:19:46 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ static int	display_prompt_and_wait_for_input(char **input)
 	return (1);
 }
 
-int handle_inputs(char **input)
+int	handle_inputs(char **input)
 {
 	if (!display_prompt_and_wait_for_input(input))
 		return (0);

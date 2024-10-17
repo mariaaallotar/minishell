@@ -6,20 +6,20 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 11:19:25 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/10/08 11:18:09 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/10/17 14:10:17 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-static int check_for_quotes(t_main *main, char **input, char c)
+static int	check_for_quotes(t_main *main, char **input, char c)
 {
 	(*input)++;
 	if (**input == c)
 	{
 		free(main->input);
 		main->input = NULL;
-		printf("Error: Empty quotes\n"); //CHANGE
+		printf("Error: Empty quotes\n");
 		return (0);
 	}
 	while (**input != c)
@@ -29,9 +29,9 @@ static int check_for_quotes(t_main *main, char **input, char c)
 			free(main->input);
 			main->input = NULL;
 			if (c == '\'')
-				printf("Error: Unclosed single quotes\n"); //CHANGE
+				printf("Error: Unclosed single quotes\n");
 			else
-				printf("Error: Unclosed double quotes\n"); //CHANGE
+				printf("Error: Unclosed double quotes\n");
 			return (0);
 		}
 		(*input)++;
@@ -40,58 +40,56 @@ static int check_for_quotes(t_main *main, char **input, char c)
 	return (1);
 }
 
+static int	split_length_helper(t_main *main, char **input, int *result)
+{
+	// if (**input == '\"')
+	// {
+	// 	if (!check_for_quotes(main, input, '\"'))
+	// 		return (0);
+	// }
+	if (**input == '\'')
+	{
+		if (!check_for_quotes(main, input, '\''))
+			return (0);
+	}
+	else
+	{
+		while (**input && **input != ' ' && **input != '\t')
+		{
+			if (is_special(**input))
+			{
+				*result += 2;
+				(*input)++;
+				break ;
+			}
+			(*input)++;
+		}	
+	}
+	return (1);
+}
+
 static int	get_split_length(t_main *main, char *input)
 {
-	int result;
+	int	result;
 
 	result = 0;
 	while (*input)
 	{
-		//Skip spaces and tabs
 		while (*input && (*input == ' ' || *input == '\t'))
 			input++;
-
-		//Count result or else return if it's the end of the string
 		if (*input)
 			result++;
 		else
 			return (result);
-
-		//Check for double quotes and skip, also return error if they are unclosed
-		if (*input == '\"')
-		{
-			if (!check_for_quotes(main, &input, '\"'))
-				return (0);
-		}
-
-		//Check for single quotes and skip, also return error if they are unclosed
-		else if (*input == '\'')
-		{
-			if (!check_for_quotes(main, &input, '\''))
-				return (0);
-		}
-		
-		//Skip regular characters
-		else
-		{
-			while (*input && *input != ' ' && *input != '\t')
-			{
-				if (is_special(*input))
-				{
-					result += 2;
-					input++;
-					break ;
-				}
-				input++;
-			}	
-		}
+		if (!split_length_helper(main, &input, &result))
+			return (0);
 	}
 	return (result);
 }
 
 static int	malloc_split_input_array(t_main *main)
 {
-	int split_length;
+	int	split_length;
 
 	split_length = 0;
 	if (main->input)
@@ -101,12 +99,13 @@ static int	malloc_split_input_array(t_main *main)
 	main->split_input = malloc((split_length + 1) * sizeof(char *));
 	if (!main->split_input)
 	{
+		printf("Error: Failed to malloc array for split_input\n");
 		free(main->input);
-		exit (1);
+		return (0);
 	}
 	while (split_length)
 	{
-		main->split_input[split_length] =  NULL;
+		main->split_input[split_length] = NULL;
 		split_length--;
 	}
 	return (1);

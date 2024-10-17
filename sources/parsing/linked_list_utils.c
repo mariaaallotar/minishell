@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 12:02:21 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/10/09 12:03:24 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/10/14 14:54:01 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,16 @@ t_redirect_node	*lstnew_redirect_node(char *name, int type)
 	new_node = (t_redirect_node *)malloc(sizeof(t_redirect_node));
 	if (!new_node)
 		return (NULL);
-	new_node->name = name;
+	if (type == HEREDOC)
+	{
+		new_node->delimiter = name;
+		new_node->name = NULL;
+	}
+	else
+	{
+		new_node->name = name;
+		new_node->delimiter = NULL;
+	}
 	new_node->type = type;
 	new_node->next = NULL;
 	return (new_node);
