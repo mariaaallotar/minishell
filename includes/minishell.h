@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 11:21:19 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/10/17 11:30:03 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/10/18 13:40:14 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,6 +153,9 @@ void quotes_and_variables(t_main *main, t_tokens **tokens);
 
 //Free all commands above the NULL and free all and exit
 void free_and_exit_quote_malloc_failed(t_main *main, t_tokens **tokens, int token_id, int cmd_id);
+
+//Find the given $VAR in the env replace the given element if found
+int	find_var_and_remalloc(t_main *main, char **str);
 
 /*****************************************************************************/
 	//ENVIRONMENT

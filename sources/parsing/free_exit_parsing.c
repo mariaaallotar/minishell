@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/24 10:44:31 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/10/17 12:47:59 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/10/18 13:32:32 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,8 +104,11 @@ void	free_and_exit_node_malloc_failed(t_main *main, t_tokens **tokens)
 
 void	free_and_exit_variable_malloc_failed(t_main *main, int i)
 {
-	while (main->split_input[i++])
+	while (main->split_input[i])
+	{
 		free(main->split_input[i]);
+		i++;
+	}
 	ft_free_split(&main->split_input);
 	exit (1);
 }
