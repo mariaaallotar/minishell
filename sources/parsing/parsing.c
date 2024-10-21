@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 11:32:36 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/10/11 11:41:42 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/10/17 10:33:11 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,7 +131,6 @@ int	parsing(t_main *main, t_tokens **tokens)
 		return (1);
 	print_split_input(main); //REMOVE
 	free_and_null_input(main);
-	exit_command(main);
 	expand_variables(main);
 	malloc_and_init_tokens(main, tokens);
 	if (tokenize(main, tokens))

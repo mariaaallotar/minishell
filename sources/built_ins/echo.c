@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 14:52:20 by maheleni          #+#    #+#             */
-/*   Updated: 2024/10/10 10:59:20 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/10/21 11:38:07 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,6 @@ int	has_no_newline_flag(char *str)
 
 void	print_echo_arguments(int i, int has_new_line, t_tokens token)
 {
-	//Handle error when printf fails?
 	while (token.command[i] != NULL)
 	{
 		printf("%s", token.command[i]);
@@ -51,14 +50,12 @@ int	echo(t_main *main, t_tokens token)
 
 	(void)main;
 	has_new_line = 1;
-	i = 0;
+	i = 1;
 	if (token.command[i] == NULL)
 	{
-		printf("First string NULL\n");
-		//error
-		return (1);
+		printf("\n");
+		return (0);
 	}
-	i = 1;
 	if (has_no_newline_flag(token.command[i]))
 	{
 		has_new_line = 0;

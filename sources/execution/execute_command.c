@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 10:00:41 by maheleni          #+#    #+#             */
-/*   Updated: 2024/10/15 15:42:54 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/10/17 15:19:34 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,12 @@ void	execute_command(t_main *main, t_tokens token, int *pids)
 		exit(errno);
 	}
 	env = convert_list_to_array(main->env_list);
+	if (env == NULL)
+	{
+		free_all_in_child(main, pids);
+		free(path);
+		exit(errno);
+	}
 	if (execve(path, token.command, env) == -1)
 	{
 		free_all_in_child(main, pids);
@@ -64,32 +70,25 @@ void	execute_command(t_main *main, t_tokens token, int *pids)
 	}
 }
 
-int	execute_builtin(t_main *main, t_tokens token)
+int	execute_builtin(t_main *main, t_tokens token, int parent, int open_fds[2])
 {
 	char	*command;
-	int		cmd_len;
 
-	(void)main;
 	command = token.command[0];
-	cmd_len = ft_strlen(command);
-	if (ft_strncmp(command, "echo\0", cmd_len) == 0)
+	if (ft_strncmp(command, "echo", ft_strlen(command)) == 0)
 		return (echo(main, token));
-	else if (ft_strncmp(command, "cd\0", cmd_len) == 0)
+	else if (ft_strncmp(command, "cd", ft_strlen(command)) == 0)
 		return (cd(main, token));
-	else if (ft_strncmp(command, "pwd\0", cmd_len) == 0)
+	else if (ft_strncmp(command, "pwd", ft_strlen(command)) == 0)
 		return (pwd(main, token));
-	else if (ft_strncmp(command, "export\0", cmd_len) == 0)
+	else if (ft_strncmp(command, "export", ft_strlen(command)) == 0)
 		return (export(main, token));
-	else if (ft_strncmp(command, "unset\0", cmd_len) == 0)
+	else if (ft_strncmp(command, "unset", ft_strlen(command)) == 0)
 		return (unset(main, token));
-	else if (ft_strncmp(command, "env\0", cmd_len) == 0)
+	else if (ft_strncmp(command, "env", ft_strlen(command)) == 0)
 		return (env(main, token));
-	else if (ft_strncmp(command, "exit\0", cmd_len) == 0)
-	{
-		printf("Executing exit\n");
-		//return(exit_command(main));
-		return (0);
-	}
+	else if (ft_strncmp(command, "exit", ft_strlen(command)) == 0)
+		return (exit_command(main, token, parent, open_fds));
 	return (0);
 }
 
@@ -99,7 +98,7 @@ void	execute_child_process(t_main *main, t_tokens token, int *pids)
 
 	if (is_builtin(token))
 	{
-		status = execute_builtin(main, token);
+		status = execute_builtin(main, token, 0, NULL);
 		free_all_in_child(main, pids);
 		exit(status);
 	}
@@ -123,12 +122,12 @@ void	restore_stdin_stdout(t_main *main, int original_stdin,
 
 void	execute_builtin_in_parent(t_main *main, t_tokens token)
 {
-	int original_stdin;
-    int original_stdout;
+	int	exit_code;
+	int	original_stdin_stdout[2];
 
-	original_stdin = dup(STDIN_FILENO);
-	original_stdout = dup(STDOUT_FILENO);
-	if (original_stdin == -1 || original_stdout == -1)
+	original_stdin_stdout[0] = dup(STDIN_FILENO);
+	original_stdin_stdout[1] = dup(STDOUT_FILENO);
+	if (original_stdin_stdout[0] == -1 || original_stdin_stdout[1] == -1)
 	{
 		perror(NULL);
 		main->exit_code = errno;
@@ -136,8 +135,10 @@ void	execute_builtin_in_parent(t_main *main, t_tokens token)
 	}
 	handle_infile(token, NULL);
 	handle_outfile(token, NULL);
-	execute_builtin(main, token);
-	restore_stdin_stdout(main, original_stdin, original_stdout);
-	close(original_stdin);
-	close(original_stdout);
+	exit_code = execute_builtin(main, token, 1, original_stdin_stdout);
+	main->exit_code = exit_code;
+	restore_stdin_stdout(main, original_stdin_stdout[0], original_stdin_stdout[1]);
+	close(original_stdin_stdout[0]);
+	close(original_stdin_stdout[1]);
+	errno = 0;
 }

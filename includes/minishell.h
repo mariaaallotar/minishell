@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 11:21:19 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/10/15 16:05:06 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/10/17 13:31:25 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,9 +100,6 @@ void add_double_quotes_element(t_main *main, char *input, int *id_input, int id_
 //Add special character elements to the split_input array
 void add_redirect_element(t_main *main, char *input, int *i, int split_index);
 
-//Checks for an exit command and exit-code and exits if found or shows error for incorrect format
-void	exit_command(t_main *main);
-
 //Our own kind of tokenizing function of the input
 int tokenize(t_main *main, t_tokens **command);
 
@@ -179,7 +176,7 @@ t_list	*find_node(t_main *main, char *variable);
  * @param main pointer to the main struct
  * @param content the content of the node
  */
-void    add_variable(t_main *main, char *content);
+int    add_variable(t_main *main, char *content);
 
 /**
  * Updates the value of the variable key in the env linked list
@@ -187,7 +184,7 @@ void    add_variable(t_main *main, char *content);
  * @param main pointer to the main struct
  * @param var the key value pair to update
  */
-void	update_variable(t_main *main, char *var);
+int	update_variable(t_main *main, char *var);
 
 /**
  * Duplicates (mallocs) the values from envp into a linked list
@@ -280,6 +277,8 @@ int	unset(t_main *main, t_tokens token);
  */
 int	pwd(t_main *main, t_tokens token);
 
+char	*get_pwd(void);
+
 int	cd(t_main *main, t_tokens token);
 
 /**
@@ -290,6 +289,8 @@ int	cd(t_main *main, t_tokens token);
  * @returns 0 on success, 1 on error
  */
 int env(t_main *main, t_tokens token);
+
+int	exit_command(t_main *main, t_tokens token, int parent, int open_fds[2]);
 
 /*****************************************************************************/
 	//EXECUTION
@@ -338,7 +339,7 @@ void	execute_command(t_main *main, t_tokens token, int *pids);
  * @param main the main struct of the program
  * @param token  the token to execute
  */
-int	execute_builtin(t_main *main, t_tokens token);
+int	execute_builtin(t_main *main, t_tokens token, int parent, int open_fds[2]);
 
 /**
  * Executes either a builtin or a command as a child process.

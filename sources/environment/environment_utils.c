@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 14:37:05 by maheleni          #+#    #+#             */
-/*   Updated: 2024/10/11 12:15:34 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/10/17 15:18:40 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,9 +38,8 @@ char	**convert_list_to_array(t_list *env_list)
 	array = malloc ((size + 1) * sizeof(char *));
 	if (array == NULL)
 	{
-		//TODO handle error;
-		perror("In convert_list_to_array");
-		exit(1);
+		perror(NULL);
+		return (NULL);
 	}
 	node = env_list;
 	i = 0;

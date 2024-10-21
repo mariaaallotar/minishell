@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 10:33:14 by maheleni          #+#    #+#             */
-/*   Updated: 2024/10/15 14:39:22 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/10/17 12:58:24 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,19 +21,19 @@ int	is_builtin(t_tokens token)
 		return (0);
 	command = token.command[0];
 	str_len = ft_strlen(command);
-	if (ft_strncmp(command, "echo\0", str_len) == 0)
+	if (ft_strncmp(command, "echo", 5) == 0)
 		return (1);
-	else if (ft_strncmp(command, "cd\0", str_len) == 0)
+	else if (ft_strncmp(command, "cd", 3) == 0)
 		return (1);
-	else if (ft_strncmp(command, "pwd\0", str_len) == 0)
+	else if (ft_strncmp(command, "pwd", 4) == 0)
 		return (1);
-	else if (ft_strncmp(command, "export\0", str_len) == 0)
+	else if (ft_strncmp(command, "export", 7) == 0)
 		return (1);
-	else if (ft_strncmp(command, "unset\0", str_len) == 0)
+	else if (ft_strncmp(command, "unset", 6) == 0)
 		return (1);
-	else if (ft_strncmp(command, "env\0", str_len) == 0)
+	else if (ft_strncmp(command, "env", 4) == 0)
 		return (1);
-	else if (ft_strncmp(command, "exit\0", str_len) == 0)
+	else if (ft_strncmp(command, "exit", 5) == 0)
 		return (1);
 	return (0);
 }
