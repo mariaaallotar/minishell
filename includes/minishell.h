@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 11:21:19 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/10/18 13:40:14 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/10/21 14:50:04 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,6 +156,12 @@ void free_and_exit_quote_malloc_failed(t_main *main, t_tokens **tokens, int toke
 
 //Find the given $VAR in the env replace the given element if found
 int	find_var_and_remalloc(t_main *main, char **str);
+
+//Same as free all and exit but also free the split_input when there is a NULL in the middle
+void	free_all_and_exit_with_free_split_middle(t_main *main, t_tokens **tokens);
+
+//Removes outer double quotes and expands the environment vars within
+int expand_quotes_and_vars(t_main *main, t_tokens **tokens, char **str);
 
 /*****************************************************************************/
 	//ENVIRONMENT

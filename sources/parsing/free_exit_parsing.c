@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/24 10:44:31 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/10/18 13:32:32 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/10/21 14:10:14 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,29 @@ void	free_split_and_tokens(t_main *main, t_tokens **tokens)
 void	free_all_and_exit(t_main *main, t_tokens **tokens)
 {
 	free_and_null_split_input(main);
+	free_token_commands(main, tokens);
+	free_token_redirects(main, tokens);
+	free(*tokens);
+	free_environment(&(main->env_list));
+	exit (1);
+}
+
+static void	ft_free_split_with_middle_null(char ***arr)
+{
+	int	i;
+
+	i = 0;
+	while ((*arr)[i])
+		free((*arr)[i++]);
+	i++;
+	while ((*arr)[i])
+		free((*arr)[i++]);
+	free(*arr);
+}
+
+void	free_all_and_exit_with_free_split_middle(t_main *main, t_tokens **tokens)
+{
+	ft_free_split_with_middle_null(&main->split_input);
 	free_token_commands(main, tokens);
 	free_token_redirects(main, tokens);
 	free(*tokens);
@@ -62,7 +85,7 @@ void	free_token_commands(t_main *main, t_tokens **tokens)
 	}
 }
 
-void	free_token_redirects(t_main *main, t_tokens **tokens)
+void	 free_token_redirects(t_main *main, t_tokens **tokens)
 {
 	int				token_number;
 	t_redirect_node	*temp;
@@ -75,7 +98,9 @@ void	free_token_redirects(t_main *main, t_tokens **tokens)
 		while (temp)
 		{
 			temp_next = temp->next;
-			if (temp->type == HEREDOC && temp->name)
+			if (temp->type == HEREDOC)
+				free(temp->delimiter);
+			if (temp->type == INFILE || (temp->type == HEREDOC && temp->name))
 				free(temp->name);
 			free(temp);
 			temp = temp_next;
@@ -84,6 +109,7 @@ void	free_token_redirects(t_main *main, t_tokens **tokens)
 		while (temp)
 		{
 			temp_next = temp->next;
+			free(temp->name);
 			free(temp);
 			temp = temp_next;
 		}

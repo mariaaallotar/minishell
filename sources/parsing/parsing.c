@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 11:32:36 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/10/18 14:21:50 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/10/21 12:01:30 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ static void	print_split_input(t_main *main) //REMOVE
 	int i = 0;
 	while (main->split_input[i])
 	{
-		printf("input[%d] = %s\n", i, main->split_input[i]);
+		printf("input[%d] = %s, address = %p\n", i, main->split_input[i], main->split_input[i]);
 		i++;
 	}
 	printf("\n");
@@ -135,6 +135,7 @@ int	parsing(t_main *main, t_tokens **tokens)
 	if (tokenize(main, tokens))
 		return (1);
 	quotes_and_variables(main, tokens);
+	//print_split_input(main); //REMOVE
 	create_heredoc(main, tokens);
 	print_tokens(main, tokens); //REMOVE
 	return (0);

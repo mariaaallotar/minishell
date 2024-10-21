@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 16:50:02 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/10/18 14:26:11 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/10/21 15:10:05 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,14 @@ int	find_var_and_remalloc(t_main *main, char **str)
 			return (1);
 		}
 		temp = temp->next;
+	}
+	if ((*str)[0] == '$')
+	{
+		free(*str);
+		*str = NULL;
+		*str = ft_strdup("");
+		if (!*str)
+			return (0);
 	}
 	return (1);
 }

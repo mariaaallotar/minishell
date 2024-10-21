@@ -6,7 +6,7 @@
 #    By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/20 15:07:12 by eberkowi          #+#    #+#              #
-#    Updated: 2024/10/16 13:57:10 by eberkowi         ###   ########.fr        #
+#    Updated: 2024/10/21 14:51:14 by eberkowi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,6 +29,7 @@ CFILES := main.c \
 		parsing/linked_list_utils.c \
 		parsing/create_heredoc.c \
 		parsing/quotes_and_variables.c \
+		parsing/expand_quotes_and_vars.c \
 		built_ins/exit_command.c \
 		environment/environment_utils.c \
 		environment/print_environment.c \

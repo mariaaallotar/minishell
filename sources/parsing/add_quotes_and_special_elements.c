@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 11:39:13 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/10/17 14:32:13 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/10/21 14:55:00 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ static void check_for_odd_number_of_double_quotes(t_main *main, char *input, int
 	int num_of_quotes;
 
 	num_of_quotes = 0;
-	while (input[id_input] && input[id_input] != ' ' && input[id_input] != '\t')
+	while (input[id_input])
 	{
 		if (input[id_input] == '\"')
 			num_of_quotes++;

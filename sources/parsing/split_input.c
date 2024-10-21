@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 11:19:25 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/10/17 14:10:17 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/10/21 14:54:08 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ static int	check_for_quotes(t_main *main, char **input, char c)
 			if (c == '\'')
 				printf("Error: Unclosed single quotes\n");
 			else
-				printf("Error: Unclosed double quotes\n");
+				printf("Error: Unclosed double quotes in split\n");
 			return (0);
 		}
 		(*input)++;
