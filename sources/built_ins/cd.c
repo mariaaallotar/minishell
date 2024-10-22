@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 15:38:24 by maheleni          #+#    #+#             */
-/*   Updated: 2024/10/17 11:40:31 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/10/22 11:49:15 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,8 @@ int	cd(t_main *main, t_tokens token)
 	char	*value;
 	char	*key_value;
 
-	(void) main;
+	if (token.command[1] == NULL)
+		return (0);
 	if (token.command[2] != NULL)
 	{
 		dup2(STDERR_FILENO, 1);
