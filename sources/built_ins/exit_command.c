@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 18:38:06 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/10/01 15:17:58 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/10/17 11:30:43 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,39 +36,55 @@ static int	check_for_int_after_exit(char *element, int *temp_code)
 	return (0);
 }
 
-void	exit_command(t_main *main)		//remember to print exit to stderr
-{	
+void	close_open_fds(int open_fds[2])
+{
+	close(open_fds[0]);
+	close(open_fds[1]);
+}
+
+void	free_everything_everything(t_main *main)
+{
+	free_and_null_split_input(main);
+	free_token_commands(main, main->tokens);
+	free_token_redirects(main, main->tokens);
+	free(*(main->tokens));
+	free_environment(&(main->env_list));
+	rl_clear_history();
+}
+
+int	exit_command(t_main *main, t_tokens token, int parent, int open_fds[2])
+{
 	int temp_code;
 
-	if (!ft_strncmp(main->split_input[0], "exit", 5))
+	dup2(STDERR_FILENO, STDOUT_FILENO);
+	if (token.command[1] == NULL)	//only exit
 	{
-		//Check for no other elements
-		if (!main->split_input[1])
-		{
-			free(main->input);
-			ft_free_split(&main->split_input);
-			printf("exit\n");
-			exit (main->exit_code);
-		}
-
-		//Check for too many elements
-		else if (main->split_input[2])
-			printf("Error: Too many arguments after exit command\n");
-
-		//Check for integer (and if between 0-255)
-		else if (check_for_int_after_exit(main->split_input[1], &temp_code))
-		{
-			if (temp_code >= 0 && temp_code <= 255)
-			{
-				free(main->input);
-				ft_free_split(&main->split_input);
-				printf("exit\n");
-				exit(temp_code);
-			}
-			else
-				printf("Error: Exit code must be an int between 0 and 255\n");
-		}
-		else
-			printf("Error: Exit code must be an int between 0 and 255\n");
+		if (!parent)
+			return (0);
+		printf("exit\n");
+		close_open_fds(open_fds);
+		free_everything_everything(main);
+		exit(0);
 	}
+	if (check_for_int_after_exit(token.command[1], &temp_code) && token.command[2] == NULL)		//exit, number, NULL
+	{
+		if (!parent)
+			return (temp_code);
+		printf("exit\n");
+		close_open_fds(open_fds);
+		free_everything_everything(main);
+		exit(temp_code);
+	}
+	else if (!check_for_int_after_exit(token.command[1], &temp_code))				//exit, not number, NULL
+	{
+		printf("exit: numeric argument required\n");
+		if (!parent)
+			return (2);
+		free_everything_everything(main);
+		printf("exit\n");
+		close_open_fds(open_fds);
+		exit(2);
+	}
+	printf("exit: too many arguments\n");
+	return (1);
 }

@@ -6,30 +6,32 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 10:33:16 by maheleni          #+#    #+#             */
-/*   Updated: 2024/10/10 14:21:15 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/10/16 11:18:51 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-char	*malloc_buf(int size)
+char	*get_pwd(void)
 {
 	char	*buf;
+	size_t	size;
 
-	buf = malloc (size);
-	if (buf == NULL)
+	size = 10;
+	buf = NULL;
+	while (1)
 	{
-		printf("Malloc failed\n");
-		//error;
-		exit(1);
+		buf = getcwd(buf, size);
+		if (buf == NULL)
+			size += 10;
+		else
+			return (buf);
 	}
-	return (buf);
 }
 
 int	pwd(t_main *main, t_tokens token)
 {
 	char	*buf;
-	size_t	size;
 
 	(void)main;
 	if (token.command[1] != NULL)
@@ -37,19 +39,7 @@ int	pwd(t_main *main, t_tokens token)
 		printf("Pwd does not take any arguments\n");
 		return (1);
 	}
-	size = 10;
-	while (1)
-	{
-		buf = malloc_buf(size);
-		buf = getcwd(buf, size);
-		if (buf == NULL)
-		{
-			free(buf);
-			size *= 2;
-		}
-		else
-			break ;
-	}
+	buf = get_pwd();
 	printf("%s\n", buf);
 	free(buf);
 	return (0);

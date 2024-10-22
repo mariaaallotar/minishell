@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 10:12:47 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/10/10 15:18:54 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/10/15 10:34:06 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ void	initialize_variables(t_main *main, t_tokens **tokens)
 	main->split_input = NULL;
 	main->exit_code = 0;
 	*tokens = NULL;
+	main->tokens = tokens;
 	main->env_list = NULL;
 	main->num_of_pipes = 0;
 	main->found_command = 0;
@@ -50,6 +51,7 @@ int	main(int argc, char *argv[], char *envp[]) //what happens if ./minishell get
 	if (main.input) //REMOVE?
 		free(main.input);
 	free_environment(&(main.env_list));
+	rl_clear_history();
 	//free_signals();
 	exit (main.exit_code);
 }
