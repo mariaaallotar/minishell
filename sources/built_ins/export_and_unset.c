@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 10:33:07 by maheleni          #+#    #+#             */
-/*   Updated: 2024/10/21 14:57:41 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/10/21 15:16:55 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,7 +147,7 @@ int	export(t_main *main, t_tokens token)
 			printf("\n");
 			errno = 1;
 		}
-		if (existing_key(main, token.command[i]))
+		else if (existing_key(main, token.command[i]))
 		{
 			if (update_variable(main, token.command[i]) != 0)
 				return (errno);
