@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+         #
+#    By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/20 15:07:12 by eberkowi          #+#    #+#              #
-#    Updated: 2024/10/15 16:12:17 by maheleni         ###   ########.fr        #
+#    Updated: 2024/10/22 11:13:21 by eberkowi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,6 @@ FLAGS := -Wall -Wextra -Werror
 LINKFLAGS := -lreadline
 
 CFILES := main.c \
-		error_exit.c \
 		parsing/parsing.c \
 		parsing/split_input.c \
 		parsing/add_elements_to_split_input.c \
@@ -28,6 +27,9 @@ CFILES := main.c \
 		parsing/add_command_to_struct.c \
 		parsing/expand_variables.c \
 		parsing/linked_list_utils.c \
+		parsing/create_heredoc.c \
+		parsing/quotes_and_variables.c \
+		parsing/expand_quotes_and_vars.c \
 		built_ins/exit_command.c \
 		environment/list_add_and_remove.c \
 		environment/environment_utils.c \

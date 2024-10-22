@@ -3,10 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   exit_command.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 18:38:06 by eberkowi          #+#    #+#             */
+<<<<<<< HEAD
+/*   Updated: 2024/10/14 15:16:19 by eberkowi         ###   ########.fr       */
+=======
 /*   Updated: 2024/10/17 11:30:43 by maheleni         ###   ########.fr       */
+>>>>>>> eabcee45672df1c3fd0929f4f4a8bd718e6821e4
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,12 +63,41 @@ int	exit_command(t_main *main, t_tokens token, int parent, int open_fds[2])
 	dup2(STDERR_FILENO, STDOUT_FILENO);
 	if (token.command[1] == NULL)	//only exit
 	{
+<<<<<<< HEAD
+		//Check for no other elements
+		if (!main->split_input[1])
+		{
+			ft_free_split(&main->split_input);
+			printf("exit\n");
+			exit (main->exit_code);
+		}
+
+		//Check for too many elements
+		else if (main->split_input[2])
+			printf("Error: Too many arguments after exit command\n");
+
+		//Check for integer (and if between 0-255)
+		else if (check_for_int_after_exit(main->split_input[1], &temp_code))
+		{
+			if (temp_code >= 0 && temp_code <= 255)
+			{
+				ft_free_split(&main->split_input);
+				printf("exit\n");
+				exit(temp_code);
+			}
+			else
+				printf("Error: Exit code must be an int between 0 and 255\n");
+		}
+		else
+			printf("Error: Exit code must be an int between 0 and 255\n");
+=======
 		if (!parent)
 			return (0);
 		printf("exit\n");
 		close_open_fds(open_fds);
 		free_everything_everything(main);
 		exit(0);
+>>>>>>> eabcee45672df1c3fd0929f4f4a8bd718e6821e4
 	}
 	if (check_for_int_after_exit(token.command[1], &temp_code) && token.command[2] == NULL)		//exit, number, NULL
 	{

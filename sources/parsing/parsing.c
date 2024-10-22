@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 11:32:36 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/10/17 10:33:11 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/10/22 11:13:05 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ static void print_split_input(t_main *main) //REMOVE
 	printf("\n");
 }
 
-static void print_tokens(t_main *main, t_tokens **tokens) //REMOVE
+static void	print_tokens(t_main *main, t_tokens **tokens) //REMOVE
 {
 	int token_number = 0;
 	int i = 0;
@@ -43,10 +43,6 @@ static void print_tokens(t_main *main, t_tokens **tokens) //REMOVE
 				i++;
 			}
 		}
-		if ((*tokens)[token_number].heredoc_delimiter)
-			printf("heredoc_delimiter = %s\n", *((*tokens)[token_number].heredoc_delimiter));
-		
-
 		
 		//PRINT INFILES AND HEREDOCS
 		j = 0;
@@ -54,14 +50,16 @@ static void print_tokens(t_main *main, t_tokens **tokens) //REMOVE
 		while (temp)
 		{
 			printf("infile[%d] name = %s, ", j, temp->name);
-			if (temp->type == 100)
-				printf("type = INFILE\n");
+			if (temp->type == INFILE)
+				printf("type = INFILE");
 			else 
-				printf("type = HEREDOC\n");
+				printf("type = HEREDOC");
+			if (temp->type == HEREDOC)
+				printf(", delimiter = %s", temp->delimiter);
+			printf("\n");
 			temp = temp->next;
 			j++;
 		}
-		
 		//PRINT OUTFILES AND APPENDS
 		j = 0;
 		temp = (*tokens)[token_number].outfiles;
@@ -78,12 +76,13 @@ static void print_tokens(t_main *main, t_tokens **tokens) //REMOVE
 
 		token_number++;
 		printf("\n");
+		printf("============================================\n");
 	}
 }
 
-static void get_number_of_pipes(t_main *main)
+static void	get_number_of_pipes(t_main *main)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	main->num_of_pipes = 0;
@@ -97,28 +96,27 @@ static void	malloc_commands(t_main *main, t_tokens **tokens, int size)
 	*tokens = malloc((size) * sizeof(t_tokens));
 	if (!*tokens)
 	{
-		ft_free_split(&main->split_input);
 		printf("Error: Failed to malloc\n");
+		ft_free_split(&main->split_input);
 		exit (1);
 	}	
 }
 
 static void	initialize_commands(t_tokens **tokens, int size)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (i < size)
 	{
 		(*tokens)[i].command = NULL;
-		(*tokens)[i].heredoc_delimiter = NULL;
 		(*tokens)[i].infiles = NULL;
 		(*tokens)[i].outfiles = NULL;
 		i++;
 	}
 }
 
-static void malloc_and_init_tokens(t_main *main, t_tokens **tokens)
+static void	malloc_and_init_tokens(t_main *main, t_tokens **tokens)
 {
 	get_number_of_pipes(main);
 	malloc_commands(main, tokens, main->num_of_pipes + 1);
@@ -130,11 +128,14 @@ int	parsing(t_main *main, t_tokens **tokens)
 	if (!split_input(main))
 		return (1);
 	print_split_input(main); //REMOVE
-	free_and_null_input(main);
-	expand_variables(main);
+	free(main->input);
+	//expand_variables(main); //REMOVE
 	malloc_and_init_tokens(main, tokens);
 	if (tokenize(main, tokens))
 		return (1);
+	quotes_and_variables(main, tokens);
+	//print_split_input(main); //REMOVE
+	create_heredoc(main, tokens);
 	print_tokens(main, tokens); //REMOVE
 	return (0);
 }

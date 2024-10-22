@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 11:21:19 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/10/17 13:31:25 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/10/22 11:13:38 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,12 +27,15 @@
 #define HEREDOC 101
 #define OUTFILE 102
 #define APPEND 103
+#define COMMAND 104
+#define REDIRECT 105
 
 typedef struct s_redirect_node t_redirect_node;
 
 struct s_redirect_node
 {
 	char *name;
+	char *delimiter;
 	int type;
 	t_redirect_node *next;
 };
@@ -40,7 +43,6 @@ struct s_redirect_node
 typedef struct s_tokens
 {
 	char	**command;
-	char	**heredoc_delimiter;
 	t_redirect_node *infiles;
 	t_redirect_node *outfiles;
 }	t_tokens;
@@ -69,9 +71,6 @@ typedef struct s_main
 //display prompt, readline, and save it in history
 int	handle_inputs(char **input);
 
-//error and exit for failed malloc in readline
-int	error_exit_handle_input(void);
-
 /*****************************************************************************/
 	//PARSING
 /*****************************************************************************/
@@ -92,10 +91,10 @@ void	add_elements_to_split_input(t_main *main, char *input);
 int	is_special(char c);
 
 //Add single quote elements to the split_input array
-void add_single_quotes_element(t_main *main, char *input, int *id_input, int id_split);
+void add_single_quotes(t_main *main, char *input, int *id_input, int id_split);
 
 //Add double quote elements to the split_input array
-void add_double_quotes_element(t_main *main, char *input, int *id_input, int id_split);
+void add_double_quotes(t_main *main, char *input, int *id_input, int id_split);
 
 //Add special character elements to the split_input array
 void add_redirect_element(t_main *main, char *input, int *i, int split_index);
@@ -107,13 +106,13 @@ int tokenize(t_main *main, t_tokens **command);
 int	is_redirect(char c);
 
 //Free command struct, free split_input, and exit with the given code
-void free_spl_and_cmd(t_main *main, t_tokens **command);
+void free_split_and_tokens(t_main *main, t_tokens **command);
 
 //Free the command_token utilizing ft_free_split
 void free_token_commands(t_main *main, t_tokens **command);
 
 //Free command tokens, command struct, and split_input, then exit with given code
-void free_all_and_exit(t_main *main, t_tokens **command, int code);
+void free_all_and_exit(t_main *main, t_tokens **command);
 
 //Checks for a syntax error where there are two redirects in a row or a redirect then NULL
 int check_for_redirect_error(t_main *main, t_tokens **command);
@@ -123,9 +122,6 @@ void add_in_or_heredoc(t_main *main, t_tokens **command, int cmd_id, int *spl_id
 
 //Checks for and adds redirect_out and redirect_append to the token struct
 void add_out_or_append(t_main *main, t_tokens **command, int cmd_id, int *spl_id);
-
-//Free and null the input string (the basic input from the first readline)
-void	free_and_null_input(t_main *main);
 
 //Free and null the split_input
 void	free_and_null_split_input(t_main *main);
@@ -149,6 +145,27 @@ void free_token_redirects(t_main *main, t_tokens **tokens);
 
 //Free everything if a linked list node fails to malloc
 void free_and_exit_node_malloc_failed(t_main *main, t_tokens **tokens);
+
+//Create and readline the heredoc fd's and put them in the tokens
+void create_heredoc(t_main *main, t_tokens **tokens);
+
+//Free and exit if malloc failed for expand variables
+void free_and_exit_variable_malloc_failed(t_main *main, int i);
+
+//Remove or interpret quotes and expand variables
+void quotes_and_variables(t_main *main, t_tokens **tokens);
+
+//Free all commands above the NULL and free all and exit
+void free_and_exit_quote_malloc_failed(t_main *main, t_tokens **tokens, int token_id, int cmd_id);
+
+//Find the given $VAR in the env replace the given element if found
+int	find_var_and_remalloc(t_main *main, char **str);
+
+//Same as free all and exit but also free the split_input when there is a NULL in the middle
+void	free_all_and_exit_with_free_split_middle(t_main *main, t_tokens **tokens);
+
+//Removes outer double quotes and expands the environment vars within
+int expand_quotes_and_vars(t_main *main, t_tokens **tokens, char **str);
 
 /*****************************************************************************/
 	//ENVIRONMENT
