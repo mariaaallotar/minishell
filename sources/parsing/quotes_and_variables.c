@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 13:56:04 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/10/21 16:14:01 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/10/22 10:56:34 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,6 @@
 //Works for doubles, singles, and no quotes
 //Need to now expand heredocs?
 //And lots of cleaning up long functions and lines and files
-
-//Fix this in split_input :)
-// "one two"
-//It's starting a new split_input element when there's a space!
 
 void quotes_and_variables(t_main *main, t_tokens **tokens)
 {

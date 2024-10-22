@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 11:56:14 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/10/21 16:12:16 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/10/22 10:52:46 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,24 +93,14 @@ void	add_elements_to_split_input(t_main *main, char *input)
 			id_input++;
 		bonus_front(main, input, id_input, id_split);
 		if (input[id_input] == '\"')
-		{
-			printf("do add_double_quotes\n"); //REMOVE
 			add_double_quotes(main, input, &id_input, id_split);
-		}
 		else if (input[id_input] == '\'')
-		{
-			printf("do add_single_quotes\n"); //REMOVE
 			add_single_quotes(main, input, &id_input, id_split);
-		}
 		else if (is_special(input[id_input]))
-		{
-			printf("do add_redirect_element\n"); //REMOVE
 			add_redirect_element(main, input, &id_input, id_split);
-		}
 		else
 		{
 			bonus_middle(main, input, id_input, id_split);
-			printf("do add_regular\n"); //REMOVE
 			add_regular(main, input, &id_input, id_split);
 		}
 		id_split++;

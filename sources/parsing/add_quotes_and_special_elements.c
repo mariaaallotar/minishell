@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 11:39:13 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/10/21 14:55:00 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/10/22 10:53:26 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,16 +73,18 @@ void	add_redirect_element(t_main *main, char *input, int *i, int split_index)
 	}
 }
 
-static void check_for_odd_number_of_double_quotes(t_main *main, char *input, int id_input)
+static void check_for_odd_number_of_double_quotes(t_main *main, char *str)
 {
 	int num_of_quotes;
+	int i;
 
+	i = 0;
 	num_of_quotes = 0;
-	while (input[id_input])
+	while (str[i])
 	{
-		if (input[id_input] == '\"')
+		if (str[i] == '\"')
 			num_of_quotes++;
-		id_input++;
+		i++;
 	}
 	if (num_of_quotes % 2 != 0)
 	{
@@ -97,11 +99,16 @@ void malloc_double_quotes(t_main *main, char *input, int id_input, int id_spl)
 {
 	size_t	element_length;
 
-	(void)main;
-	(void)id_spl;
-	element_length = 0;
-	while (input[id_input] && input[id_input] != ' ' && input[id_input] != '\t')
+	element_length = 1;
+	id_input++;
+	while (input[id_input])
 	{
+		if (input[id_input] == '\"' && (input[id_input + 1] == ' ' 
+			|| input[id_input + 1] == '\t' || !input[id_input + 1]))
+		{
+			element_length++;
+			break ;
+		}
 		element_length++;
 		id_input++;
 	}
@@ -119,14 +126,23 @@ void add_double_quotes(t_main *main, char *input, int *id_input, int id_spl)
 	int i;
 
 	i = 0;
-	check_for_odd_number_of_double_quotes(main, input, *id_input);
 	malloc_double_quotes(main, input, *id_input, id_spl);
-	while (input[*id_input] && input[*id_input] != ' ' && input[*id_input] != '\t')
+	main->split_input[id_spl][i++] = '\"';
+	(*id_input)++;
+	while (input[*id_input])
 	{
+		if (input[*id_input] == '\"' && (input[*id_input + 1] == ' ' 
+			|| input[*id_input + 1] == '\t' || !input[*id_input + 1]))
+		{
+			main->split_input[id_spl][i++] = input[*id_input];
+			(*id_input)++;
+			break ;
+		}
 		main->split_input[id_spl][i++] = input[*id_input];
 		(*id_input)++;
 	}
 	main->split_input[id_spl][i] = '\0';
+	check_for_odd_number_of_double_quotes(main, main->split_input[id_spl]);
 }
 
 // void	add_double_quotes(t_main *main, char *input, int *id_input, int id_spl)
