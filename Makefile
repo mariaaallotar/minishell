@@ -6,7 +6,7 @@
 #    By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/20 15:07:12 by eberkowi          #+#    #+#              #
-#    Updated: 2024/10/21 14:51:14 by eberkowi         ###   ########.fr        #
+#    Updated: 2024/10/22 11:13:21 by eberkowi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -31,12 +31,14 @@ CFILES := main.c \
 		parsing/quotes_and_variables.c \
 		parsing/expand_quotes_and_vars.c \
 		built_ins/exit_command.c \
+		environment/list_add_and_remove.c \
 		environment/environment_utils.c \
 		environment/print_environment.c \
 		input_and_signals/handle_inputs.c \
 		built_ins/echo.c \
 		built_ins/export_and_unset.c \
 		built_ins/pwd.c \
+		built_ins/cd.c \
 		built_ins/env.c \
 		execution/execute_commandline.c \
 		execution/handle_redirects.c \

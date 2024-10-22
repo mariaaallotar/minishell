@@ -6,103 +6,139 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 10:00:41 by maheleni          #+#    #+#             */
-/*   Updated: 2024/10/11 10:33:16 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/10/17 15:19:34 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-void	execute_command(t_main *main, t_tokens token)
+void	free_all_in_child(t_main *main, int *pids)
+{
+	rl_clear_history();
+	free_and_null_split_input(main);
+	free_token_commands(main, main->tokens);
+	free_token_redirects(main, main->tokens);
+	free(*(main->tokens));
+	free_environment(&(main->env_list));
+	free(pids);
+}
+
+void	free_all_in_parent(t_main *main)
+{
+	rl_clear_history();
+	free_and_null_split_input(main);
+	free_token_commands(main, main->tokens);
+	free_token_redirects(main, main->tokens);
+	free(*(main->tokens));
+	free_environment(&(main->env_list));
+}
+
+void	execute_command(t_main *main, t_tokens token, int *pids)
 {
 	char	*path;
-	// char	**env;
+	char	**env;
 
-	path = get_path(main, token.command);
+	path = get_path(main, token.command, pids);
 	if (path == NULL)
 	{
-		dup2(STDERR_FILENO, STDOUT_FILENO);
+		dup2(STDERR_FILENO, 1);
 		if (errno == 127)
-			printf("Command not found: %s\n", token.command[0]);
+		{
+			if (token.command == NULL || token.command[0] == NULL)
+				printf("Command not found\n");
+			else
+				printf("Command not found: %s\n", token.command[0]);
+		}
 		else
-			perror("Error in getting path to command:");
-		exit(1);
+			perror("Error in getting path to command");
+		free_all_in_child(main, pids);
+		exit(errno);
 	}
-
-	//make sure that in- and outfiles are correct at this point and pipes closed
-
-	// env = transform_to_string_array(main->env_list);		//TODO
-	// if (execve(path, token.command, env) == -1)
-	// {
-	// 	free(path);
-	// 	//error
-	// }
-
-	//this is just for testing without env
-	if (execv(path, token.command) == -1)
+	env = convert_list_to_array(main->env_list);
+	if (env == NULL)
 	{
-		//make sure that path is always allocated by execution
-		printf("Execv error on command %s\n", token.command[0]);
+		free_all_in_child(main, pids);
 		free(path);
-		//error
+		exit(errno);
+	}
+	if (execve(path, token.command, env) == -1)
+	{
+		free_all_in_child(main, pids);
+		free(path);
+		free(env);
+		exit(errno);
 	}
 }
 
-int	execute_builtin(t_main *main, t_tokens token)
+int	execute_builtin(t_main *main, t_tokens token, int parent, int open_fds[2])
 {
 	char	*command;
-	int		cmd_len;
 
-	(void)main;
 	command = token.command[0];
-	cmd_len = ft_strlen(command);
-	if (ft_strncmp(command, "echo\0", cmd_len) == 0)
+	if (ft_strncmp(command, "echo", ft_strlen(command)) == 0)
 		return (echo(main, token));
-	else if (ft_strncmp(command, "cd\0", cmd_len) == 0)
-	{
-		// return (cd());
-		printf("Executing cd\n");
-	}
-	else if (ft_strncmp(command, "pwd\0", cmd_len) == 0)
+	else if (ft_strncmp(command, "cd", ft_strlen(command)) == 0)
+		return (cd(main, token));
+	else if (ft_strncmp(command, "pwd", ft_strlen(command)) == 0)
 		return (pwd(main, token));
-	else if (ft_strncmp(command, "export\0", cmd_len) == 0)
+	else if (ft_strncmp(command, "export", ft_strlen(command)) == 0)
 		return (export(main, token));
-	else if (ft_strncmp(command, "unset\0", cmd_len) == 0)
+	else if (ft_strncmp(command, "unset", ft_strlen(command)) == 0)
 		return (unset(main, token));
-	else if (ft_strncmp(command, "env\0", cmd_len) == 0)
+	else if (ft_strncmp(command, "env", ft_strlen(command)) == 0)
 		return (env(main, token));
-	else if (ft_strncmp(command, "exit\0", cmd_len) == 0)
-	{
-		printf("Executing exit\n");
-		//return(exit_command(main));
-		return (0);
-	}
+	else if (ft_strncmp(command, "exit", ft_strlen(command)) == 0)
+		return (exit_command(main, token, parent, open_fds));
 	return (0);
 }
 
-void	execute_child_process(t_main *main, t_tokens token)
+void	execute_child_process(t_main *main, t_tokens token, int *pids)
 {
 	int	status;
 
 	if (is_builtin(token))
 	{
-		status = execute_builtin(main, token);
+		status = execute_builtin(main, token, 0, NULL);
+		free_all_in_child(main, pids);
 		exit(status);
 	}
-	execute_command(main, token);
+	execute_command(main, token, pids);
+}
+
+void	restore_stdin_stdout(t_main *main, int original_stdin,
+	int original_stdout)
+{
+	(void) main;
+	if (dup2(original_stdin, STDIN_FILENO) == -1
+		|| dup2(original_stdout, STDOUT_FILENO) == -1)
+	{
+		close(original_stdin);
+		close(original_stdout);
+		perror("Exiting minishell because of: ");
+		free_all_in_parent(main);
+		exit(1);
+	}
 }
 
 void	execute_builtin_in_parent(t_main *main, t_tokens token)
 {
-	int original_stdin;
-    int original_stdout;
+	int	exit_code;
+	int	original_stdin_stdout[2];
 
-	original_stdin = dup(STDIN_FILENO);
-	original_stdout = dup(STDOUT_FILENO);
+	original_stdin_stdout[0] = dup(STDIN_FILENO);
+	original_stdin_stdout[1] = dup(STDOUT_FILENO);
+	if (original_stdin_stdout[0] == -1 || original_stdin_stdout[1] == -1)
+	{
+		perror(NULL);
+		main->exit_code = errno;
+		return ;
+	}
 	handle_infile(token, NULL);
 	handle_outfile(token, NULL);
-	execute_builtin(main, token);
-	dup2(original_stdin, STDIN_FILENO);
-	dup2(original_stdout, STDOUT_FILENO);
-	close(original_stdin);
-	close(original_stdout);
+	exit_code = execute_builtin(main, token, 1, original_stdin_stdout);
+	main->exit_code = exit_code;
+	restore_stdin_stdout(main, original_stdin_stdout[0], original_stdin_stdout[1]);
+	close(original_stdin_stdout[0]);
+	close(original_stdin_stdout[1]);
+	errno = 0;
 }

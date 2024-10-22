@@ -6,13 +6,13 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 11:32:36 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/10/22 10:50:53 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/10/22 11:13:05 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-static void	print_split_input(t_main *main) //REMOVE
+static void print_split_input(t_main *main) //REMOVE
 {
 	printf("\033[0;33m---SPLIT_INPUT---\033[0m\n");
 	int i = 0;
@@ -129,7 +129,6 @@ int	parsing(t_main *main, t_tokens **tokens)
 		return (1);
 	print_split_input(main); //REMOVE
 	free(main->input);
-	exit_command(main);
 	//expand_variables(main); //REMOVE
 	malloc_and_init_tokens(main, tokens);
 	if (tokenize(main, tokens))

@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 13:45:33 by maheleni          #+#    #+#             */
-/*   Updated: 2024/10/02 10:39:16 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/10/15 14:39:56 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,10 +44,7 @@ int	is_direcotory(char *command)
 				return (0);
 		}
 		else
-		{
-			perror("stat");
-			exit(1);
-		}
+			return (1);
 	}
 	else
 		return (0);
@@ -63,10 +60,13 @@ int	empty_command(char *command)
 	return (0);
 }
 
-char	*get_path(t_main *main, char **command)
+char	*get_path(t_main *main, char **command, int *pids)
 {
-	if (empty_command(command[0]))
+	if (command == NULL || empty_command(command[0]))
+	{
+		errno = 127;
 		return (NULL);
+	}
 	else if (is_direcotory(command[0]))
 		return (NULL);
 	else if (is_path_to_file(command[0]))
@@ -76,5 +76,5 @@ char	*get_path(t_main *main, char **command)
 		else
 			return (NULL);
 	}
-	return (find_path(main, command[0]));
+	return (find_path(main, command[0], pids));
 }

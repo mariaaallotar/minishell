@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 11:21:19 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/10/21 14:50:04 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/10/22 11:13:38 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,16 +30,6 @@
 #define COMMAND 104
 #define REDIRECT 105
 
-typedef struct s_main
-{
-	char	*input;
-	char	**split_input;
-	t_list	*env_list;
-	int		exit_code;  //exit code of the exit command given by user?
-	int 	num_of_pipes;
-	int		found_command;
-} t_main;
-
 typedef struct s_redirect_node t_redirect_node;
 
 struct s_redirect_node
@@ -56,6 +46,23 @@ typedef struct s_tokens
 	t_redirect_node *infiles;
 	t_redirect_node *outfiles;
 }	t_tokens;
+
+/**
+ * char		*input;
+ * char		**split_input;
+ * t_list	*env_list;
+ * int		exit_code;
+ */
+typedef struct s_main
+{
+	char	*input;
+	char	**split_input;
+	t_list	*env_list;
+	t_tokens	**tokens;
+	int		exit_code;
+	int 	num_of_pipes;
+	int		found_command;
+} t_main;
 
 /*****************************************************************************/
 	//INPUT AND SIGNALS
@@ -91,9 +98,6 @@ void add_double_quotes(t_main *main, char *input, int *id_input, int id_split);
 
 //Add special character elements to the split_input array
 void add_redirect_element(t_main *main, char *input, int *i, int split_index);
-
-//Checks for an exit command and exit-code and exits if found or shows error for incorrect format
-void	exit_command(t_main *main);
 
 //Our own kind of tokenizing function of the input
 int tokenize(t_main *main, t_tokens **command);
@@ -189,7 +193,7 @@ t_list	*find_node(t_main *main, char *variable);
  * @param main pointer to the main struct
  * @param content the content of the node
  */
-void    add_variable(t_main *main, char *content);
+int    add_variable(t_main *main, char *content);
 
 /**
  * Updates the value of the variable key in the env linked list
@@ -197,7 +201,7 @@ void    add_variable(t_main *main, char *content);
  * @param main pointer to the main struct
  * @param var the key value pair to update
  */
-void	update_variable(t_main *main, char *var);
+int	update_variable(t_main *main, char *var);
 
 /**
  * Duplicates (mallocs) the values from envp into a linked list
@@ -227,6 +231,8 @@ void	print_list_content(void *content);
  * @note variable_key needs to have '=' sign! E.g. "PATH="
  */
 void	remove_variable(t_main *main, char *variable_key);
+
+char	**convert_list_to_array(t_list *env_list);
 
 /*****************************************************************************/
 	//BUILTINS
@@ -288,6 +294,10 @@ int	unset(t_main *main, t_tokens token);
  */
 int	pwd(t_main *main, t_tokens token);
 
+char	*get_pwd(void);
+
+int	cd(t_main *main, t_tokens token);
+
 /**
  * Prints the updated environment variables
  * 
@@ -296,6 +306,8 @@ int	pwd(t_main *main, t_tokens token);
  * @returns 0 on success, 1 on error
  */
 int env(t_main *main, t_tokens token);
+
+int	exit_command(t_main *main, t_tokens token, int parent, int open_fds[2]);
 
 /*****************************************************************************/
 	//EXECUTION
@@ -336,7 +348,7 @@ void	close_pipes_in_parent(int i, int num_of_pipes, int *pipe_left, int *pipe_ri
  * @param main the main struct of the program
  * @param token  the token to execute
  */
-void	execute_command(t_main *main, t_tokens token);
+void	execute_command(t_main *main, t_tokens token, int *pids);
 
 /**
  * Calls the right builtin function to execute it
@@ -344,7 +356,7 @@ void	execute_command(t_main *main, t_tokens token);
  * @param main the main struct of the program
  * @param token  the token to execute
  */
-int	execute_builtin(t_main *main, t_tokens token);
+int	execute_builtin(t_main *main, t_tokens token, int parent, int open_fds[2]);
 
 /**
  * Executes either a builtin or a command as a child process.
@@ -354,7 +366,7 @@ int	execute_builtin(t_main *main, t_tokens token);
  * @param main the main struct of the program
  * @param token  the token to execute
  */
-void	execute_child_process(t_main *main, t_tokens token);
+void	execute_child_process(t_main *main, t_tokens token, int *pids);
 
 /**
  * Executes a bultin in the parent process. Redirects STDIN and STDOUT
@@ -366,15 +378,15 @@ void	execute_child_process(t_main *main, t_tokens token);
  */
 void	execute_builtin_in_parent(t_main *main, t_tokens token);
 
-char	*find_path(t_main *main, char *command);
+char	*find_path(t_main *main, char *command, int *pids);
 
 char	*get_path_variable(t_main *main);
 
-char	**get_split_paths(char *path_variable);
+char	**get_split_paths(char *path_variable, t_main *main, int *pids);
 
 int	set_path_if_executable(char *env_path, char *command, char **command_path);
 
-char	*get_path(t_main *main, char **command);
+char	*get_path(t_main *main, char **command, int *pids);
 
 int	empty_command(char *command);
 
@@ -392,7 +404,7 @@ int	is_path_to_file(char *command);
  * @param num_of_pipes the number of pipes left to be written into in
  * the pipeline
  */
-void	handle_infile_and_outfile(int i, int num_of_pipes,
+int	handle_infile_and_outfile(int i, int num_of_pipes,
 	int pipe_array[2][2], t_tokens token);
 
 /**
@@ -405,7 +417,7 @@ void	handle_infile_and_outfile(int i, int num_of_pipes,
  * @param pipe_left array of ints for the left-hand side pipe,
  * 	NULL if there is no pipe
  */
-void	handle_infile(t_tokens token, int* pipe_left);
+int	handle_infile(t_tokens token, int* pipe_left);
 
 /**
  * Redirects STDOUT with dup2 to:
@@ -417,7 +429,7 @@ void	handle_infile(t_tokens token, int* pipe_left);
  * @param pipe_right array of ints for the right-hand side pipe,
  * 	NULL if there is no pipe
  */
-void	handle_outfile(t_tokens token, int* pipe_right);
+int	handle_outfile(t_tokens token, int* pipe_right);
 
 /**
  * Loops through all infiles, opens them and redirects STDIN with dup2
@@ -425,7 +437,7 @@ void	handle_outfile(t_tokens token, int* pipe_right);
  * 
  * @param token the token to handle infile for
  */
-void	dup2_infile(t_tokens token);
+int	dup2_infile(t_tokens token);
 
 /**
  * Loops through all outfiles, opens them and redirects STDOUT with dup2
@@ -433,6 +445,8 @@ void	dup2_infile(t_tokens token);
  * 
  * @param token the token to handle outfile for
  */
-void	dup2_outfile(t_tokens token);
+int	dup2_outfile(t_tokens token);
+
+void	free_all_in_child(t_main *main, int *pids);
 
 #endif
