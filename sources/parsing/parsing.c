@@ -6,13 +6,13 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 11:32:36 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/10/22 11:13:05 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/10/23 12:17:35 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-static void print_split_input(t_main *main) //REMOVE
+static void	print_split_input(t_main *main) //REMOVE
 {
 	printf("\033[0;33m---SPLIT_INPUT---\033[0m\n");
 	int i = 0;
@@ -43,7 +43,6 @@ static void	print_tokens(t_main *main, t_tokens **tokens) //REMOVE
 				i++;
 			}
 		}
-		
 		//PRINT INFILES AND HEREDOCS
 		j = 0;
 		temp = (*tokens)[token_number].infiles;
@@ -134,7 +133,6 @@ int	parsing(t_main *main, t_tokens **tokens)
 	if (tokenize(main, tokens))
 		return (1);
 	quotes_and_variables(main, tokens);
-	//print_split_input(main); //REMOVE
 	create_heredoc(main, tokens);
 	print_tokens(main, tokens); //REMOVE
 	return (0);

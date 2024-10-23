@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_and_unset.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 10:33:07 by maheleni          #+#    #+#             */
-/*   Updated: 2024/10/21 15:16:55 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/10/22 15:22:47 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,11 +139,11 @@ int	export(t_main *main, t_tokens token)
 		if (forbidden_key(token.command[i]))
 		{
 			printf("Forbidden key: ");
-			while (*(token.command[i]) != '=' && *(token.command[i]))
-			{
-				printf("%c", *token.command[i]);
-				(token.command[i])++;
-			}
+			// while (*(token.command[i]) != '=' && *(token.command[i]))
+			// {
+			// 	printf("%c", *token.command[i]);
+			// 	(token.command[i])++;
+			// }
 			printf("\n");
 			errno = 1;
 		}

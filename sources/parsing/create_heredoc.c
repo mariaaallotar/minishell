@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 11:52:55 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/10/15 11:58:46 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/10/23 10:31:36 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,15 @@ static void	readline_to_file(char *filename, char *delimiter)
 	while (1)
 	{
 		input = readline("> ");
+		// if (isatty(fileno(stdin)))
+		// input = readline("> ");
+		// else
+		// {
+		// 	char *line;
+		// 	line = get_next_line(fileno(stdin));
+		// 	input = ft_strtrim(line, "\n");
+		// 	free(line);
+		// }
 		input_len = ft_strlen(input);
 		delimiter_len = ft_strlen(delimiter);
 		if (!ft_strncmp(input, delimiter, delimiter_len + 1))

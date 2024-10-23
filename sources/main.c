@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 10:12:47 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/10/22 11:23:11 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/10/23 12:17:50 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ int	main(int argc, char *argv[], char *envp[]) //what happens if ./minishell get
 	while (1)
 	{
 		if (!handle_inputs(&main.input))
-			continue;
+			break;
 		if (parsing(&main, &tokens))
 			continue;
 		execute_commandline(&main, tokens);

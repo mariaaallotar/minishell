@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/24 10:44:31 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/10/21 14:10:14 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/10/23 12:07:37 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,8 @@ static void	ft_free_split_with_middle_null(char ***arr)
 	free(*arr);
 }
 
-void	free_all_and_exit_with_free_split_middle(t_main *main, t_tokens **tokens)
+void	free_all_and_exit_with_free_split_middle(t_main *main
+	, t_tokens **tokens)
 {
 	ft_free_split_with_middle_null(&main->split_input);
 	free_token_commands(main, tokens);
@@ -85,7 +86,7 @@ void	free_token_commands(t_main *main, t_tokens **tokens)
 	}
 }
 
-void	 free_token_redirects(t_main *main, t_tokens **tokens)
+void	free_token_redirects(t_main *main, t_tokens **tokens)
 {
 	int				token_number;
 	t_redirect_node	*temp;
@@ -139,9 +140,9 @@ void	free_and_exit_variable_malloc_failed(t_main *main, int i)
 	exit (1);
 }
 
-void	free_and_exit_quote_malloc_failed(t_main *main, t_tokens **tokens, int token_id, int cmd_id)
+void	free_and_exit_quote_malloc(t_main *main, t_tokens **tokens, int token_id, int cmd_id)
 {
-	int i;
+	int	i;
 
 	i = 1;
 	while ((*tokens)[token_id].command[cmd_id + i])
@@ -155,4 +156,11 @@ void	free_and_exit_quote_malloc_failed(t_main *main, t_tokens **tokens, int toke
 	free(*tokens);
 	free_environment(&(main->env_list));
 	exit (1);
+}
+
+void	free_and_exit_combine_elements(t_main *main, t_tokens **tokens, char ***quote_split)
+{
+	printf("Error: Failed to malloc temp var for quote_split combine\n");
+	ft_free_split(quote_split);
+	free_all_and_exit(main, tokens);
 }

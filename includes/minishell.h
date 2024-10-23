@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 11:21:19 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/10/22 11:13:38 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/10/23 12:11:33 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,7 +156,7 @@ void free_and_exit_variable_malloc_failed(t_main *main, int i);
 void quotes_and_variables(t_main *main, t_tokens **tokens);
 
 //Free all commands above the NULL and free all and exit
-void free_and_exit_quote_malloc_failed(t_main *main, t_tokens **tokens, int token_id, int cmd_id);
+void free_and_exit_quote_malloc(t_main *main, t_tokens **tokens, int token_id, int cmd_id);
 
 //Find the given $VAR in the env replace the given element if found
 int	find_var_and_remalloc(t_main *main, char **str);
@@ -166,6 +166,9 @@ void	free_all_and_exit_with_free_split_middle(t_main *main, t_tokens **tokens);
 
 //Removes outer double quotes and expands the environment vars within
 int expand_quotes_and_vars(t_main *main, t_tokens **tokens, char **str);
+
+//Free and  exit when malloc fails in combine elements for quote_split
+void	free_and_exit_combine_elements(t_main *main, t_tokens **tokens, char ***quote_split);
 
 /*****************************************************************************/
 	//ENVIRONMENT

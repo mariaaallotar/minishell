@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 11:19:25 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/10/21 14:54:08 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/10/23 10:51:23 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,11 +42,6 @@ static int	check_for_quotes(t_main *main, char **input, char c)
 
 static int	split_length_helper(t_main *main, char **input, int *result)
 {
-	// if (**input == '\"')
-	// {
-	// 	if (!check_for_quotes(main, input, '\"'))
-	// 		return (0);
-	// }
 	if (**input == '\'')
 	{
 		if (!check_for_quotes(main, input, '\''))
