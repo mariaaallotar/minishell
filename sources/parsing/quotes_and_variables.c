@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 13:56:04 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/10/23 11:31:53 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/10/25 15:09:01 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,5 +57,5 @@ void	quotes_and_variables(t_main *main, t_tokens **tokens)
 		}
 		helper_for_redirects(main, tokens, token_id);
 		token_id++;
-	}	
+	}
 }

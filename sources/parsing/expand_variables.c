@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 16:50:02 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/10/23 11:37:50 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/10/24 13:26:28 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ int	find_var_and_remalloc(t_main *main, char **str)
 		}
 		temp = temp->next;
 	}
-	if ((*str)[0] == '$')
+	if ((*str)[0] == '$' && (*str)[1])
 	{
 		free(*str);
 		*str = NULL;

@@ -12,21 +12,7 @@
 
 #include "../../includes/minishell.h"
 
-static int	check_for_no_vars(char *str)
-{
-	int	i;
-
-	i = 0;
-	while (str[i])
-	{
-		if (str[i] == '$')
-			return (0);
-		i++;
-	}
-	return (1);
-}
-
-static int	remove_outside_quotes(char **str)
+int	remove_outside_quotes(char **str)
 {
 	size_t	remove_quote_len;
 	size_t	i;
@@ -65,6 +51,13 @@ static int	get_quote_split_len(char *str)
 	while ((str)[i])
 	{
 		if ((str)[i] == '$')
+			num_of_vars++;
+		i++;
+	}
+	i = 0;
+	while ((str)[i])
+	{
+		if ((str)[i] == '\"' || (str)[i] == '\'')
 			num_of_vars++;
 		i++;
 	}
@@ -108,10 +101,40 @@ static int	get_split_element_len(char *str, int i)
 			i++;
 		}
 	}
+	else if (str[i] == '\"')
+	{
+		result = 1;
+		i++;
+		while (str[i])
+		{
+			if (str[i] == '\"')
+			{
+				result++;
+				return (result);
+			}
+			result++;
+			i++;
+		}
+	}
+	else if (str[i] == '\'')
+	{
+		result = 1;
+		i++;
+		while (str[i])
+		{
+			if (str[i] == '\'')
+			{
+				result++;
+				return (result);
+			}
+			result++;
+			i++;
+		}
+	}
 	else
 	{
 		result = 0;
-		while (str[i] && str[i] != '$')
+		while (str[i] && str[i] != '$' && str[i] != '\"' && str[i] != '\'')
 		{
 			result++;
 			i++;
@@ -138,9 +161,51 @@ static int	add_non_var_element(char ***quote_split, char *str, int id_split, int
 	int	i;
 
 	i = 0;
-	while (str[id_str] && str[id_str] != '$')
+	while (str[id_str] && str[id_str] != '$' && str[id_str] != '\"' && str[id_str] != '\'')
 	{
 		(*quote_split)[id_split][i] = str[id_str];
+		id_str++;
+		i++;
+	}
+	return (i);
+}
+
+static int	add_double_quote_element(char ***quote_split, char *str, int id_split, int id_str)
+{
+	int	i;
+
+	(*quote_split)[id_split][0] = str[id_str];
+	i = 1;
+	id_str++;
+	while (str[id_str])
+	{
+		(*quote_split)[id_split][i] = str[id_str];
+		if (str[id_str] == '\"')
+		{
+			i++;
+			return (i);
+		}
+		id_str++;
+		i++;
+	}
+	return (i);
+}
+
+static int	add_single_quote_element(char ***quote_split, char *str, int id_split, int id_str)
+{
+	int	i;
+
+	(*quote_split)[id_split][0] = str[id_str];
+	i = 1;
+	id_str++;
+	while (str[id_str])
+	{
+		(*quote_split)[id_split][i] = str[id_str];
+		if (str[id_str] == '\'')
+		{
+			i++;
+			return (i);
+		}
 		id_str++;
 		i++;
 	}
@@ -170,12 +235,16 @@ static void	add_element_to_quote_split(char ***quote_split, char *str, int id_sp
 			i++;
 		}
 	}
+	else if (str[id_str] == '\"')
+		i += add_double_quote_element(quote_split, str, id_split, id_str);
+	else if (str[id_str] == '\'')
+		i += add_single_quote_element(quote_split, str, id_split, id_str);
 	else
 		i += add_non_var_element(quote_split, str, id_split, id_str);	
 	(*quote_split)[id_split][i] = '\0';
 }
 
-static int	create_quote_split(char *str, char ***quote_split)
+int	create_quote_split(char *str, char ***quote_split)
 {
 	int		id_str;
 	int		id_split;
@@ -210,7 +279,35 @@ static void	expand_vars_in_quotes(t_main *main, t_tokens **tokens, char ***quote
 	i = 0;
 	while ((*quote_split)[i])
 	{
-		if (!find_var_and_remalloc(main, &(*quote_split)[i]))
+		if ((*quote_split)[i][0] == '\"')
+		{
+			if (!inner_expansion(main, &(*quote_split)[i]))
+			{
+				i++; //Combine this section and the one in the else if below
+				while ((*quote_split)[i])
+				{
+					free((*quote_split)[i]);
+					i++;
+				}
+				ft_free_split(quote_split);
+				free_all_and_exit(main, tokens);
+			}
+		}
+		else if ((*quote_split)[i][0] == '\'')
+		{
+			if (!remove_outside_quotes(&(*quote_split)[i]))
+			{
+				i++; //Combine this section and the one in the else if below
+				while ((*quote_split)[i])
+				{
+					free((*quote_split)[i]);
+					i++;
+				}
+				ft_free_split(quote_split);
+				free_all_and_exit(main, tokens);	
+			}
+		}
+		else if (!find_var_and_remalloc(main, &(*quote_split)[i]))
 		{
 			printf("Error: Failed to malloc environment variable in quotes\n");
 			i++;
@@ -277,33 +374,43 @@ static int	combine_quote_split(t_main *main, t_tokens **tokens, char ***quote_sp
 	return (1);
 }
 
+static int check_for_outside_quotes(char *str)
+{
+	int i;
+
+	i = 0;
+	while (str[i])
+		i++;
+	if (str[0] == '\"' && str[i] == '\"')
+		return (1);
+	if (str[0] == '\'' && str[i] == '\'')
+		return (1);
+	return (0);
+}
+
 int	expand_quotes_and_vars(t_main *main, t_tokens **tokens, char **str)
 {
 	char	**quote_split;
 
-	if ((*str)[0] == '\'')
+	if (check_for_outside_quotes(*str))
 	{
 		if (!remove_outside_quotes(str))
 			return (0);
-		return (1);
+		if ((*str)[0] == '\0')
+			return (1);
 	}
-	else if ((*str)[0] == '\"')
-	{
-		if (!remove_outside_quotes(str))
-			return (0);
-	}
-	if (check_for_no_vars(*str))
-		return (1);
 	if (!create_quote_split(*str, &quote_split))
 		return (0);
 
 	//PRINT QUOTE_SPLIT
+	printf("\033[0;34m---QUOTE SPLIT ---\033[0m\n");
 	int i = 0;
 	while (quote_split[i])
 	{
 		printf("quote_split[%d] = %s\n", i, quote_split[i]);
 		i++;
 	}
+	printf("\n");
 
 	expand_vars_in_quotes(main, tokens, &quote_split);
 	if (!combine_quote_split(main, tokens, &quote_split, str))
