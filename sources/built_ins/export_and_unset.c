@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 10:33:07 by maheleni          #+#    #+#             */
-/*   Updated: 2024/10/21 15:16:55 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/10/27 12:16:56 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,6 +122,15 @@ int	export_without_args(t_main *main)
 	return (1);
 }
 
+void	print_key(char *command)
+{
+	while (*(command) != '=' && *command)
+	{
+		printf("%c", *command);
+		command++;
+	}
+}
+
 int	export(t_main *main, t_tokens token)
 {
 	int	i;
@@ -139,11 +148,7 @@ int	export(t_main *main, t_tokens token)
 		if (forbidden_key(token.command[i]))
 		{
 			printf("Forbidden key: ");
-			while (*(token.command[i]) != '=' && *(token.command[i]))
-			{
-				printf("%c", *token.command[i]);
-				(token.command[i])++;
-			}
+			print_key(token.command[i]);
 			printf("\n");
 			errno = 1;
 		}
