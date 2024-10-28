@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 11:52:55 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/10/15 11:58:46 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/10/28 10:23:29 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,12 +42,12 @@ static void	readline_to_file(char *filename, char *delimiter)
 	int		input_len;
 	int		delimiter_len;
 
+	delimiter_len = ft_strlen(delimiter);
 	heredoc_fd = open(filename, O_WRONLY | O_TRUNC | O_CREAT, 0644);
 	while (1)
 	{
 		input = readline("> ");
 		input_len = ft_strlen(input);
-		delimiter_len = ft_strlen(delimiter);
 		if (!ft_strncmp(input, delimiter, delimiter_len + 1))
 		{
 			free(input);

@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 11:21:19 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/10/22 11:13:38 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/10/28 10:02:48 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,13 +22,14 @@
 # include <fcntl.h>
 # include <errno.h>
 # include <sys/stat.h>
+# include <signal.h>
 
-#define INFILE 100
-#define HEREDOC 101
-#define OUTFILE 102
-#define APPEND 103
-#define COMMAND 104
-#define REDIRECT 105
+# define INFILE 100
+# define HEREDOC 101
+# define OUTFILE 102
+# define APPEND 103
+# define COMMAND 104
+# define REDIRECT 105
 
 typedef struct s_redirect_node t_redirect_node;
 
@@ -61,8 +62,18 @@ typedef struct s_main
 	t_tokens	**tokens;
 	int		exit_code;
 	int 	num_of_pipes;
-	int		found_command;
+	int		elements_in_command;
+	int		id_command;
 } t_main;
+
+typedef struct s_parsing
+{
+	int id_char;
+	int num_of_singles;
+	int num_of_doubles;
+	bool inside_singles;
+	bool inside_doubles;
+} t_parsing;
 
 /*****************************************************************************/
 	//INPUT AND SIGNALS
@@ -70,6 +81,10 @@ typedef struct s_main
 
 //display prompt, readline, and save it in history
 int	handle_inputs(char **input);
+
+void setup_signal_handlers();
+
+void handle_sigint(int sig);
 
 /*****************************************************************************/
 	//PARSING
@@ -85,19 +100,13 @@ int	split_input(t_main *main);
 void	exit_free_split_element_malloc_failed(t_main *main, int i);
 
 //Split the input into individual elements and check for no spaces before/after symbols
-void	add_elements_to_split_input(t_main *main, char *input);
+int	add_elements_to_split_input(t_main *main, char *input);
 
 //Returns 1 if the given char is a special character that we need to handle, else 0
-int	is_special(char c);
-
-//Add single quote elements to the split_input array
-void add_single_quotes(t_main *main, char *input, int *id_input, int id_split);
-
-//Add double quote elements to the split_input array
-void add_double_quotes(t_main *main, char *input, int *id_input, int id_split);
+int	char_is_special(char c);
 
 //Add special character elements to the split_input array
-void add_redirect_element(t_main *main, char *input, int *i, int split_index);
+void add_special_element(t_main *main, char *input, int *i, int split_index);
 
 //Our own kind of tokenizing function of the input
 int tokenize(t_main *main, t_tokens **command);
@@ -130,7 +139,7 @@ void	free_and_null_split_input(t_main *main);
 int	is_quote(char c);
 
 //Add command to token struct
-void add_command(t_main *main, t_tokens **command, int cmd_id, int *spl_id);
+void	add_command(t_main *main, t_tokens **tokens, int cmd_id, int *spl_id);
 
 //Expand the environment variables
 void expand_variables(t_main *main);
@@ -156,7 +165,7 @@ void free_and_exit_variable_malloc_failed(t_main *main, int i);
 void quotes_and_variables(t_main *main, t_tokens **tokens);
 
 //Free all commands above the NULL and free all and exit
-void free_and_exit_quote_malloc_failed(t_main *main, t_tokens **tokens, int token_id, int cmd_id);
+void free_and_exit_quote_malloc(t_main *main, t_tokens **tokens, int token_id, int cmd_id);
 
 //Find the given $VAR in the env replace the given element if found
 int	find_var_and_remalloc(t_main *main, char **str);
@@ -166,6 +175,18 @@ void	free_all_and_exit_with_free_split_middle(t_main *main, t_tokens **tokens);
 
 //Removes outer double quotes and expands the environment vars within
 int expand_quotes_and_vars(t_main *main, t_tokens **tokens, char **str);
+
+//Free and  exit when malloc fails in combine elements for quote_split
+void	free_and_exit_combine_elements(t_main *main, t_tokens **tokens, char ***quote_split);
+
+//Expansion of quote and vars in the middle of words or double quotes
+int	inner_expansion(t_main *main, char **str);
+
+//Remove the outer quotes of the given string
+int	remove_outside_quotes(char **str);
+
+//Create an array of strings that splits the elements of a string into variables and quotes
+int	create_quote_split(char *str, char ***quote_split);
 
 /*****************************************************************************/
 	//ENVIRONMENT
