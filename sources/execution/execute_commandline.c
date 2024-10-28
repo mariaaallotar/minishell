@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_commandline.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 10:33:14 by maheleni          #+#    #+#             */
-/*   Updated: 2024/10/27 12:27:06 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/10/28 10:27:35 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,7 +134,7 @@ int	execute_commandline(t_main *main, t_tokens *tokens)	//does this need to be r
 
 	num_of_pipes = main->num_of_pipes;
 	i = 0;
-	if (is_builtin_not_part_of_pipeline(tokens, num_of_pipes, i))
+	if (tokens[0].command[0] != NULL && is_builtin_not_part_of_pipeline(tokens, num_of_pipes, i))
 	{
 		execute_builtin_in_parent(main, tokens[i]);
 		return (main->exit_code);
