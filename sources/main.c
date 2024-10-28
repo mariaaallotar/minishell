@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 10:12:47 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/10/28 13:14:09 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/10/28 13:21:03 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ int	main(int argc, char *argv[], char *envp[]) //what happens if ./minishell get
 	setup_signal_handlers();
 	while (1)
 	{
+		errno = 0;
 		rl_return = handle_inputs(&main.input);
 		if (rl_return == -1)
 			break;

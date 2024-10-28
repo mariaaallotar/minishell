@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_and_unset.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 10:33:07 by maheleni          #+#    #+#             */
-/*   Updated: 2024/10/28 10:08:19 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/10/28 15:46:23 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,7 +124,11 @@ int	export_without_args(t_main *main)
 
 void	print_forbidden_key(char *command)
 {
-	write(STDERR_FILENO, "Forbidden key: ", ft_strlen("Forbidden key: "));
+	if (ft_strrchr(command, '=') == NULL)
+		write(STDERR_FILENO, "Not a valid identifier: ",
+			ft_strlen("Not a valid identifier: "));
+	else
+		write(STDERR_FILENO, "Forbidden key: ", ft_strlen("Forbidden key: "));
 	while (*(command) != '=' && *command)
 	{
 		write(STDERR_FILENO, command, 1);
@@ -142,11 +146,6 @@ int	export(t_main *main, t_tokens token)
 	i = 1;
 	while (token.command[i] != NULL)	
 	{
-		if (ft_strrchr(token.command[i], '=') == NULL)
-		{
-			i++;
-			continue ;
-		}
 		if (forbidden_key(token.command[i]))
 		{
 			print_forbidden_key(token.command[i]);
@@ -176,13 +175,6 @@ int	unset(t_main *main, t_tokens token)
 	i = 1;
 	while (token.command[i] != NULL)
 	{
-		if (ft_strchr(token.command[i], '=') != NULL)
-		{
-			printf("invalid parameter name\n");
-			errno = 1;
-			i++;
-			continue ;
-		}
 		joined_str = ft_strjoin(token.command[i], "=");
 		if (joined_str == NULL)
 		{

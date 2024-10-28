@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_command.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 10:00:41 by maheleni          #+#    #+#             */
-/*   Updated: 2024/10/28 10:07:48 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/10/28 15:44:14 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ void	execute_command(t_main *main, t_tokens token, int *pids)
 				printf("Command not found: %s\n", token.command[0]);
 		}
 		else
-			perror("Error in getting path to command");
+			perror(NULL);
 		free_all_in_child(main, pids);
 		exit(errno);
 	}
@@ -157,5 +157,4 @@ void	execute_builtin_in_parent(t_main *main, t_tokens token)
 	restore_stdin_stdout(main, original_stdin_stdout[0], original_stdin_stdout[1]);
 	close(original_stdin_stdout[0]);
 	close(original_stdin_stdout[1]);
-	errno = 0;
 }

@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 14:37:05 by maheleni          #+#    #+#             */
-/*   Updated: 2024/10/17 15:18:40 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/10/28 15:56:48 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,12 @@ char	**convert_list_to_array(t_list *env_list)
 	i = 0;
 	while (node != NULL)
 	{
+		if (ft_strrchr(node->content, '=') == NULL)
+		{
+			i++;
+			node = node->next;
+			continue;
+		}
 		array[i] = node->content;
 		i++;
 		node = node->next;
