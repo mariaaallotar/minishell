@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 10:12:47 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/10/25 16:56:28 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/10/28 09:53:42 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,6 @@ void	initialize_variables(t_main *main, t_tokens **tokens)
 	main->id_command = 0;
 }
 
-//minishell: echo 'a'a "A"a | B"""F" 'a'd"d"d'c'c"a"a""''
-
 int	main(int argc, char *argv[], char *envp[]) //what happens if ./minishell gets arguments?
 {	
 	t_main 	main;
@@ -43,14 +41,18 @@ int	main(int argc, char *argv[], char *envp[]) //what happens if ./minishell get
 		if (!handle_inputs(&main.input))
 			break;
 		if (!parsing(&main, &tokens))
+		{
+			free(main.input);
+			ft_free_split(&main.split_input);
 			continue;
+		}
 		execute_commandline(&main, tokens);
 		//set_exit_status_of_last_line();
 		free_and_null_split_input(&main);
 		free_token_commands(&main, &tokens);
 		free_token_redirects(&main, &tokens);
 		free(tokens);
-		printf("============================================\n");
+		//printf("============================================\n");
 	}
 	free_environment(&(main.env_list));
 	rl_clear_history();
