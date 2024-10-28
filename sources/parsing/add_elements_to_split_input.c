@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 11:56:14 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/10/28 09:55:01 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/10/28 12:01:34 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,6 +154,7 @@ int	add_elements_to_split_input(t_main *main, char *input)
 			if (!add_regular_or_quote_element(main, input, &id_input, id_split))
 				return (0);
 		}
+		skip_spaces_and_tabs(input, &id_input);
 		id_split++;
 	}
 	return (1);
