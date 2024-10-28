@@ -353,40 +353,25 @@ static int	combine_remaining_elements(t_main *main, t_tokens **tokens, char ***q
 
 static int	combine_quote_split(t_main *main, t_tokens **tokens, char ***quote_split, char **str)
 {
-
+	free(*str);
+	*str = NULL;
 	if (!(*quote_split)[1])
-		return (1);
-	else
 	{
-		free(*str);
-		*str = NULL;
-		*str = ft_strjoin((*quote_split)[0], (*quote_split)[1]);
+		*str = ft_strdup((*quote_split)[0]);
+		if (!*str)
+		{
+			printf("Error: Failed to malloc str in combine quote_split\n");
+			return (0);
+		}
+		return (1);
 	}
+	else
+		*str = ft_strjoin((*quote_split)[0], (*quote_split)[1]);
 	if (!*str)
 		return (0);
 	if (!combine_remaining_elements(main, tokens, quote_split, str))
 		return (0);
 	return (1);
-
-	// free(*str);
-	// *str = NULL;
-	// if (!(*quote_split)[1])
-	// {
-	// 	*str = ft_strdup((*quote_split)[0]);
-	// 	if (!*str)
-	// 	{
-	// 		printf("Error: Failed to malloc str in combine quote_split\n");
-	// 		return (0);
-	// 	}
-	// 	return (1);
-	// }
-	// else
-	// 	*str = ft_strjoin((*quote_split)[0], (*quote_split)[1]);
-	// if (!*str)
-	// 	return (0);
-	// if (!combine_remaining_elements(main, tokens, quote_split, str))
-	// 	return (0);
-	// return (1);
 }
 
 static int check_for_outside_quotes(char *str)
@@ -417,7 +402,7 @@ int	expand_quotes_and_vars(t_main *main, t_tokens **tokens, char **str)
 	if (!create_quote_split(*str, &quote_split))
 		return (0);
 
-	// //PRINT QUOTE_SPLIT
+	//PRINT QUOTE_SPLIT
 	// printf("\033[0;34m---QUOTE SPLIT ---\033[0m\n");
 	// int i = 0;
 	// while (quote_split[i])
