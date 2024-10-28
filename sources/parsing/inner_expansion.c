@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   inner_expansion.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/24 12:16:01 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/10/28 11:01:51 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/10/28 11:33:33 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,23 +98,23 @@ int	inner_expansion(t_main *main, char **str)
 	if (!create_quote_split(*str, &quote_split))
 		return (0);
 	//PRINT QUOTE_SPLIT REMOVE
-	int id_print = 0;
-	while (quote_split[id_print])
-	{
-		printf("inner_quote_split[%d] = %s\n", id_print, quote_split[id_print]);
-		id_print++;
-	}
+	// int id_print = 0;
+	// while (quote_split[id_print])
+	// {
+	// 	printf("inner_quote_split[%d] = %s\n", id_print, quote_split[id_print]);
+	// 	id_print++;
+	// }
 	
 	if (!expand_vars_in_quotes_inner(main, &quote_split))
 		return (0);
 		
 	//PRINT QUOTE_SPLIT REMOVE
-	id_print = 0;
-	while (quote_split[id_print])
-	{
-		printf("inner_quote_split_after_expand[%d] = %s\n", id_print, quote_split[id_print]);
-		id_print++;
-	}
+	// id_print = 0;
+	// while (quote_split[id_print])
+	// {
+	// 	printf("inner_quote_split_after_expand[%d] = %s\n", id_print, quote_split[id_print]);
+	// 	id_print++;
+	// }
 
 	if (!combine_quote_split_inner(&quote_split, str))
 	{

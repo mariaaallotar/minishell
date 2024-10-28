@@ -417,15 +417,15 @@ int	expand_quotes_and_vars(t_main *main, t_tokens **tokens, char **str)
 	if (!create_quote_split(*str, &quote_split))
 		return (0);
 
-	//PRINT QUOTE_SPLIT
-	printf("\033[0;34m---QUOTE SPLIT ---\033[0m\n");
-	int i = 0;
-	while (quote_split[i])
-	{
-		printf("quote_split[%d] = %s\n", i, quote_split[i]);
-		i++;
-	}
-	printf("\n");
+	// //PRINT QUOTE_SPLIT
+	// printf("\033[0;34m---QUOTE SPLIT ---\033[0m\n");
+	// int i = 0;
+	// while (quote_split[i])
+	// {
+	// 	printf("quote_split[%d] = %s\n", i, quote_split[i]);
+	// 	i++;
+	// }
+	// printf("\n");
 
 	expand_vars_in_quotes(main, tokens, &quote_split);
 	if (!combine_quote_split(main, tokens, &quote_split, str))
