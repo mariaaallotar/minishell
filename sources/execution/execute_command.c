@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 10:00:41 by maheleni          #+#    #+#             */
-/*   Updated: 2024/10/22 15:11:40 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/10/28 10:07:48 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,10 +92,27 @@ int	execute_builtin(t_main *main, t_tokens token, int parent, int open_fds[2])
 	return (0);
 }
 
+void	activate_signals_for_child(void)
+{
+	struct sigaction sa_quit;
+	struct sigaction sa_int;
+
+	sa_quit.sa_handler = SIG_DFL;
+    sigemptyset(&sa_quit.sa_mask);
+    sa_quit.sa_flags = 0; // Ensure interrupted system calls are restarted
+    sigaction(SIGQUIT, &sa_quit, NULL);
+
+	sa_int.sa_handler = SIG_DFL;
+    sigemptyset(&sa_int.sa_mask);
+    sa_int.sa_flags = 0; // Ensure interrupted system calls are restarted
+    sigaction(SIGINT, &sa_int, NULL);
+}
+
 void	execute_child_process(t_main *main, t_tokens token, int *pids)
 {
 	int	status;
 
+	activate_signals_for_child();
 	if (is_builtin(token))
 	{
 		status = execute_builtin(main, token, 0, NULL);

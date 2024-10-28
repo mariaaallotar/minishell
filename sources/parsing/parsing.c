@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 11:32:36 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/10/28 09:53:54 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/10/28 10:07:35 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@
 // 				i++;
 // 			}
 // 		}
+		
 // 		//PRINT INFILES AND HEREDOCS
 // 		j = 0;
 // 		temp = (*tokens)[token_number].infiles;

@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 11:21:19 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/10/25 16:47:08 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/10/28 10:02:48 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,13 +22,14 @@
 # include <fcntl.h>
 # include <errno.h>
 # include <sys/stat.h>
+# include <signal.h>
 
-#define INFILE 100
-#define HEREDOC 101
-#define OUTFILE 102
-#define APPEND 103
-#define COMMAND 104
-#define REDIRECT 105
+# define INFILE 100
+# define HEREDOC 101
+# define OUTFILE 102
+# define APPEND 103
+# define COMMAND 104
+# define REDIRECT 105
 
 typedef struct s_redirect_node t_redirect_node;
 
@@ -80,6 +81,10 @@ typedef struct s_parsing
 
 //display prompt, readline, and save it in history
 int	handle_inputs(char **input);
+
+void setup_signal_handlers();
+
+void handle_sigint(int sig);
 
 /*****************************************************************************/
 	//PARSING

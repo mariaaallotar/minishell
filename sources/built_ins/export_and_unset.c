@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 10:33:07 by maheleni          #+#    #+#             */
-/*   Updated: 2024/10/22 15:22:47 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/10/28 10:08:19 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,6 +122,17 @@ int	export_without_args(t_main *main)
 	return (1);
 }
 
+void	print_forbidden_key(char *command)
+{
+	write(STDERR_FILENO, "Forbidden key: ", ft_strlen("Forbidden key: "));
+	while (*(command) != '=' && *command)
+	{
+		write(STDERR_FILENO, command, 1);
+		command++;
+	}
+	write(STDERR_FILENO, "\n", 2);
+}
+
 int	export(t_main *main, t_tokens token)
 {
 	int	i;
@@ -138,13 +149,7 @@ int	export(t_main *main, t_tokens token)
 		}
 		if (forbidden_key(token.command[i]))
 		{
-			printf("Forbidden key: ");
-			// while (*(token.command[i]) != '=' && *(token.command[i]))
-			// {
-			// 	printf("%c", *token.command[i]);
-			// 	(token.command[i])++;
-			// }
-			printf("\n");
+			print_forbidden_key(token.command[i]);
 			errno = 1;
 		}
 		else if (existing_key(main, token.command[i]))

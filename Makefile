@@ -6,7 +6,7 @@
 #    By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/20 15:07:12 by eberkowi          #+#    #+#              #
-#    Updated: 2024/10/24 12:16:54 by eberkowi         ###   ########.fr        #
+#    Updated: 2024/10/28 10:06:50 by eberkowi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -36,6 +36,7 @@ CFILES := main.c \
 		environment/environment_utils.c \
 		environment/print_environment.c \
 		input_and_signals/handle_inputs.c \
+		input_and_signals/signals.c \
 		built_ins/echo.c \
 		built_ins/export_and_unset.c \
 		built_ins/pwd.c \

@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 10:12:47 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/10/28 09:53:42 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/10/28 10:45:19 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,22 +29,25 @@ int	main(int argc, char *argv[], char *envp[]) //what happens if ./minishell get
 {	
 	t_main 	main;
 	t_tokens *tokens;
+	int		rl_return;
 
 	(void)argc;
 	(void)*argv;
 	initialize_variables(&main, &tokens);
 	copy_env(envp, &main);
 	// update_env(&main);	//do we do this at all?
-	// create_signals();
+	setup_signal_handlers();
 	while (1)
 	{
-		if (!handle_inputs(&main.input))
+		rl_return = handle_inputs(&main.input);
+		if (rl_return == -1)
 			break;
+		else if (rl_return == 0)
+			continue;
 		if (!parsing(&main, &tokens))
 		{
 			free(main.input);
 			ft_free_split(&main.split_input);
-			continue;
 		}
 		execute_commandline(&main, tokens);
 		//set_exit_status_of_last_line();
