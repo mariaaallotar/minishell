@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 10:12:47 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/10/22 11:23:11 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/10/24 11:47:15 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,16 +28,20 @@ int	main(int argc, char *argv[], char *envp[]) //what happens if ./minishell get
 {	
 	t_main 	main;
 	t_tokens *tokens;
+	int		rl_return;
 
 	(void)argc;
 	(void)*argv;
 	initialize_variables(&main, &tokens);
 	copy_env(envp, &main);
 	// update_env(&main);	//do we do this at all?
-	// create_signals();
+	setup_signal_handlers();
 	while (1)
 	{
-		if (!handle_inputs(&main.input))
+		rl_return = handle_inputs(&main.input);
+		if (rl_return == -1)
+			break;
+		else if (rl_return == 0)
 			continue;
 		if (parsing(&main, &tokens))
 			continue;
@@ -47,7 +51,7 @@ int	main(int argc, char *argv[], char *envp[]) //what happens if ./minishell get
 		free_token_commands(&main, &tokens);
 		free_token_redirects(&main, &tokens);
 		free(tokens);
-		printf("============================================\n");
+		// printf("============================================\n");
 	}
 	free_environment(&(main.env_list));
 	rl_clear_history();

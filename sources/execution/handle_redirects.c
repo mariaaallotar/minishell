@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 09:57:31 by maheleni          #+#    #+#             */
-/*   Updated: 2024/10/15 14:13:40 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/10/23 12:45:48 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,6 @@ int	handle_infile(t_tokens token, int* pipe_left)
 			return (-1);
 		}
 		close(pipe_left[0]);
-		close(pipe_left[1]);
 	}
 	if (token.infiles != NULL)
 		return (dup2_infile(token));

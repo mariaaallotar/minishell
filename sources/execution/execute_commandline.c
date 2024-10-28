@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 10:33:14 by maheleni          #+#    #+#             */
-/*   Updated: 2024/10/17 12:58:24 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/10/27 12:27:06 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,6 +104,26 @@ void	close_pipes_on_error(int *pipe)
 	close(pipe[1]);
 }
 
+void	ignore_sigint(void)
+{
+	struct sigaction sa_int;
+	
+	sa_int.sa_handler = SIG_IGN;
+	sigemptyset(&sa_int.sa_mask);
+	sa_int.sa_flags = 0; // Ensure interrupted system calls are restarted
+	sigaction(SIGINT, &sa_int, NULL);
+}
+
+void	activate_sigint(void)
+{
+	struct sigaction sa_int;
+	
+	sa_int.sa_handler = handle_sigint;
+	sigemptyset(&sa_int.sa_mask);
+	sa_int.sa_flags = 0; // Ensure interrupted system calls are restarted
+	sigaction(SIGINT, &sa_int, NULL);
+}
+
 int	execute_commandline(t_main *main, t_tokens *tokens)	//does this need to be return int?
 {
 	int	pipe_array[2][2];
@@ -156,7 +176,10 @@ int	execute_commandline(t_main *main, t_tokens *tokens)	//does this need to be r
 			execute_child_process(main, tokens[i], pids);
 		}
 		else
+		{
+			ignore_sigint();
 			close_pipes_in_parent(i, num_of_pipes, pipe_array[0], pipe_array[1]);
+		}
 		num_of_pipes--;
 		i++;
 	}
@@ -170,6 +193,7 @@ int	execute_commandline(t_main *main, t_tokens *tokens)	//does this need to be r
 			main->exit_code = WEXITSTATUS(status);
 		i++;
 	}
+	activate_sigint();
 	free(pids);
 	return (main->exit_code);
 }
