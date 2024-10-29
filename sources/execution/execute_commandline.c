@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_commandline.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 10:33:14 by maheleni          #+#    #+#             */
-/*   Updated: 2024/10/28 10:27:35 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/10/29 13:52:46 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,13 +75,26 @@ int	create_pipe(int pipe_array[2][2])
 	return (1);
 }
 
-int	create_fork(void)
+void	close_pipes_on_error(int *pipe)
+{
+	close(pipe[0]);
+	close(pipe[1]);
+}
+
+int	create_fork(int i, int num_of_pipes, int pipe_array[2][2], int **pids)
 {
 	int	pid;
 
 	pid = fork();
 	if (pid == -1)
-		perror("Create fork");
+	{
+		if (i > 0)
+			close_pipes_on_error(pipe_array[0]);
+		if (num_of_pipes > 0)
+			close_pipes_on_error(pipe_array[1]);
+		free(*pids);
+		return (1);
+	}
 	return (pid);
 }
 
@@ -96,12 +109,6 @@ int	is_builtin_not_part_of_pipeline(t_tokens *tokens, int num_of_pipes, int i)
 	if (is_builtin(tokens[i]) && num_of_pipes == 0 && i == 0)
 		return (1);
 	return (0);
-}
-
-void	close_pipes_on_error(int *pipe)
-{
-	close(pipe[0]);
-	close(pipe[1]);
 }
 
 void	ignore_sigint(void)
@@ -156,16 +163,7 @@ int	execute_commandline(t_main *main, t_tokens *tokens)	//does this need to be r
 				return (1);
 			}
 		}
-		pids[i] = create_fork();
-		if (pids[i] == -1)
-		{
-			if (i > 0)
-				close_pipes_on_error(pipe_array[0]);
-			if (num_of_pipes > 0)
-				close_pipes_on_error(pipe_array[1]);
-			free(pids);
-			return (1);
-		}
+		pids[i] = create_fork(i, num_of_pipes, pipe_array, &pids);
 		if (pids[i] == 0)
 		{
 			if (handle_infile_and_outfile(i, num_of_pipes, pipe_array, tokens[i]) == -1)
@@ -177,6 +175,7 @@ int	execute_commandline(t_main *main, t_tokens *tokens)	//does this need to be r
 		}
 		else
 		{
+			//printf("Process id for %s is %i\n", tokens[i].command[0], pids[i]);
 			ignore_sigint();
 			close_pipes_in_parent(i, num_of_pipes, pipe_array[0], pipe_array[1]);
 		}
@@ -191,6 +190,8 @@ int	execute_commandline(t_main *main, t_tokens *tokens)	//does this need to be r
 		waitpid(pids[i], &status, 0);
 		if (WIFEXITED(status))
 			main->exit_code = WEXITSTATUS(status);
+		if (WIFSIGNALED(status))
+			main->exit_code = 128 + WTERMSIG(status);
 		i++;
 	}
 	activate_sigint();

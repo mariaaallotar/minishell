@@ -6,21 +6,22 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 15:38:24 by maheleni          #+#    #+#             */
-/*   Updated: 2024/10/22 11:49:15 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/10/29 14:54:58 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int	update_oldpwd(t_main *main)
+int	update_directory_variable(t_main *main, char *key)
 {
 	char	*value;
 	char	*key_value;
 
 	value = get_pwd();
-	key_value = ft_strjoin("OLDPWD=", value);
+	key_value = ft_strjoin(key, value);
 	if (key_value == NULL)
 	{
+		free(value);
 		perror(NULL);
 		return (errno);
 	}
@@ -30,36 +31,46 @@ int	update_oldpwd(t_main *main)
 	return (0);
 }
 
+char	*get_path_to_home(t_main *main)
+{
+	t_list	*home_variable;
+	char	*message;
+
+	home_variable = find_node(main, "HOME=");
+	if (home_variable == NULL)
+	{
+		message = "cd: HOME not set\n";
+		write(STDERR_FILENO, message, ft_strlen(message));
+		return (NULL);
+	}
+	return (home_variable->content + 5);
+}
+
 int	cd(t_main *main, t_tokens token)
 {
 	int		return_value;
-	char	*value;
-	char	*key_value;
+	char	*path;
+	char	*message;
 
-	if (token.command[1] == NULL)
-		return (0);
-	if (token.command[2] != NULL)
+	if (token.command[1] != NULL && token.command[2] != NULL)
 	{
-		dup2(STDERR_FILENO, 1);
-		printf("Cd only takes one argument\n");
+		message = "cd: too many arguments\n";
+		write(STDERR_FILENO, message, ft_strlen(message));
 		return (1);
 	}
-	update_oldpwd(main);
-	return_value = chdir(token.command[1]);
+	if (token.command[1] == NULL)
+		path = get_path_to_home(main);
+	else
+		path = token.command[1];
+	if (path == NULL)
+			return (1);
+	update_directory_variable(main, "OLDPWD=");
+	return_value = chdir(path);
 	if (return_value == -1)
 	{
 		perror(NULL);
-		return (errno);
+		return (1);
 	}
-	value = get_pwd();
-	key_value = ft_strjoin("PWD=", value);
-	if (key_value == NULL)
-	{
-		perror(NULL);
-		return (errno);
-	}
-	free(value);
-	update_variable(main, key_value);
-	free(key_value);
+	update_directory_variable(main, "PWD=");
 	return (0);
 }

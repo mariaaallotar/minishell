@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 11:21:19 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/10/28 10:02:48 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/10/29 16:01:13 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,14 @@
 # define HEREDOC 101
 # define OUTFILE 102
 # define APPEND 103
+
+
+
+	//are these used at all?
 # define COMMAND 104
 # define REDIRECT 105
+
+
 
 typedef struct s_redirect_node t_redirect_node;
 
@@ -76,7 +82,9 @@ typedef struct s_parsing
 } t_parsing;
 
 /*****************************************************************************/
+
 	//INPUT AND SIGNALS
+
 /*****************************************************************************/
 
 //display prompt, readline, and save it in history
@@ -87,7 +95,9 @@ void setup_signal_handlers();
 void handle_sigint(int sig);
 
 /*****************************************************************************/
+
 	//PARSING
+
 /*****************************************************************************/
 
 //Master parsing function that calls are other functions for parsing
@@ -189,7 +199,9 @@ int	remove_outside_quotes(char **str);
 int	create_quote_split(char *str, char ***quote_split);
 
 /*****************************************************************************/
+
 	//ENVIRONMENT
+
 /*****************************************************************************/
 
 /**
@@ -256,8 +268,36 @@ void	remove_variable(t_main *main, char *variable_key);
 char	**convert_list_to_array(t_list *env_list);
 
 /*****************************************************************************/
+
 	//BUILTINS
+
 /*****************************************************************************/
+
+/**
+ * Changes the working directory of the shell. Also updates the PWD and OLDWPD
+ * variable in the env list.
+ * 
+ * @param main pointer to the main struct of the program
+ * @param token the token that cd command is part of
+ * @returns 
+ */
+int	cd(t_main *main, t_tokens token);
+
+/**
+ * Gets the path to home directory from env list.
+ * 
+ * @param main pointer to the main struct of the program
+ * @returns The path as a string, NULL if HOME variable is unset
+ */
+char	*get_path_to_home(t_main *main);
+
+/**
+ * Updates the PWD and OLDPWD variables in env list depending on the key
+ * 
+ * @param main pointer to the main struct of the program
+ * @param key the key of the variable to update (only PWD or OLDPWD)
+ */
+int	update_directory_variable(t_main *main, char *key);
 
 /**
  * Prints the words after echo. If flag -n is given, does not print the newline
@@ -268,6 +308,63 @@ char	**convert_list_to_array(t_list *env_list);
  * @returns 0 on success, 1 on error
  */
 int    echo(t_main *main, t_tokens token);
+
+/**
+ * Prints the arguments
+ * 
+ * @param i position of first aguent to print
+ * @param has_new_line 1 if will print newline at the end, 0 if not
+ * @param token the token that echo command is part of
+ */
+void	print_echo_arguments(int i, int has_new_line, t_tokens token);
+
+/**
+ * Checks if echo has the flag -n or not, indicating if the trailing newline
+ * will be printed or not.
+ * 
+ * @param str the string that will hold the -n or first argument
+ * @returns 1 if -n flag is present, 0 otherwise
+ */
+int	has_no_newline_flag(char *str);
+
+/**
+ * Prints the current environment variables
+ * 
+ * @param main the main struct of the program
+ * @param token the token that env command is part of
+ * @returns 0 on success, 1 on error
+ */
+int env(t_main *main, t_tokens token);
+
+/**
+ * Exits the program with the given value, 0 if no argument is given
+ * 
+ * @param main the main struct of the program
+ * @param token the token that exit command is part of
+ * @param parent 1 if we are in parent process, 0 if in child process
+ * @param open_fds array of the open file descriptors
+ * @returns the exitcode if in child process
+ */
+int	exit_command(t_main *main, t_tokens token, int parent, int open_fds[2]);
+
+/**
+ * If in child process: Returns with exit_code.
+ * If in parent process: Frees and closes everyhitng and exits.
+ * 
+ * @param main the main struct of the program
+ * @param open_fds array of the open file descriptors
+ * @param exit_code the code to exit with or return
+ */
+void	free_and_exit(t_main *main, int open_fds[2], int exit_code);
+
+/**
+ * Sets the numeric value given with the command into temp_code.
+ * 
+ * @param element the element that can be the numeric value
+ * @param exit_code pointer to variable to hold the exit code in
+ * @returns 1 if numeric value, 0 if not
+ */
+int	int_after_exit(char *element, int *exit_code);
 
 /**
  * Checks if the given key is already in the env list.
@@ -317,21 +414,10 @@ int	pwd(t_main *main, t_tokens token);
 
 char	*get_pwd(void);
 
-int	cd(t_main *main, t_tokens token);
-
-/**
- * Prints the updated environment variables
- * 
- * @param main the main struct of the program
- * @param token the token that env command is part of
- * @returns 0 on success, 1 on error
- */
-int env(t_main *main, t_tokens token);
-
-int	exit_command(t_main *main, t_tokens token, int parent, int open_fds[2]);
-
 /*****************************************************************************/
+
 	//EXECUTION
+
 /*****************************************************************************/
 
 /**

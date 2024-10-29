@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 14:52:20 by maheleni          #+#    #+#             */
-/*   Updated: 2024/10/21 11:38:07 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/10/29 12:58:40 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ void	print_echo_arguments(int i, int has_new_line, t_tokens token)
 		if (token.command[i] == NULL && has_new_line)
 			printf("\n");
 		else if (token.command[i] == NULL)
-			break;
+			break ;
 		else
 			printf(" ");
 	}
