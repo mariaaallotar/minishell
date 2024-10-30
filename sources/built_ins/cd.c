@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 15:38:24 by maheleni          #+#    #+#             */
-/*   Updated: 2024/10/29 14:54:58 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/10/30 11:45:15 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,12 +63,12 @@ int	cd(t_main *main, t_tokens token)
 	else
 		path = token.command[1];
 	if (path == NULL)
-			return (1);
+		return (1);
 	update_directory_variable(main, "OLDPWD=");
 	return_value = chdir(path);
 	if (return_value == -1)
 	{
-		perror(NULL);
+		perror("cd");
 		return (1);
 	}
 	update_directory_variable(main, "PWD=");

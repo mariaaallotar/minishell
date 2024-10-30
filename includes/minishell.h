@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 11:21:19 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/10/29 16:01:13 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/10/30 11:44:00 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,9 +82,11 @@ typedef struct s_parsing
 } t_parsing;
 
 /*****************************************************************************/
+/*****************************************************************************/
 
 	//INPUT AND SIGNALS
 
+/*****************************************************************************/
 /*****************************************************************************/
 
 //display prompt, readline, and save it in history
@@ -95,9 +97,11 @@ void setup_signal_handlers();
 void handle_sigint(int sig);
 
 /*****************************************************************************/
+/*****************************************************************************/
 
 	//PARSING
 
+/*****************************************************************************/
 /*****************************************************************************/
 
 //Master parsing function that calls are other functions for parsing
@@ -199,9 +203,11 @@ int	remove_outside_quotes(char **str);
 int	create_quote_split(char *str, char ***quote_split);
 
 /*****************************************************************************/
+/*****************************************************************************/
 
 	//ENVIRONMENT
 
+/*****************************************************************************/
 /*****************************************************************************/
 
 /**
@@ -261,16 +267,17 @@ void	print_list_content(void *content);
  * 
  * @param main the main struct of the program
  * @param variable_key the key of the variable to remove
- * @note variable_key needs to have '=' sign! E.g. "PATH="
  */
-void	remove_variable(t_main *main, char *variable_key);
+int	remove_variable(t_main *main, char *variable_key);
 
 char	**convert_list_to_array(t_list *env_list);
 
 /*****************************************************************************/
+/*****************************************************************************/
 
 	//BUILTINS
 
+/*****************************************************************************/
 /*****************************************************************************/
 
 /**
@@ -367,6 +374,33 @@ void	free_and_exit(t_main *main, int open_fds[2], int exit_code);
 int	int_after_exit(char *element, int *exit_code);
 
 /**
+ * Exports a variable of form VAR or VAR=value to the env list
+ * 
+ * @param main the main struct of the program
+ * @param token the token to be executed
+ * @returns 0 on success, 1 on error
+ */
+int	export(t_main *main, t_tokens token);
+
+/**
+ * Prints error message and the variable that is refers to
+ * 
+ * @param argument the key-value pair that is to be printed
+ * @returns 1, that will be set to the return value of export command
+ */
+int	print_forbidden_key(char *argument);
+
+/**
+ * Checks if the key of the variable to export has forbidden characters or in
+ * forbidden form. I.e. a key can only contain digits, letters and '_'. Digits
+ * can not be in the beginning.
+ * 
+ * @param var the variable in form VAR=value
+ * @returns 1 if key is forbidden, 0 if key is ok
+ */
+int		forbidden_key(char *var);
+
+/**
  * Checks if the given key is already in the env list.
  * 
  * @param main the main struct of the program
@@ -376,32 +410,39 @@ int	int_after_exit(char *element, int *exit_code);
 int		existing_key(t_main *main, char *var);
 
 /**
- * Checks if the key of the variable to export has forbidden characters or in
- * forbidden form. I.e. a key kan only contain digits, letters and '_'. Digits
- * can not be in the beginning.
- * 
- * @param var the variable in form VAR=value
- * @returns 1 if key is forbidden, 0 if key is ok
- */
-int		forbidden_key(char *var);
-
-/**
- * Exports a variable of form VAR=value to the env list
+ * Prints all exported variables in ASCII order
  * 
  * @param main the main struct of the program
- * @param token the token to be executed
- * @returns 0 on success, 1 on error
+ * @returns 0 on success, 1 on fail
  */
-int	export(t_main *main, t_tokens token);
+int	export_without_args(t_main *main);
 
 /**
- * Unsets a variable from the env list.
+ * Finds the node that has the contents next in ascii order
  * 
- * @param main the main struct of the program
- * @param token the token to be executed
- * @returns 0 on success, 1 on error
+ * @param prev_node pointer to the previously printed node
+ * @param biggest_node pointer to the node that will be printed last
+ * @param env_list pointer to the env_list (export_list) that will be printed
+ * @returns the node to print the contents of next
  */
-int	unset(t_main *main, t_tokens token);
+t_list	*get_next_node(t_list *prev_node, t_list *biggest_node,
+	t_list *env_list);
+
+/**
+ * Finds and returns the node that will be printed last
+ * 
+ * @param env_list pointer to the env_list (export_list) that will be printed
+ * @returns the node that will be printed last
+ */
+t_list	*get_biggest_node(t_list *env_list);
+
+/**
+ * Finds and returns the node that will be printed first
+ * 
+ * @param env_list pointer to the env_list (export_list) that will be printed
+ * @returns the node that will be printed first
+ */
+t_list	*get_smallest_node(t_list *env_list);
 
 /**
  * Prints the current working directory
@@ -412,12 +453,29 @@ int	unset(t_main *main, t_tokens token);
  */
 int	pwd(t_main *main, t_tokens token);
 
+/**
+ * Gets and returns the current working directory in a buffer that is malloced
+ * by getcwd()
+ * 
+ * @returns the path to the current working direcotry
+ */
 char	*get_pwd(void);
 
+/**
+ * Removes a variable from the env list (export list)
+ * 
+ * @param main the main struct of the program
+ * @param token the token to be executed
+ * @returns 0 on success, 1 on error
+ */
+int	unset(t_main *main, t_tokens token);
+
+/*****************************************************************************/
 /*****************************************************************************/
 
 	//EXECUTION
 
+/*****************************************************************************/
 /*****************************************************************************/
 
 /**
