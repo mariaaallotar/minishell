@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 10:33:14 by maheleni          #+#    #+#             */
-/*   Updated: 2024/10/29 13:52:46 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/10/30 13:33:06 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int	is_builtin(t_tokens token)
 	char	*command;
 	int		str_len;
 
-	if (token.command == NULL)
+	if (token.command == NULL || token.command[0] == NULL)
 		return (0);
 	command = token.command[0];
 	str_len = ft_strlen(command);
@@ -106,6 +106,8 @@ void	reassign_pipe_right_to_left(int pipe_array[2][2])
 
 int	is_builtin_not_part_of_pipeline(t_tokens *tokens, int num_of_pipes, int i)
 {
+	if ( tokens[i].command == NULL || tokens[i].command[0] == NULL)
+		return (0);
 	if (is_builtin(tokens[i]) && num_of_pipes == 0 && i == 0)
 		return (1);
 	return (0);

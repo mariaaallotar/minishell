@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 18:38:06 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/10/30 09:40:04 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/10/30 13:14:44 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ int	int_after_exit(char *element, int *exit_code)
 
 void	free_and_exit(t_main *main, int open_fds[2], int exit_code)
 {
+	remove_heredocs(main, main->tokens);
 	free_and_null_split_input(main);
 	free_token_commands(main, main->tokens);
 	free_token_redirects(main, main->tokens);

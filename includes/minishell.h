@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 11:21:19 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/10/30 11:44:00 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/10/30 13:45:53 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -613,5 +613,7 @@ int	dup2_infile(t_tokens token);
 int	dup2_outfile(t_tokens token);
 
 void	free_all_in_child(t_main *main, int *pids);
+
+void	remove_heredocs(t_main *main, t_tokens **tokens);
 
 #endif
