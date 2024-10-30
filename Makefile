@@ -6,7 +6,7 @@
 #    By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/20 15:07:12 by eberkowi          #+#    #+#              #
-#    Updated: 2024/10/30 12:18:00 by eberkowi         ###   ########.fr        #
+#    Updated: 2024/10/30 13:58:05 by eberkowi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -32,17 +32,19 @@ CFILES := main.c \
 		parsing/expand_quotes_and_vars.c \
 		parsing/inner_expansion.c \
 		parsing/get_split_element_length.c \
-		built_ins/exit_command.c \
 		environment/list_add_and_remove.c \
 		environment/environment_utils.c \
 		environment/print_environment.c \
 		input_and_signals/handle_inputs.c \
 		input_and_signals/signals.c \
 		built_ins/echo.c \
-		built_ins/export_and_unset.c \
+		built_ins/export_without_args.c \
+		built_ins/export_with_args.c \
+		built_ins/unset.c \
 		built_ins/pwd.c \
 		built_ins/cd.c \
 		built_ins/env.c \
+		built_ins/exit.c \
 		execution/execute_commandline.c \
 		execution/handle_redirects.c \
 		execution/execute_command.c \

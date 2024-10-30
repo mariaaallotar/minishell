@@ -1,27 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env.c                                              :+:      :+:    :+:   */
+/*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/10 11:49:12 by maheleni          #+#    #+#             */
-/*   Updated: 2024/10/29 14:54:05 by maheleni         ###   ########.fr       */
+/*   Created: 2024/10/30 09:33:42 by maheleni          #+#    #+#             */
+/*   Updated: 2024/10/30 11:37:51 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int	env(t_main *main, t_tokens token)
+int	unset(t_main *main, t_tokens token)
 {
-	char	*message;
+	int		i;
 
-	if (token.command[1] != NULL)
+	i = 1;
+	while (token.command[i] != NULL)
 	{
-		message = "env: env does not take any arguments\n";
-		write(STDERR_FILENO, message, ft_strlen(message));
-		return (1);
+		if (find_node(main, token.command[i]) == NULL)
+		{
+			i++;
+			continue ;
+		}
+		remove_variable(main, token.command[i]);
+		i++;
 	}
-	print_linked_list(main->env_list);
 	return (0);
 }
