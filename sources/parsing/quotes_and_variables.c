@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 13:56:04 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/10/25 15:09:01 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/10/30 11:21:49 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,13 @@ static void	helper_for_redirects(t_main *main, t_tokens **tokens, int token_id)
 	{
 		if (temp->type == INFILE)
 		{	
-			if (!expand_quotes_and_vars(main, tokens, &(temp->name)))
+			if (!expand_quotes_and_vars(main, tokens, &(temp->name), false))
+				free_all_and_exit_with_free_split_middle(main, tokens);
+		}
+		if (check_for_outside_quotes(temp->delimiter, NULL))
+		{
+			temp->delimiter_has_quotes = true;
+			if (!remove_outside_quotes(&temp->delimiter))
 				free_all_and_exit_with_free_split_middle(main, tokens);
 		}
 		temp = temp->next;
@@ -29,7 +35,7 @@ static void	helper_for_redirects(t_main *main, t_tokens **tokens, int token_id)
 	temp = (*tokens)[token_id].outfiles;
 	while (temp)
 	{
-		if (!expand_quotes_and_vars(main, tokens, &(temp->name)))
+		if (!expand_quotes_and_vars(main, tokens, &(temp->name), false))
 			free_all_and_exit_with_free_split_middle(main, tokens);
 		temp = temp->next;
 	}	
@@ -50,7 +56,7 @@ void	quotes_and_variables(t_main *main, t_tokens **tokens)
 			while ((*tokens)[token_id].command[cmd_id])
 			{
 				if (!expand_quotes_and_vars(main, tokens
-						, &(*tokens)[token_id].command[cmd_id]))
+						, &(*tokens)[token_id].command[cmd_id], false))
 					free_and_exit_quote_malloc(main, tokens, token_id, cmd_id);
 				cmd_id++;
 			}

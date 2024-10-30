@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+         #
+#    By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/20 15:07:12 by eberkowi          #+#    #+#              #
-#    Updated: 2024/10/30 09:40:13 by maheleni         ###   ########.fr        #
+#    Updated: 2024/10/30 13:58:05 by eberkowi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -31,6 +31,7 @@ CFILES := main.c \
 		parsing/quotes_and_variables.c \
 		parsing/expand_quotes_and_vars.c \
 		parsing/inner_expansion.c \
+		parsing/get_split_element_length.c \
 		environment/list_add_and_remove.c \
 		environment/environment_utils.c \
 		environment/print_environment.c \

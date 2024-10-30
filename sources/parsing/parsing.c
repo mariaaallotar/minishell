@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 11:32:36 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/10/28 13:14:14 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/10/30 13:57:06 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,13 @@
 // 			else 
 // 				printf("type = HEREDOC");
 // 			if (temp->type == HEREDOC)
-// 				printf(", delimiter = %s", temp->delimiter);
+// 			{
+// 				printf(", delimiter = %s, ", temp->delimiter);
+// 				if (temp->delimiter_has_quotes)
+// 					printf("delimiter_has_quotes = true\n");
+// 				else
+// 					printf("delimiter_has_quotes = false\n");
+// 			}
 // 			printf("\n");
 // 			temp = temp->next;
 // 			j++;
