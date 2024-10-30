@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 10:33:16 by maheleni          #+#    #+#             */
-/*   Updated: 2024/10/16 11:18:51 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/10/28 11:03:13 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,11 +34,8 @@ int	pwd(t_main *main, t_tokens token)
 	char	*buf;
 
 	(void)main;
-	if (token.command[1] != NULL)
-	{
-		printf("Pwd does not take any arguments\n");
+	if (token.command[0] == NULL)
 		return (1);
-	}
 	buf = get_pwd();
 	printf("%s\n", buf);
 	free(buf);

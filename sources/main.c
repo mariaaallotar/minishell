@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 10:12:47 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/10/28 12:11:17 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/10/30 13:26:06 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,25 @@ void	initialize_variables(t_main *main, t_tokens **tokens)
 	main->id_command = 0;
 }
 
+void	remove_heredocs(t_main *main, t_tokens **tokens)
+{
+	t_redirect_node	*node;
+	int				i;
+
+	i = 0;
+	while (i <= main->num_of_pipes)
+	{
+		node = (* tokens)[i].infiles;
+		while (node != NULL)
+		{
+			if (node->type == HEREDOC)
+				unlink(node->name);
+			node = node->next;
+		}
+		i++;
+	}
+}
+
 int	main(int argc, char *argv[], char *envp[]) //what happens if ./minishell gets arguments?
 {	
 	t_main 	main;
@@ -39,6 +58,7 @@ int	main(int argc, char *argv[], char *envp[]) //what happens if ./minishell get
 	setup_signal_handlers();
 	while (1)
 	{
+		errno = 0;
 		rl_return = handle_inputs(&main.input);
 		if (rl_return == -1)
 			break;
@@ -52,6 +72,7 @@ int	main(int argc, char *argv[], char *envp[]) //what happens if ./minishell get
 		}
 		execute_commandline(&main, tokens);
 		//set_exit_status_of_last_line();
+		remove_heredocs(&main, &tokens);
 		free_and_null_split_input(&main);
 		free_token_commands(&main, &tokens);
 		free_token_redirects(&main, &tokens);
@@ -61,5 +82,5 @@ int	main(int argc, char *argv[], char *envp[]) //what happens if ./minishell get
 	free_environment(&(main.env_list));
 	rl_clear_history();
 	//free_signals();
-	exit (main.exit_code);
+	exit (main.exit_code);		//just 0?
 }
