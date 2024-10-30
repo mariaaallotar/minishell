@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/24 12:16:01 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/10/28 12:07:21 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/10/30 11:32:22 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,10 +87,10 @@ static int	combine_quote_split_inner(char ***quote_split, char **str)
 	return (1);
 }
 
-int	inner_expansion(t_main *main, char **str)
+int	inner_expansion(t_main *main, char **str, bool is_heredoc)
 {
 	char	**quote_split;
-	
+
 	if (!remove_outside_quotes(str))
 		return (0);
 	if ((*str)[0] == '\0')
@@ -122,7 +122,15 @@ int	inner_expansion(t_main *main, char **str)
 		ft_free_split(&quote_split);
 		return (0);
 	}	
-	
+	if (is_heredoc)
+	{
+		if (!add_quotes_back_to_str(str, '\"'))
+		{
+			printf("Error: Failed to malloc add quotes back\n");
+			ft_free_split(&quote_split);
+			return (0);	
+		}
+	}
 	ft_free_split(&quote_split);
 	return (1);
 }

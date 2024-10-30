@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 12:02:21 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/10/21 14:06:38 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/10/29 15:44:24 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ t_redirect_node	*lstnew_redirect_node(char *name, int type)
 		return (NULL);
 	new_node->name = NULL;
 	new_node->delimiter = NULL;
+	new_node->delimiter_has_quotes = false;
 	new_node->next = NULL;
 	new_node->type = type;
 	if (type == HEREDOC)

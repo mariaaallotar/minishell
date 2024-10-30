@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 11:52:55 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/10/28 10:23:29 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/10/30 12:11:48 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,26 +35,40 @@ static int	create_filename(char **name, int num_of_heredocs)
 	return (1);
 }
 
-static void	readline_to_file(char *filename, char *delimiter)
+static void	readline_to_file(t_main *main, t_tokens **tokens, t_redirect_node *temp)
 {
 	int		heredoc_fd;
 	char	*input;
 	int		input_len;
 	int		delimiter_len;
 
-	delimiter_len = ft_strlen(delimiter);
-	heredoc_fd = open(filename, O_WRONLY | O_TRUNC | O_CREAT, 0644);
+	delimiter_len = ft_strlen(temp->delimiter);
+	heredoc_fd = open(temp->name, O_WRONLY | O_TRUNC | O_CREAT, 0644);
 	while (1)
 	{
 		input = readline("> ");
+		if (!input)
+		{
+			printf("Error: Malloc failed in readline for heredoc\n");
+			free_all_and_exit(main, tokens);
+		}
 		input_len = ft_strlen(input);
-		if (!ft_strncmp(input, delimiter, delimiter_len + 1))
+		if (!ft_strncmp(input, temp->delimiter, delimiter_len + 1))
 		{
 			free(input);
 			input = NULL;
 			break ;
 		}
-		write(heredoc_fd, input, input_len);
+		if (!temp->delimiter_has_quotes)
+		{
+			if (!expand_quotes_and_vars(main, tokens, &input, true))
+			{
+				printf("Error: Malloc failed in expand_quotes in heredoc\n");
+				free(input);
+				free_all_and_exit(main, tokens);
+			}
+		}
+		write(heredoc_fd, input, ft_strlen(input));
 		write(heredoc_fd, "\n", 1);
 		free(input);
 		input = NULL;
@@ -79,7 +93,8 @@ void	create_heredoc(t_main *main, t_tokens **tokens)
 			{
 				if (!create_filename(&temp->name, num_of_heredocs))
 					free_all_and_exit(main, tokens);
-				readline_to_file(temp->name, temp->delimiter);
+				readline_to_file(main, tokens, temp);
+
 				num_of_heredocs++;
 			}
 			temp = temp->next;

@@ -6,7 +6,7 @@
 #    By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/20 15:07:12 by eberkowi          #+#    #+#              #
-#    Updated: 2024/10/28 10:47:32 by eberkowi         ###   ########.fr        #
+#    Updated: 2024/10/30 12:18:00 by eberkowi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -31,6 +31,7 @@ CFILES := main.c \
 		parsing/quotes_and_variables.c \
 		parsing/expand_quotes_and_vars.c \
 		parsing/inner_expansion.c \
+		parsing/get_split_element_length.c \
 		built_ins/exit_command.c \
 		environment/list_add_and_remove.c \
 		environment/environment_utils.c \

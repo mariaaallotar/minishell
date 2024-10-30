@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 11:21:19 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/10/28 10:02:48 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/10/30 12:18:47 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,8 @@
 # define APPEND 103
 # define COMMAND 104
 # define REDIRECT 105
+# define DOUBLE_QUOTE 106
+# define SINGLE_QUOTE 107
 
 typedef struct s_redirect_node t_redirect_node;
 
@@ -37,6 +39,7 @@ struct s_redirect_node
 {
 	char *name;
 	char *delimiter;
+	bool delimiter_has_quotes;
 	int type;
 	t_redirect_node *next;
 };
@@ -174,19 +177,28 @@ int	find_var_and_remalloc(t_main *main, char **str);
 void	free_all_and_exit_with_free_split_middle(t_main *main, t_tokens **tokens);
 
 //Removes outer double quotes and expands the environment vars within
-int expand_quotes_and_vars(t_main *main, t_tokens **tokens, char **str);
+int	expand_quotes_and_vars(t_main *main, t_tokens **tokens, char **str, bool is_heredoc);
 
 //Free and  exit when malloc fails in combine elements for quote_split
 void	free_and_exit_combine_elements(t_main *main, t_tokens **tokens, char ***quote_split);
 
 //Expansion of quote and vars in the middle of words or double quotes
-int	inner_expansion(t_main *main, char **str);
+int	inner_expansion(t_main *main, char **str, bool is_heredoc);
 
 //Remove the outer quotes of the given string
 int	remove_outside_quotes(char **str);
 
 //Create an array of strings that splits the elements of a string into variables and quotes
 int	create_quote_split(char *str, char ***quote_split);
+
+//Check for single or double quotes on the outside of the given string
+int check_for_outside_quotes(char *str, char *quote_type);
+
+//Add the given quote type to the outside of the given string
+int add_quotes_back_to_str(char **str, char quote_type);
+
+//Returns the length of one element of the quote_split for expanding quotes and vars
+int	get_split_element_len(char *str, int i);
 
 /*****************************************************************************/
 	//ENVIRONMENT

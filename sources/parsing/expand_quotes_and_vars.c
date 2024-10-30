@@ -85,64 +85,6 @@ static int	malloc_quote_split(char *str, char ***quote_split)
 	return (1);
 }
 
-static int	get_split_element_len(char *str, int i)
-{
-	size_t	result;
-
-	if (str[i] == '$')
-	{
-		if (str[i + 1] == '?')
-			return (2);
-		result = 1;
-		i++;
-		while (ft_isalnum(str[i]) || str[i] == '_')
-		{
-			result++;
-			i++;
-		}
-	}
-	else if (str[i] == '\"')
-	{
-		result = 1;
-		i++;
-		while (str[i])
-		{
-			if (str[i] == '\"')
-			{
-				result++;
-				return (result);
-			}
-			result++;
-			i++;
-		}
-	}
-	else if (str[i] == '\'')
-	{
-		result = 1;
-		i++;
-		while (str[i])
-		{
-			if (str[i] == '\'')
-			{
-				result++;
-				return (result);
-			}
-			result++;
-			i++;
-		}
-	}
-	else
-	{
-		result = 0;
-		while (str[i] && str[i] != '$' && str[i] != '\"' && str[i] != '\'')
-		{
-			result++;
-			i++;
-		}
-	}
-	return (result);
-}
-
 static void	free_split_in_middle(char ***quote_split, int id_split)
 {
 	if (id_split < 0)
@@ -272,28 +214,15 @@ int	create_quote_split(char *str, char ***quote_split)
 	return (1);
 }
 
-static void	expand_vars_in_quotes(t_main *main, t_tokens **tokens, char ***quote_split)
+static void	expand_vars_in_quotes(t_main *main, t_tokens **tokens, char ***quote_split, bool is_heredoc)
 {
 	int	i;
 
 	i = 0;
 	while ((*quote_split)[i])
 	{
-		if ((*quote_split)[i][0] == '\"')
-		{
-			if (!inner_expansion(main, &(*quote_split)[i]))
-			{
-				i++; //Combine this section and the one in the else if below
-				while ((*quote_split)[i])
-				{
-					free((*quote_split)[i]);
-					i++;
-				}
-				ft_free_split(quote_split);
-				free_all_and_exit(main, tokens);
-			}
-		}
-		else if ((*quote_split)[i][0] == '\'')
+
+		if ((*quote_split)[i][0] == '\'' && !is_heredoc)
 		{
 			if (!remove_outside_quotes(&(*quote_split)[i]))
 			{
@@ -305,6 +234,20 @@ static void	expand_vars_in_quotes(t_main *main, t_tokens **tokens, char ***quote
 				}
 				ft_free_split(quote_split);
 				free_all_and_exit(main, tokens);	
+			}
+		}
+		else if (check_for_outside_quotes((*quote_split)[i], NULL))
+		{
+			if (!inner_expansion(main, &(*quote_split)[i], is_heredoc))
+			{
+				i++; //Combine this section and the one in the else if below
+				while ((*quote_split)[i])
+				{
+					free((*quote_split)[i]);
+					i++;
+				}
+				ft_free_split(quote_split);
+				free_all_and_exit(main, tokens);
 			}
 		}
 		else if (!find_var_and_remalloc(main, &(*quote_split)[i]))
@@ -374,25 +317,69 @@ static int	combine_quote_split(t_main *main, t_tokens **tokens, char ***quote_sp
 	return (1);
 }
 
-static int check_for_outside_quotes(char *str)
+int check_for_outside_quotes(char *str, char *quote_type)
 {
 	int i;
 
+	if (!str)
+		return (0);
 	i = 0;
 	while (str[i])
 		i++;
+	i--;
 	if (str[0] == '\"' && str[i] == '\"')
+	{
+		if (quote_type)
+			*quote_type = '\"';
 		return (1);
+	}
 	if (str[0] == '\'' && str[i] == '\'')
+	{
+		if (quote_type)
+			*quote_type = '\'';
 		return (1);
+	}
 	return (0);
 }
 
-int	expand_quotes_and_vars(t_main *main, t_tokens **tokens, char **str)
+int add_quotes_back_to_str(char **str, char quote_type)
+{
+	size_t	add_quote_len;
+	size_t	i;
+	char	*temp;
+
+	temp = ft_strdup(*str);
+	free(*str);
+	*str = NULL;
+	add_quote_len = ft_strlen(temp) + 3;
+	*str = malloc(add_quote_len);
+	if (!*str)
+	{
+		printf("Error: Failed to malloc add-outside-quotes\n");
+		free(temp);
+		return (0);
+	}
+	(*str)[0] = quote_type;
+	i = 1;
+	while (i < add_quote_len - 2)
+	{
+		(*str)[i] = temp[i - 1];
+		i++;
+	}
+	(*str)[i++] = quote_type;
+	(*str)[i] = '\0';
+	free(temp);
+	return (1);	
+}
+
+int	expand_quotes_and_vars(t_main *main, t_tokens **tokens, char **str, bool is_heredoc)
 {
 	char	**quote_split;
+	(void)is_heredoc;
+	char quote_type;
 
-	if (check_for_outside_quotes(*str))
+	quote_type = '\0';
+	if (check_for_outside_quotes(*str, &quote_type))
 	{
 		if (!remove_outside_quotes(str))
 			return (0);
@@ -412,11 +399,19 @@ int	expand_quotes_and_vars(t_main *main, t_tokens **tokens, char **str)
 	// }
 	// printf("\n");
 
-	expand_vars_in_quotes(main, tokens, &quote_split);
+	expand_vars_in_quotes(main, tokens, &quote_split, is_heredoc);
 	if (!combine_quote_split(main, tokens, &quote_split, str))
 	{
 		ft_free_split(&quote_split);
 		return (0);
+	}
+	if (is_heredoc && quote_type != '\0')
+	{
+		if (!add_quotes_back_to_str(str, quote_type))
+		{
+			ft_free_split(&quote_split);
+			return (0);
+		}
 	}
 	ft_free_split(&quote_split);
 	return (1);

@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 11:32:36 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/10/28 12:07:33 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/10/30 13:50:55 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,13 @@
 // 			else 
 // 				printf("type = HEREDOC");
 // 			if (temp->type == HEREDOC)
-// 				printf(", delimiter = %s", temp->delimiter);
+// 			{
+// 				printf(", delimiter = %s, ", temp->delimiter);
+// 				if (temp->delimiter_has_quotes)
+// 					printf("delimiter_has_quotes = true\n");
+// 				else
+// 					printf("delimiter_has_quotes = false\n");
+// 			}
 // 			printf("\n");
 // 			temp = temp->next;
 // 			j++;
