@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 10:12:47 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/10/30 13:56:57 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/10/31 10:58:13 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,6 @@ int	main(int argc, char *argv[], char *envp[]) //what happens if ./minishell get
 	initialize_variables(&main, &tokens);
 	copy_env(envp, &main);
 	// update_env(&main);	//do we do this at all?
-	setup_signal_handlers();
 	while (1)
 	{
 		errno = 0;
@@ -66,6 +65,7 @@ int	main(int argc, char *argv[], char *envp[]) //what happens if ./minishell get
 			continue;
 		if (!parsing(&main, &tokens))
 		{
+			remove_heredocs(&main, &tokens);
 			free(main.input);
 			ft_free_split(&main.split_input);
 			continue;
@@ -82,5 +82,5 @@ int	main(int argc, char *argv[], char *envp[]) //what happens if ./minishell get
 	free_environment(&(main.env_list));
 	rl_clear_history();
 	//free_signals();
-	exit (main.exit_code);		//just 0?
+	exit (main.exit_code);		//just 0? I don't think we ever
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 11:21:19 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/10/30 13:57:13 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/10/31 15:55:14 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,15 +29,7 @@
 # define OUTFILE 102
 # define APPEND 103
 
-
-
-	//are these used at all?
-# define COMMAND 104
-# define REDIRECT 105
-# define DOUBLE_QUOTE 106
-# define SINGLE_QUOTE 107
-
-
+extern int signal_received;
 
 typedef struct s_redirect_node t_redirect_node;
 
@@ -95,9 +87,13 @@ typedef struct s_parsing
 //display prompt, readline, and save it in history
 int	handle_inputs(char **input);
 
-void setup_signal_handlers();
+void	activate_readline_signals(void);
 
-void handle_sigint(int sig);
+void	activate_heredoc_signals(void);
+
+void handle_sigint_readline(int sig);
+
+void	ignore_sigint(void);
 
 /*****************************************************************************/
 /*****************************************************************************/
@@ -173,7 +169,7 @@ void free_token_redirects(t_main *main, t_tokens **tokens);
 void free_and_exit_node_malloc_failed(t_main *main, t_tokens **tokens);
 
 //Create and readline the heredoc fd's and put them in the tokens
-void create_heredoc(t_main *main, t_tokens **tokens);
+int	create_heredoc(t_main *main, t_tokens **tokens);
 
 //Free and exit if malloc failed for expand variables
 void free_and_exit_variable_malloc_failed(t_main *main, int i);
@@ -496,9 +492,8 @@ int	unset(t_main *main, t_tokens token);
  * 
  * @param main the main struct of the program
  * @param tokens array of tokens to execute
- * @returns the exitstatus of the last executable
  */
-int	execute_commandline(t_main *main, t_tokens *tokens);
+void	execute_commandline(t_main *main, t_tokens *tokens);
 
 /**
  * Checks if command is a builtin or not
@@ -519,6 +514,15 @@ int	is_builtin(t_tokens token);
  */
 void	close_pipes_in_parent(int i, int num_of_pipes, int *pipe_left, int *pipe_right);
 
+
+void	close_pipes_on_error(int *pipe);
+
+int	create_fork(int i, int num_of_pipes, int pipe_array[2][2], int *pids);
+
+void	reassign_pipe_right_to_left(int pipe_array[2][2]);
+
+int	handle_pipes(int i, int num_of_pipes, int pipe_array[2][2], int *pids);
+
 /**
  * Finds path to the command and execues it with execve
  * 
@@ -534,6 +538,11 @@ void	execute_command(t_main *main, t_tokens token, int *pids);
  * @param token  the token to execute
  */
 int	execute_builtin(t_main *main, t_tokens token, int parent, int open_fds[2]);
+
+void	restore_stdin_stdout(t_main *main, int original_stdin,
+	int original_stdout);
+
+int	is_builtin_not_part_of_pipeline(t_tokens token, int num_of_pipes);
 
 /**
  * Executes either a builtin or a command as a child process.
@@ -553,7 +562,7 @@ void	execute_child_process(t_main *main, t_tokens token, int *pids);
  * @param main the main struct of the program
  * @param token  the token to execute
  */
-void	execute_builtin_in_parent(t_main *main, t_tokens token);
+int	execute_builtin_in_parent(t_main *main, t_tokens token, int num_of_pipes); //TODO check params
 
 char	*find_path(t_main *main, char *command, int *pids);
 
@@ -581,7 +590,7 @@ int	is_path_to_file(char *command);
  * @param num_of_pipes the number of pipes left to be written into in
  * the pipeline
  */
-int	handle_infile_and_outfile(int i, int num_of_pipes,
+int	handle_in_and_outfile(int i, int num_of_pipes,
 	int pipe_array[2][2], t_tokens token);
 
 /**
@@ -625,6 +634,8 @@ int	dup2_infile(t_tokens token);
 int	dup2_outfile(t_tokens token);
 
 void	free_all_in_child(t_main *main, int *pids);
+
+void	free_all_in_parent(t_main *main);
 
 void	remove_heredocs(t_main *main, t_tokens **tokens);
 

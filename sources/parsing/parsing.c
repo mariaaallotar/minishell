@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 11:32:36 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/10/30 13:57:06 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/10/30 15:24:21 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,7 +140,8 @@ int	parsing(t_main *main, t_tokens **tokens)
 	if (tokenize(main, tokens))
 		return (0);
 	quotes_and_variables(main, tokens);
-	create_heredoc(main, tokens);
+	if (create_heredoc(main, tokens) == 0)
+		return (0);
 	//print_tokens(main, tokens); //REMOVE
 	return (1);
 }

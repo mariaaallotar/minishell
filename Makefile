@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+         #
+#    By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/20 15:07:12 by eberkowi          #+#    #+#              #
-#    Updated: 2024/10/30 13:58:05 by eberkowi         ###   ########.fr        #
+#    Updated: 2024/10/31 15:53:23 by maheleni         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -46,6 +46,8 @@ CFILES := main.c \
 		built_ins/env.c \
 		built_ins/exit.c \
 		execution/execute_commandline.c \
+		execution/pipeline_utils.c \
+		execution/execute_builtin.c \
 		execution/handle_redirects.c \
 		execution/execute_command.c \
 		execution/find_path.c \

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   create_heredoc.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 11:52:55 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/10/30 12:11:48 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/10/31 10:30:17 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,12 @@ static int	create_filename(char **name, int num_of_heredocs)
 	return (1);
 }
 
-static void	readline_to_file(t_main *main, t_tokens **tokens, t_redirect_node *temp)
+int event(void)
+{
+	return (0);
+}
+
+static int	readline_to_file(t_main *main, t_tokens **tokens, t_redirect_node *temp)
 {
 	int		heredoc_fd;
 	char	*input;
@@ -44,9 +49,18 @@ static void	readline_to_file(t_main *main, t_tokens **tokens, t_redirect_node *t
 
 	delimiter_len = ft_strlen(temp->delimiter);
 	heredoc_fd = open(temp->name, O_WRONLY | O_TRUNC | O_CREAT, 0644);
+	activate_heredoc_signals();
+	rl_event_hook = event;
 	while (1)
 	{
 		input = readline("> ");
+		if (signal_received)
+		{
+			close (heredoc_fd);
+			main->exit_code = signal_received;
+			signal_received = 0;
+			return (0);
+		}
 		if (!input)
 		{
 			printf("Error: Malloc failed in readline for heredoc\n");
@@ -74,9 +88,10 @@ static void	readline_to_file(t_main *main, t_tokens **tokens, t_redirect_node *t
 		input = NULL;
 	}
 	close(heredoc_fd);
+	return (1);
 }
 
-void	create_heredoc(t_main *main, t_tokens **tokens)
+int	create_heredoc(t_main *main, t_tokens **tokens)
 {
 	int				token_id;
 	int				num_of_heredocs;
@@ -93,12 +108,13 @@ void	create_heredoc(t_main *main, t_tokens **tokens)
 			{
 				if (!create_filename(&temp->name, num_of_heredocs))
 					free_all_and_exit(main, tokens);
-				readline_to_file(main, tokens, temp);
-
+				if (readline_to_file(main, tokens, temp) == 0)
+					return (0);
 				num_of_heredocs++;
 			}
 			temp = temp->next;
 		}
 		token_id++;
 	}
+	return (1);
 }
