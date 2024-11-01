@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/24 12:16:01 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/10/30 13:57:04 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/11/01 11:35:19 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ static int	expand_vars_in_quotes_inner(t_main *main, char ***quote_split)
 	i = 0;
 	while ((*quote_split)[i])
 	{
-		if (!find_var_and_remalloc(main, &(*quote_split)[i]))
+		if (!find_var_in_env(main, &(*quote_split)[i]))
 		{
 			printf("Error: Failed to malloc environment variable in quotes\n");
 			i++;
@@ -87,6 +87,12 @@ static int	combine_quote_split_inner(char ***quote_split, char **str)
 	return (1);
 }
 
+static void	print_error_and_free_split(char ***quote_split)
+{
+	printf("Error: Failed to malloc in inner_expansion\n");
+	ft_free_split(quote_split);
+}
+
 int	inner_expansion(t_main *main, char **str, bool is_heredoc)
 {
 	char	**quote_split;
@@ -97,38 +103,19 @@ int	inner_expansion(t_main *main, char **str, bool is_heredoc)
 		return (1);
 	if (!create_quote_split(*str, &quote_split))
 		return (0);
-	//PRINT QUOTE_SPLIT REMOVE
-	// int id_print = 0;
-	// while (quote_split[id_print])
-	// {
-	// 	printf("inner_quote_split[%d] = %s\n", id_print, quote_split[id_print]);
-	// 	id_print++;
-	// }
-	
 	if (!expand_vars_in_quotes_inner(main, &quote_split))
 		return (0);
-		
-	//PRINT QUOTE_SPLIT REMOVE
-	// id_print = 0;
-	// while (quote_split[id_print])
-	// {
-	// 	printf("inner_quote_split_after_expand[%d] = %s\n", id_print, quote_split[id_print]);
-	// 	id_print++;
-	// }
-
 	if (!combine_quote_split_inner(&quote_split, str))
 	{
-		printf("Error: Failed to malloc temp var for quote_split combine\n");
-		ft_free_split(&quote_split);
+		print_error_and_free_split(&quote_split);
 		return (0);
 	}	
 	if (is_heredoc)
 	{
 		if (!add_quotes_back_to_str(str, '\"'))
 		{
-			printf("Error: Failed to malloc add quotes back\n");
-			ft_free_split(&quote_split);
-			return (0);	
+			print_error_and_free_split(&quote_split);
+			return (0);
 		}
 	}
 	ft_free_split(&quote_split);

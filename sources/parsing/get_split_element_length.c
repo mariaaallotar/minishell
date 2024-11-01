@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 12:17:24 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/10/30 12:27:14 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/10/30 15:58:37 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,8 @@ static void	len_for_dollar_sign(char *str, int i, size_t *result)
 	}	
 }
 
-static void	len_for_given_quote_type(char *str, int i, size_t *result, char quote_type)
+static void	len_for_given_quote_type(char *str, int i
+		, size_t *result, char quote_type)
 {
 	(*result) = 1;
 	i++;
@@ -51,9 +52,9 @@ int	get_split_element_len(char *str, int i)
 	if (str[i] == '$')
 		len_for_dollar_sign(str, i, &result);
 	else if (str[i] == '\"')
-		len_for_given_quote_type(str, i , &result, '\"');
+		len_for_given_quote_type(str, i, &result, '\"');
 	else if (str[i] == '\'')
-		len_for_given_quote_type(str, i , &result, '\'');
+		len_for_given_quote_type(str, i, &result, '\'');
 	else
 	{
 		result = 0;

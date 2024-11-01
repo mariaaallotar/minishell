@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/24 10:44:31 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/10/23 12:07:37 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/10/30 15:23:23 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -161,6 +161,18 @@ void	free_and_exit_quote_malloc(t_main *main, t_tokens **tokens, int token_id, i
 void	free_and_exit_combine_elements(t_main *main, t_tokens **tokens, char ***quote_split)
 {
 	printf("Error: Failed to malloc temp var for quote_split combine\n");
+	ft_free_split(quote_split);
+	free_all_and_exit(main, tokens);
+}
+
+void	free_and_exit_quote_split_expand(t_main *main, t_tokens **tokens, char ***quote_split, int i)
+{
+	i++;
+	while ((*quote_split)[i])
+	{
+		free((*quote_split)[i]);
+		i++;
+	}
 	ft_free_split(quote_split);
 	free_all_and_exit(main, tokens);
 }

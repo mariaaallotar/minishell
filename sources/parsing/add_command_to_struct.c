@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/25 10:37:36 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/10/25 13:43:11 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/10/30 15:41:32 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,11 @@ static void	dup_cmd(t_main *main, t_tokens **tokens, int spl_id, char **cmd)
 
 void	add_command(t_main *main, t_tokens **tokens, int cmd_id, int *spl_id)
 {
-	while (main->split_input[*spl_id] && !char_is_special(main->split_input[*spl_id][0]))
+	while (main->split_input[*spl_id]
+		&& !char_is_special(main->split_input[*spl_id][0]))
 	{
-		dup_cmd(main, tokens, *spl_id, &(*tokens)[cmd_id].command[main->id_command]);
+		dup_cmd(main, tokens, *spl_id,
+			&(*tokens)[cmd_id].command[main->id_command]);
 		(*spl_id)++;
 		(main->id_command)++;
 	}

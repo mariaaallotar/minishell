@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 11:32:36 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/10/30 13:57:06 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/11/01 11:15:46 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,11 +39,11 @@
 // 		{
 // 			while ((*tokens)[token_number].command[i])
 // 			{
-// 				printf("\033[0;31mcommand[%d] = %s\033[0m\n", i, (*tokens)[token_number].command[i]);
+// 				printf("\033[0;31mcommand[%d] = %s\033[0m\n", i
+// 					,(*tokens)[token_number].command[i]);
 // 				i++;
 // 			}
 // 		}
-		
 // 		//PRINT INFILES AND HEREDOCS
 // 		j = 0;
 // 		temp = (*tokens)[token_number].infiles;
@@ -135,10 +135,12 @@ int	parsing(t_main *main, t_tokens **tokens)
 		return (0);
 	//print_split_input(main); //REMOVE
 	free(main->input);
-	//expand_variables(main); //REMOVE
 	malloc_and_init_tokens(main, tokens);
-	if (tokenize(main, tokens))
+	if (check_for_pipe_error(main, tokens))
 		return (0);
+	if (check_for_redirect_error(main, tokens))
+		return (0);
+	tokenize(main, tokens);
 	quotes_and_variables(main, tokens);
 	create_heredoc(main, tokens);
 	//print_tokens(main, tokens); //REMOVE

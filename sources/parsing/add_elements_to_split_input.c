@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 11:56:14 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/10/28 12:01:34 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/10/30 15:37:50 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,57 +23,12 @@ static int	check_for_bonus_symbols(char *input, int id_input)
 	return (0);
 }
 
-static void skip_spaces_and_tabs(char *input, int *id_input)
+static size_t	get_length_of_split_input_element(char *input, int id_input)
 {
-	while (input[*id_input] && (input[*id_input] == ' '
-			|| input[*id_input] == '\t'))
-		(*id_input)++;
-}
+	t_parsing	p;
+	size_t		result;
 
-static int char_is_space_or_special_and_quotes_are_closed(char c, t_parsing p)
-{
-	if ((c == ' ' || c == '\t' || char_is_special(c)) 
-		&& p.num_of_singles % 2 == 0 && p.num_of_doubles % 2 == 0)
-		return (1);
-	return (0);
-}
-
-static void update_inside_status(t_parsing *p)
-{
-	if (p->num_of_singles % 2 != 0)
-		p->inside_singles = true;
-	else
-		p->inside_singles = false;
-	if (p->num_of_doubles % 2 != 0)
-		p->inside_doubles = true;
-	else
-		p->inside_doubles = false;
-}
-
-static void update_number_of_quotes(char c, t_parsing *p)
-{
-	if (c == '\"' && !p->inside_singles)
-		p->num_of_doubles++;
-	else if (c == '\'' && !p->inside_doubles)
-		p->num_of_singles++;	
-}
-
-static int check_for_unclosed_quotes(t_parsing p)
-{
-	if (p.inside_singles || p.inside_doubles)
-	{
-		printf("Error: Unclosed quotes\n");
-		return (1);
-	}
-	return (0);
-}
-
-static size_t get_length_of_split_input_element(char *input, int id_input)
-{
-	t_parsing p;
-	size_t result;
-
-	result= 0;
+	result = 0;
 	p.id_char = 0;
 	p.num_of_singles = 0;
 	p.num_of_doubles = 0;
@@ -89,12 +44,13 @@ static size_t get_length_of_split_input_element(char *input, int id_input)
 		p.id_char++;
 		(id_input)++;
 	}
-	return (result);	
+	return (result);
 }
 
-static int malloc_element_in_split_input(t_main *main, char *input, int id_input, int id_split)
+static int	malloc_element_in_split_input(t_main *main, char *input
+		, int id_input, int id_split)
 {
-	size_t len_of_element;
+	size_t	len_of_element;
 
 	len_of_element = get_length_of_split_input_element(input, id_input);
 	main->split_input[id_split] = NULL;
@@ -107,9 +63,10 @@ static int malloc_element_in_split_input(t_main *main, char *input, int id_input
 	return (1);
 }
 
-static int add_regular_or_quote_element(t_main *main, char *input, int *id_input, int id_split)
+static int	add_regular_or_quote_element(t_main *main, char *input
+		, int *id_input, int id_split)
 {
-	t_parsing p;
+	t_parsing	p;
 
 	p.id_char = 0;
 	p.num_of_singles = 0;
