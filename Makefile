@@ -6,7 +6,7 @@
 #    By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/20 15:07:12 by eberkowi          #+#    #+#              #
-#    Updated: 2024/10/31 15:53:23 by maheleni         ###   ########.fr        #
+#    Updated: 2024/11/01 14:23:16 by maheleni         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,13 +25,17 @@ CFILES := main.c \
 		parsing/free_exit_parsing.c \
 		parsing/redirect_tokens.c \
 		parsing/add_command_to_struct.c \
-		parsing/expand_variables.c \
+		parsing/find_var_in_env.c \
 		parsing/linked_list_utils.c \
 		parsing/create_heredoc.c \
 		parsing/quotes_and_variables.c \
 		parsing/expand_quotes_and_vars.c \
 		parsing/inner_expansion.c \
 		parsing/get_split_element_length.c \
+		parsing/add_element_to_quote_split.c \
+		parsing/create_quote_split.c \
+		parsing/expand_utilities.c \
+		parsing/add_elements_to_split_input_utilities.c \
 		environment/list_add_and_remove.c \
 		environment/environment_utils.c \
 		environment/print_environment.c \

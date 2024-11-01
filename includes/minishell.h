@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 11:21:19 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/10/31 15:55:14 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/11/01 14:22:15 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,12 @@ typedef struct s_tokens
 	t_redirect_node *infiles;
 	t_redirect_node *outfiles;
 }	t_tokens;
+
+typedef struct s_expand
+{
+	bool is_heredoc;
+	char quote_type;
+}	t_expand;
 
 /**
  * char		*input;
@@ -122,7 +128,7 @@ int	char_is_special(char c);
 void add_special_element(t_main *main, char *input, int *i, int split_index);
 
 //Our own kind of tokenizing function of the input
-int tokenize(t_main *main, t_tokens **command);
+void tokenize(t_main *main, t_tokens **command);
 
 //Utility to check for redirection (< or >)
 int	is_redirect(char c);
@@ -154,9 +160,6 @@ int	is_quote(char c);
 //Add command to token struct
 void	add_command(t_main *main, t_tokens **tokens, int cmd_id, int *spl_id);
 
-//Expand the environment variables
-void expand_variables(t_main *main);
-
 //Utilities for creating and adding elements to a linked list
 t_redirect_node	*lstnew_redirect_node(char *name, int type);
 t_redirect_node	*lstlast_redirect_node(t_redirect_node *lst);
@@ -181,7 +184,7 @@ void quotes_and_variables(t_main *main, t_tokens **tokens);
 void free_and_exit_quote_malloc(t_main *main, t_tokens **tokens, int token_id, int cmd_id);
 
 //Find the given $VAR in the env replace the given element if found
-int	find_var_and_remalloc(t_main *main, char **str);
+int	find_var_in_env(t_main *main, char **str);
 
 //Same as free all and exit but also free the split_input when there is a NULL in the middle
 void	free_all_and_exit_with_free_split_middle(t_main *main, t_tokens **tokens);
@@ -209,6 +212,36 @@ int add_quotes_back_to_str(char **str, char quote_type);
 
 //Returns the length of one element of the quote_split for expanding quotes and vars
 int	get_split_element_len(char *str, int i);
+
+//Add elements to the quote split in quote and variable expansion
+void	add_element_to_quote_split(char ***quote_split, char *str, int id_split, int id_str);
+
+//Expands variables in the quote_split or performs 'inner_expanion' further expanding quotes and vars
+void	expand_vars_or_do_inner_expansion(t_main *main, t_tokens **tokens, char ***quote_split, t_expand expand);
+
+//Free and exit for malloc fail in expand_vars_or_do_inner_expansion
+void	free_and_exit_quote_split_expand(t_main *main, t_tokens **tokens, char ***quote_split, int i);
+
+//Check for adding back quotes to heredoc strings if they were removed during expansion
+int check_for_heredoc_quotes(char **str, bool is_heredoc, char quote_type, char ***quote_split);
+
+//Skip spaces and tabs in given string starting at given index
+void	skip_spaces_and_tabs(char *input, int *id_input);
+
+//Check if given character is a space or tab or special char and if the quotes are closed
+int	char_is_space_or_special_and_quotes_are_closed(char c, t_parsing p);
+
+//Update the 'inside status' of the given struct
+void	update_inside_status(t_parsing *p);
+
+//Update the number of the given quote for the given struct
+void	update_number_of_quotes(char c, t_parsing *p);
+
+//Check for unclosed quotes in initial input parsing
+int	check_for_unclosed_quotes(t_parsing p);
+
+//Checks for a pipe error where there is a pipe then nothing following
+int	check_for_pipe_error(t_main *main, t_tokens **tokens);
 
 /*****************************************************************************/
 /*****************************************************************************/
