@@ -6,14 +6,12 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 16:50:02 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/10/30 12:02:27 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/11/01 10:39:48 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-//strncmp with check for equals
-//Same as ft_strncmp but also checks for '=' directly after given element in env
 static int	cmp_eq(const char *s1, const char *s2, size_t n)
 {
 	if (!*s1 && !*s2)
@@ -40,7 +38,7 @@ static int	expand_exit_code(t_main *main, char **str)
 	return (1);
 }
 
-int	find_var_and_remalloc(t_main *main, char **str)
+int	find_var_in_env(t_main *main, char **str)
 {
 	int		len;
 	t_list	*temp;
@@ -75,23 +73,4 @@ int	find_var_and_remalloc(t_main *main, char **str)
 			return (0);
 	}
 	return (1);
-}
-
-void	expand_variables(t_main *main)
-{
-	int	i;
-
-	i = 0;
-	while (main->split_input[i])
-	{
-		if ((main->split_input[i])[0] == '$')
-		{
-			if (!find_var_and_remalloc(main, &main->split_input[i]))
-			{
-				printf("Error: Failed to malloc environment variable\n");
-				free_and_exit_variable_malloc_failed(main, i + 1);
-			}
-		}
-		i++;
-	}
 }

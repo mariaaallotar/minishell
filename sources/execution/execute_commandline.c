@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 10:33:14 by maheleni          #+#    #+#             */
-/*   Updated: 2024/10/30 13:33:06 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/10/31 15:43:55 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,154 +38,12 @@ int	is_builtin(t_tokens token)
 	return (0);
 }
 
-//pipe[0]: read, pipe[1]: write
-void	close_pipes_in_parent(int i, int num_of_pipes, int *pipe_left, int *pipe_right)
+void	wait_for_processes(t_main *main, int *pids)
 {
-	if (num_of_pipes > 0 && i == 0)			//first command
-		close (pipe_right[1]);
-	else if (num_of_pipes == 0 && i > 0)	//last command
-		close(pipe_left[0]);
-	else if (num_of_pipes > 0 && i > 0)		//middle command
-	{
-		close(pipe_left[0]);
-		close(pipe_right[1]);
-	}
-}
-
-int	*malloc_pids(int amount)
-{
-	int	*pids;
-
-	pids = malloc ((amount) * sizeof(int));
-	if (pids == NULL)
-	{
-		perror(NULL);
-		return (NULL);
-	}
-	return (pids);
-}
-
-int	create_pipe(int pipe_array[2][2])
-{
-	if (pipe(pipe_array[1]) == -1)
-	{
-		perror(NULL);
-		return (0);
-	}
-	return (1);
-}
-
-void	close_pipes_on_error(int *pipe)
-{
-	close(pipe[0]);
-	close(pipe[1]);
-}
-
-int	create_fork(int i, int num_of_pipes, int pipe_array[2][2], int **pids)
-{
-	int	pid;
-
-	pid = fork();
-	if (pid == -1)
-	{
-		if (i > 0)
-			close_pipes_on_error(pipe_array[0]);
-		if (num_of_pipes > 0)
-			close_pipes_on_error(pipe_array[1]);
-		free(*pids);
-		return (1);
-	}
-	return (pid);
-}
-
-void	reassign_pipe_right_to_left(int pipe_array[2][2])
-{
-	pipe_array[0][0] = pipe_array[1][0];
-	pipe_array[0][1] = pipe_array[1][1];
-}
-
-int	is_builtin_not_part_of_pipeline(t_tokens *tokens, int num_of_pipes, int i)
-{
-	if ( tokens[i].command == NULL || tokens[i].command[0] == NULL)
-		return (0);
-	if (is_builtin(tokens[i]) && num_of_pipes == 0 && i == 0)
-		return (1);
-	return (0);
-}
-
-void	ignore_sigint(void)
-{
-	struct sigaction sa_int;
-	
-	sa_int.sa_handler = SIG_IGN;
-	sigemptyset(&sa_int.sa_mask);
-	sa_int.sa_flags = 0; // Ensure interrupted system calls are restarted
-	sigaction(SIGINT, &sa_int, NULL);
-}
-
-void	activate_sigint(void)
-{
-	struct sigaction sa_int;
-	
-	sa_int.sa_handler = handle_sigint;
-	sigemptyset(&sa_int.sa_mask);
-	sa_int.sa_flags = 0; // Ensure interrupted system calls are restarted
-	sigaction(SIGINT, &sa_int, NULL);
-}
-
-int	execute_commandline(t_main *main, t_tokens *tokens)	//does this need to be return int?
-{
-	int	pipe_array[2][2];
-	int	*pids;
-	int	num_of_pipes;
 	int	i;
 	int	status;
 
-	num_of_pipes = main->num_of_pipes;
 	i = 0;
-	if (tokens[0].command[0] != NULL && is_builtin_not_part_of_pipeline(tokens, num_of_pipes, i))
-	{
-		execute_builtin_in_parent(main, tokens[i]);
-		return (main->exit_code);
-	}
-	pids = malloc_pids(num_of_pipes + 1);
-	if (pids == NULL)
-		return (errno);
-	while (num_of_pipes >= 0)
-	{
-		if (i > 0)
-			reassign_pipe_right_to_left(pipe_array);
-		if (num_of_pipes > 0)
-		{
-			if (create_pipe(pipe_array) == 0)
-			{
-				if (i > 0)
-					close_pipes_on_error(pipe_array[0]);
-				free(pids);
-				return (1);
-			}
-		}
-		pids[i] = create_fork(i, num_of_pipes, pipe_array, &pids);
-		if (pids[i] == 0)
-		{
-			if (handle_infile_and_outfile(i, num_of_pipes, pipe_array, tokens[i]) == -1)
-			{
-				free_all_in_child(main, pids);
-				exit(errno);
-			}
-			execute_child_process(main, tokens[i], pids);
-		}
-		else
-		{
-			//printf("Process id for %s is %i\n", tokens[i].command[0], pids[i]);
-			ignore_sigint();
-			close_pipes_in_parent(i, num_of_pipes, pipe_array[0], pipe_array[1]);
-		}
-		num_of_pipes--;
-		i++;
-	}
-	i = 0;
-	status = 0;
 	while (i < main->num_of_pipes + 1)
 	{
 		//TODO make this robust, has to work with signals as well
@@ -196,7 +54,66 @@ int	execute_commandline(t_main *main, t_tokens *tokens)	//does this need to be r
 			main->exit_code = 128 + WTERMSIG(status);
 		i++;
 	}
-	activate_sigint();
+}
+
+int	execute_pipeline(t_main *main, int pipe_array[2][2], int *pids,
+	t_tokens *tokens)
+{
+	int	i;
+	int	pipes;
+
+	i = 0;
+	pipes = main->num_of_pipes;
+	while (pipes >= 0)
+	{
+		if (handle_pipes(i, pipes, pipe_array, pids) == -1)
+			return (errno);
+		if (create_fork(i, pipes, pipe_array, pids) == -1)
+			return (errno);
+		if (pids[i] == 0)
+		{
+			if (handle_in_and_outfile(i, pipes, pipe_array, tokens[i]) == -1)
+			{
+				free_all_in_child(main, pids);
+				exit(errno);
+			}
+			execute_child_process(main, tokens[i], pids);
+		}
+		ignore_sigint();
+		close_pipes_in_parent(i, pipes--, pipe_array[0], pipe_array[1]);
+		i++;
+	}
+	return (0);
+}
+
+int	*malloc_pids(t_main *main, int amount)
+{
+	int	*pids;
+
+	pids = malloc ((amount) * sizeof(int));
+	if (pids == NULL)
+	{
+		perror(NULL);
+		main->exit_code = errno;
+		return (NULL);
+	}
+	return (pids);
+}
+
+void	execute_commandline(t_main *main, t_tokens *tokens)
+{
+	int	pipe_array[2][2];
+	int	*pids;
+	
+	if (execute_builtin_in_parent(main, tokens[0], main->num_of_pipes))
+		return ;
+	pids = malloc_pids(main, (main->num_of_pipes + 1));
+	if (pids == NULL)
+		return ;
+	if (execute_pipeline(main, pipe_array, pids, tokens) != 0)
+		return ;
+	wait_for_processes(main, pids);
+	activate_readline_signals();
 	free(pids);
-	return (main->exit_code);
+	return ;
 }

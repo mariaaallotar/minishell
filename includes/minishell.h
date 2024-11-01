@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 11:21:19 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/10/30 13:57:13 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/11/01 14:22:15 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,15 +29,7 @@
 # define OUTFILE 102
 # define APPEND 103
 
-
-
-	//are these used at all?
-# define COMMAND 104
-# define REDIRECT 105
-# define DOUBLE_QUOTE 106
-# define SINGLE_QUOTE 107
-
-
+extern int signal_received;
 
 typedef struct s_redirect_node t_redirect_node;
 
@@ -56,6 +48,12 @@ typedef struct s_tokens
 	t_redirect_node *infiles;
 	t_redirect_node *outfiles;
 }	t_tokens;
+
+typedef struct s_expand
+{
+	bool is_heredoc;
+	char quote_type;
+}	t_expand;
 
 /**
  * char		*input;
@@ -95,9 +93,13 @@ typedef struct s_parsing
 //display prompt, readline, and save it in history
 int	handle_inputs(char **input);
 
-void setup_signal_handlers();
+void	activate_readline_signals(void);
 
-void handle_sigint(int sig);
+void	activate_heredoc_signals(void);
+
+void handle_sigint_readline(int sig);
+
+void	ignore_sigint(void);
 
 /*****************************************************************************/
 /*****************************************************************************/
@@ -126,7 +128,7 @@ int	char_is_special(char c);
 void add_special_element(t_main *main, char *input, int *i, int split_index);
 
 //Our own kind of tokenizing function of the input
-int tokenize(t_main *main, t_tokens **command);
+void tokenize(t_main *main, t_tokens **command);
 
 //Utility to check for redirection (< or >)
 int	is_redirect(char c);
@@ -158,9 +160,6 @@ int	is_quote(char c);
 //Add command to token struct
 void	add_command(t_main *main, t_tokens **tokens, int cmd_id, int *spl_id);
 
-//Expand the environment variables
-void expand_variables(t_main *main);
-
 //Utilities for creating and adding elements to a linked list
 t_redirect_node	*lstnew_redirect_node(char *name, int type);
 t_redirect_node	*lstlast_redirect_node(t_redirect_node *lst);
@@ -173,7 +172,7 @@ void free_token_redirects(t_main *main, t_tokens **tokens);
 void free_and_exit_node_malloc_failed(t_main *main, t_tokens **tokens);
 
 //Create and readline the heredoc fd's and put them in the tokens
-void create_heredoc(t_main *main, t_tokens **tokens);
+int	create_heredoc(t_main *main, t_tokens **tokens);
 
 //Free and exit if malloc failed for expand variables
 void free_and_exit_variable_malloc_failed(t_main *main, int i);
@@ -185,7 +184,7 @@ void quotes_and_variables(t_main *main, t_tokens **tokens);
 void free_and_exit_quote_malloc(t_main *main, t_tokens **tokens, int token_id, int cmd_id);
 
 //Find the given $VAR in the env replace the given element if found
-int	find_var_and_remalloc(t_main *main, char **str);
+int	find_var_in_env(t_main *main, char **str);
 
 //Same as free all and exit but also free the split_input when there is a NULL in the middle
 void	free_all_and_exit_with_free_split_middle(t_main *main, t_tokens **tokens);
@@ -213,6 +212,36 @@ int add_quotes_back_to_str(char **str, char quote_type);
 
 //Returns the length of one element of the quote_split for expanding quotes and vars
 int	get_split_element_len(char *str, int i);
+
+//Add elements to the quote split in quote and variable expansion
+void	add_element_to_quote_split(char ***quote_split, char *str, int id_split, int id_str);
+
+//Expands variables in the quote_split or performs 'inner_expanion' further expanding quotes and vars
+void	expand_vars_or_do_inner_expansion(t_main *main, t_tokens **tokens, char ***quote_split, t_expand expand);
+
+//Free and exit for malloc fail in expand_vars_or_do_inner_expansion
+void	free_and_exit_quote_split_expand(t_main *main, t_tokens **tokens, char ***quote_split, int i);
+
+//Check for adding back quotes to heredoc strings if they were removed during expansion
+int check_for_heredoc_quotes(char **str, bool is_heredoc, char quote_type, char ***quote_split);
+
+//Skip spaces and tabs in given string starting at given index
+void	skip_spaces_and_tabs(char *input, int *id_input);
+
+//Check if given character is a space or tab or special char and if the quotes are closed
+int	char_is_space_or_special_and_quotes_are_closed(char c, t_parsing p);
+
+//Update the 'inside status' of the given struct
+void	update_inside_status(t_parsing *p);
+
+//Update the number of the given quote for the given struct
+void	update_number_of_quotes(char c, t_parsing *p);
+
+//Check for unclosed quotes in initial input parsing
+int	check_for_unclosed_quotes(t_parsing p);
+
+//Checks for a pipe error where there is a pipe then nothing following
+int	check_for_pipe_error(t_main *main, t_tokens **tokens);
 
 /*****************************************************************************/
 /*****************************************************************************/
@@ -496,9 +525,8 @@ int	unset(t_main *main, t_tokens token);
  * 
  * @param main the main struct of the program
  * @param tokens array of tokens to execute
- * @returns the exitstatus of the last executable
  */
-int	execute_commandline(t_main *main, t_tokens *tokens);
+void	execute_commandline(t_main *main, t_tokens *tokens);
 
 /**
  * Checks if command is a builtin or not
@@ -519,6 +547,15 @@ int	is_builtin(t_tokens token);
  */
 void	close_pipes_in_parent(int i, int num_of_pipes, int *pipe_left, int *pipe_right);
 
+
+void	close_pipes_on_error(int *pipe);
+
+int	create_fork(int i, int num_of_pipes, int pipe_array[2][2], int *pids);
+
+void	reassign_pipe_right_to_left(int pipe_array[2][2]);
+
+int	handle_pipes(int i, int num_of_pipes, int pipe_array[2][2], int *pids);
+
 /**
  * Finds path to the command and execues it with execve
  * 
@@ -534,6 +571,11 @@ void	execute_command(t_main *main, t_tokens token, int *pids);
  * @param token  the token to execute
  */
 int	execute_builtin(t_main *main, t_tokens token, int parent, int open_fds[2]);
+
+void	restore_stdin_stdout(t_main *main, int original_stdin,
+	int original_stdout);
+
+int	is_builtin_not_part_of_pipeline(t_tokens token, int num_of_pipes);
 
 /**
  * Executes either a builtin or a command as a child process.
@@ -553,7 +595,7 @@ void	execute_child_process(t_main *main, t_tokens token, int *pids);
  * @param main the main struct of the program
  * @param token  the token to execute
  */
-void	execute_builtin_in_parent(t_main *main, t_tokens token);
+int	execute_builtin_in_parent(t_main *main, t_tokens token, int num_of_pipes); //TODO check params
 
 char	*find_path(t_main *main, char *command, int *pids);
 
@@ -581,7 +623,7 @@ int	is_path_to_file(char *command);
  * @param num_of_pipes the number of pipes left to be written into in
  * the pipeline
  */
-int	handle_infile_and_outfile(int i, int num_of_pipes,
+int	handle_in_and_outfile(int i, int num_of_pipes,
 	int pipe_array[2][2], t_tokens token);
 
 /**
@@ -625,6 +667,8 @@ int	dup2_infile(t_tokens token);
 int	dup2_outfile(t_tokens token);
 
 void	free_all_in_child(t_main *main, int *pids);
+
+void	free_all_in_parent(t_main *main);
 
 void	remove_heredocs(t_main *main, t_tokens **tokens);
 
