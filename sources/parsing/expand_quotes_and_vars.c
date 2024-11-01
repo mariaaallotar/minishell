@@ -123,6 +123,7 @@ int	expand_quotes_and_vars(t_main *main, t_tokens **tokens
 	}
 	if (!create_quote_split(*str, &quote_split))
 		return (0);
+	//print_quote_split(quote_split); //REMOVE
 	expand_vars_or_do_inner_expansion(main, tokens, &quote_split, expand);
 	if (!combine_quote_split(main, tokens, &quote_split, str))
 	{

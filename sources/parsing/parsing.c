@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 11:32:36 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/11/01 11:15:46 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/11/01 13:51:20 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,7 +142,8 @@ int	parsing(t_main *main, t_tokens **tokens)
 		return (0);
 	tokenize(main, tokens);
 	quotes_and_variables(main, tokens);
-	create_heredoc(main, tokens);
+	if (create_heredoc(main, tokens) == 0)
+		return (0);
 	//print_tokens(main, tokens); //REMOVE
 	return (1);
 }

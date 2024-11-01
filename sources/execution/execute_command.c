@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 10:00:41 by maheleni          #+#    #+#             */
-/*   Updated: 2024/10/30 13:28:55 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/10/31 15:51:20 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,9 +42,9 @@ void	execute_command(t_main *main, t_tokens token, int *pids)
 		if (errno == 127)
 		{
 			if (token.command == NULL || token.command[0] == NULL)
-				printf("Command not found\n");
+				printf(" : command not found\n");
 			else
-				printf("Command not found: %s\n", token.command[0]);
+				printf("%s: command not found\n", token.command[0]);
 		}
 		else
 			perror(NULL);
@@ -65,28 +65,6 @@ void	execute_command(t_main *main, t_tokens token, int *pids)
 		free(env);
 		exit(errno);
 	}
-}
-
-int	execute_builtin(t_main *main, t_tokens token, int parent, int open_fds[2])
-{
-	char	*command;
-
-	command = token.command[0];
-	if (ft_strncmp(command, "echo", ft_strlen(command)) == 0)
-		return (echo(main, token));
-	else if (ft_strncmp(command, "cd", ft_strlen(command)) == 0)
-		return (cd(main, token));
-	else if (ft_strncmp(command, "pwd", ft_strlen(command)) == 0)
-		return (pwd(main, token));
-	else if (ft_strncmp(command, "export", ft_strlen(command)) == 0)
-		return (export(main, token));
-	else if (ft_strncmp(command, "unset", ft_strlen(command)) == 0)
-		return (unset(main, token));
-	else if (ft_strncmp(command, "env", ft_strlen(command)) == 0)
-		return (env(main, token));
-	else if (ft_strncmp(command, "exit", ft_strlen(command)) == 0)
-		return (exit_command(main, token, parent, open_fds));
-	return (0);
 }
 
 void	activate_signals_for_child(void)
@@ -117,41 +95,4 @@ void	execute_child_process(t_main *main, t_tokens token, int *pids)
 		exit(status);
 	}
 	execute_command(main, token, pids);
-}
-
-void	restore_stdin_stdout(t_main *main, int original_stdin,
-	int original_stdout)
-{
-	(void) main;
-	if (dup2(original_stdin, STDIN_FILENO) == -1
-		|| dup2(original_stdout, STDOUT_FILENO) == -1)
-	{
-		close(original_stdin);
-		close(original_stdout);
-		perror("Exiting minishell because of: ");
-		free_all_in_parent(main);
-		exit(1);
-	}
-}
-
-void	execute_builtin_in_parent(t_main *main, t_tokens token)
-{
-	int	exit_code;
-	int	original_stdin_stdout[2];
-
-	original_stdin_stdout[0] = dup(STDIN_FILENO);
-	original_stdin_stdout[1] = dup(STDOUT_FILENO);
-	if (original_stdin_stdout[0] == -1 || original_stdin_stdout[1] == -1)
-	{
-		perror(NULL);
-		main->exit_code = errno;
-		return ;
-	}
-	handle_infile(token, NULL);
-	handle_outfile(token, NULL);
-	exit_code = execute_builtin(main, token, 1, original_stdin_stdout);
-	main->exit_code = exit_code;
-	restore_stdin_stdout(main, original_stdin_stdout[0], original_stdin_stdout[1]);
-	close(original_stdin_stdout[0]);
-	close(original_stdin_stdout[1]);
 }

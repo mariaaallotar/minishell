@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 14:31:07 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/10/30 14:39:27 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/11/01 13:55:29 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,8 +82,7 @@ static int	add_var_element(char ***quote_split, char *str
 	if (str[id_str + 1] == '?')
 	{
 		(*quote_split)[id_split][i + 1] = '?';
-		(*quote_split)[id_split][i + 2] = '\0';
-		return (i);
+		return (2);
 	}
 	i++;
 	id_str++;

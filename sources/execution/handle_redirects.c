@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_redirects.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 09:57:31 by maheleni          #+#    #+#             */
-/*   Updated: 2024/10/28 10:44:28 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/10/31 15:37:25 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,7 +107,7 @@ int	handle_infile(t_tokens token, int* pipe_left)
 	return (0);
 }
 
-int	handle_infile_and_outfile(int i, int num_of_pipes,
+int	handle_in_and_outfile(int i, int num_of_pipes,
 	int pipe_array[2][2], t_tokens token)
 {
 	int	return_value;

@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 10:33:07 by maheleni          #+#    #+#             */
-/*   Updated: 2024/10/30 10:11:35 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/10/31 12:16:07 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,9 +40,11 @@ int	print_forbidden_key(char *argument)
 {
 	char	*message;
 
-	message = "export: not a valid identifier: ";
+	message = "export: ";
 	write(STDERR_FILENO, message, ft_strlen(message));
 	write(STDERR_FILENO, argument, ft_strlen(argument));
+	message = ": not a valid identifier";
+	write(STDERR_FILENO, message, ft_strlen(message));
 	write(STDERR_FILENO, "\n", 1);
 	return (1);
 }

@@ -6,7 +6,7 @@
 #    By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/20 15:07:12 by eberkowi          #+#    #+#              #
-#    Updated: 2024/11/01 10:40:44 by eberkowi         ###   ########.fr        #
+#    Updated: 2024/11/01 13:19:01 by eberkowi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -50,6 +50,8 @@ CFILES := main.c \
 		built_ins/env.c \
 		built_ins/exit.c \
 		execution/execute_commandline.c \
+		execution/pipeline_utils.c \
+		execution/execute_builtin.c \
 		execution/handle_redirects.c \
 		execution/execute_command.c \
 		execution/find_path.c \
