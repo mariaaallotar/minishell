@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 10:33:14 by maheleni          #+#    #+#             */
-/*   Updated: 2024/10/31 15:43:55 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/11/04 12:06:06 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,13 +66,18 @@ int	execute_pipeline(t_main *main, int pipe_array[2][2], int *pids,
 	pipes = main->num_of_pipes;
 	while (pipes >= 0)
 	{
-		if (handle_pipes(i, pipes, pipe_array, pids) == -1)
+		if (prepare_pipes(i, pipes, pipe_array, pids) == -1)
 			return (errno);
 		if (create_fork(i, pipes, pipe_array, pids) == -1)
 			return (errno);
 		if (pids[i] == 0)
 		{
-			if (handle_in_and_outfile(i, pipes, pipe_array, tokens[i]) == -1)
+			if (redirect_pipes(i, pipes, pipe_array) == -1)
+			{
+				free_all_in_child(main, pids);
+				exit(errno);
+			}
+			if (handle_redirects(tokens[i]) == -1)
 			{
 				free_all_in_child(main, pids);
 				exit(errno);

@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 11:21:19 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/11/01 14:22:15 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/11/04 12:03:36 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -554,7 +554,7 @@ int	create_fork(int i, int num_of_pipes, int pipe_array[2][2], int *pids);
 
 void	reassign_pipe_right_to_left(int pipe_array[2][2]);
 
-int	handle_pipes(int i, int num_of_pipes, int pipe_array[2][2], int *pids);
+int	prepare_pipes(int i, int num_of_pipes, int pipe_array[2][2], int *pids);
 
 /**
  * Finds path to the command and execues it with execve
@@ -615,61 +615,24 @@ int	is_path_to_executable(char *command);
 
 int	is_path_to_file(char *command);
 
-/**
- * Makes sure that STDIN and STDOUT are redirected to the right files
- * based on number of pipes and position of command in pipeline
- * 
- * @param i position of command in pipeline, first command: i = 0;
- * @param num_of_pipes the number of pipes left to be written into in
- * the pipeline
- */
-int	handle_in_and_outfile(int i, int num_of_pipes,
-	int pipe_array[2][2], t_tokens token);
-
-/**
- * Redirects STDIN with dup2 to:
- * (1) pipe: if there is a pipe and no infile
- * (2) infile: if there is infile(s)
- * (3) nowhere: if there is no pipe and no infile(s)
- * 
- * @param token the token to handle infile for
- * @param pipe_left array of ints for the left-hand side pipe,
- * 	NULL if there is no pipe
- */
-int	handle_infile(t_tokens token, int* pipe_left);
-
-/**
- * Redirects STDOUT with dup2 to:
- * (1) pipe: if there is a pipe and no outfile
- * (2) outfile: if there is outfile(s)
- * (3) nowhere: if there is no pipe and no outfile(s)
- * 
- * @param token the token to handle outfile for
- * @param pipe_right array of ints for the right-hand side pipe,
- * 	NULL if there is no pipe
- */
-int	handle_outfile(t_tokens token, int* pipe_right);
-
-/**
- * Loops through all infiles, opens them and redirects STDIN with dup2
- * to the last one.
- * 
- * @param token the token to handle infile for
- */
-int	dup2_infile(t_tokens token);
-
-/**
- * Loops through all outfiles, opens them and redirects STDOUT with dup2
- * to the last one.
- * 
- * @param token the token to handle outfile for
- */
-int	dup2_outfile(t_tokens token);
-
 void	free_all_in_child(t_main *main, int *pids);
 
 void	free_all_in_parent(t_main *main);
 
 void	remove_heredocs(t_main *main, t_tokens **tokens);
+
+int	handle_redirects(t_tokens token);
+
+int	dup2_file(int file, int std_fileno);
+
+int	open_outfile(t_redirect_node *node);
+
+int	open_infile(t_redirect_node	*node);
+
+int redirect_pipes(int i, int num_of_pipes, int pipe_array[2][2]);
+
+int redirect_pipe_right(int* pipe_right);
+
+int redirect_pipe_left(int* pipe_left);
 
 #endif

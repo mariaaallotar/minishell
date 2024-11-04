@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/31 15:43:29 by maheleni          #+#    #+#             */
-/*   Updated: 2024/10/31 15:48:05 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/11/04 11:00:00 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ void	reassign_pipe_right_to_left(int pipe_array[2][2])
 	pipe_array[0][1] = pipe_array[1][1];
 }
 
-int	handle_pipes(int i, int num_of_pipes, int pipe_array[2][2], int *pids)
+int	prepare_pipes(int i, int num_of_pipes, int pipe_array[2][2], int *pids)
 {
 	if (i > 0)
 		reassign_pipe_right_to_left(pipe_array);
