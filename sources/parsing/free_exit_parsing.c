@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/24 10:44:31 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/10/30 15:23:23 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/11/04 11:36:30 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,7 @@ void	free_token_redirects(t_main *main, t_tokens **tokens)
 	token_number = 0;
 	while (token_number < main->num_of_pipes + 1)
 	{
-		temp = (*tokens)[token_number].infiles;
+		temp = (*tokens)[token_number].redirects;
 		while (temp)
 		{
 			temp_next = temp->next;
@@ -106,7 +106,7 @@ void	free_token_redirects(t_main *main, t_tokens **tokens)
 			free(temp);
 			temp = temp_next;
 		}
-		temp = (*tokens)[token_number].outfiles;
+		temp = (*tokens)[token_number].redirects;
 		while (temp)
 		{
 			temp_next = temp->next;

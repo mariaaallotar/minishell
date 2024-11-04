@@ -6,85 +6,85 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 11:32:36 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/11/01 13:51:20 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/11/04 11:34:59 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-// static void	print_split_input(t_main *main) //REMOVE
-// {
-// 	printf("\033[0;33m---SPLIT_INPUT---\033[0m\n");
-// 	int i = 0;
-// 	while (main->split_input[i])
-// 	{
-// 		printf("input[%d] = %s\n", i, main->split_input[i]);
-// 		i++;
-// 	}
-// 	printf("\n");
-// }
+static void	print_split_input(t_main *main) //REMOVE
+{
+	printf("\033[0;33m---SPLIT_INPUT---\033[0m\n");
+	int i = 0;
+	while (main->split_input[i])
+	{
+		printf("input[%d] = %s\n", i, main->split_input[i]);
+		i++;
+	}
+	printf("\n");
+}
 
-// static void	print_tokens(t_main *main, t_tokens **tokens) //REMOVE
-// {
-// 	int token_number = 0;
-// 	int i = 0;
-// 	int j = 0;
-// 	t_redirect_node *temp;
+static void	print_tokens(t_main *main, t_tokens **tokens) //REMOVE
+{
+	int token_number = 0;
+	int i = 0;
+	int j = 0;
+	t_redirect_node *temp;
 
-// 	while (token_number < main->num_of_pipes + 1)
-// 	{
-// 		printf("\033[0;32m---COMMAND %d---\033[0m\n", token_number);
-// 		i = 0;
-// 		if ((*tokens)[token_number].command)
-// 		{
-// 			while ((*tokens)[token_number].command[i])
-// 			{
-// 				printf("\033[0;31mcommand[%d] = %s\033[0m\n", i
-// 					,(*tokens)[token_number].command[i]);
-// 				i++;
-// 			}
-// 		}
-// 		//PRINT INFILES AND HEREDOCS
-// 		j = 0;
-// 		temp = (*tokens)[token_number].infiles;
-// 		while (temp)
-// 		{
-// 			printf("infile[%d] name = %s, ", j, temp->name);
-// 			if (temp->type == INFILE)
-// 				printf("type = INFILE");
-// 			else 
-// 				printf("type = HEREDOC");
-// 			if (temp->type == HEREDOC)
-// 			{
-// 				printf(", delimiter = %s, ", temp->delimiter);
-// 				if (temp->delimiter_has_quotes)
-// 					printf("delimiter_has_quotes = true\n");
-// 				else
-// 					printf("delimiter_has_quotes = false\n");
-// 			}
-// 			printf("\n");
-// 			temp = temp->next;
-// 			j++;
-// 		}
-// 		//PRINT OUTFILES AND APPENDS
-// 		j = 0;
-// 		temp = (*tokens)[token_number].outfiles;
-// 		while (temp)
-// 		{
-// 			printf("outfile[%d] name = %s, ", j, temp->name);
-// 			if (temp->type == 102)
-// 				printf("type = OUTFILE\n");
-// 			else 
-// 				printf("type = APPEND\n");
-// 			temp = temp->next;
-// 			j++;
-// 		}
+	while (token_number < main->num_of_pipes + 1)
+	{
+		printf("\033[0;32m---COMMAND %d---\033[0m\n", token_number);
+		i = 0;
+		if ((*tokens)[token_number].command)
+		{
+			while ((*tokens)[token_number].command[i])
+			{
+				printf("\033[0;31mcommand[%d] = %s\033[0m\n", i
+					,(*tokens)[token_number].command[i]);
+				i++;
+			}
+		}
+		//PRINT INFILES AND HEREDOCS
+		j = 0;
+		temp = (*tokens)[token_number].redirects;
+		while (temp)
+		{
+			printf("infile[%d] name = %s, ", j, temp->name);
+			if (temp->type == INFILE)
+				printf("type = INFILE");
+			else 
+				printf("type = HEREDOC");
+			if (temp->type == HEREDOC)
+			{
+				printf(", delimiter = %s, ", temp->delimiter);
+				if (temp->delimiter_has_quotes)
+					printf("delimiter_has_quotes = true\n");
+				else
+					printf("delimiter_has_quotes = false\n");
+			}
+			printf("\n");
+			temp = temp->next;
+			j++;
+		}
+		//PRINT OUTFILES AND APPENDS
+		j = 0;
+		temp = (*tokens)[token_number].redirects;
+		while (temp)
+		{
+			printf("outfile[%d] name = %s, ", j, temp->name);
+			if (temp->type == OUTFILE)
+				printf("type = OUTFILE\n");
+			else 
+				printf("type = APPEND\n");
+			temp = temp->next;
+			j++;
+		}
 
-// 		token_number++;
-// 		printf("\n");
-// 		printf("============================================\n");
-// 	}
-// }
+		token_number++;
+		printf("\n");
+		printf("============================================\n");
+	}
+}
 
 static void	get_number_of_pipes(t_main *main)
 {
@@ -116,8 +116,7 @@ static void	initialize_commands(t_tokens **tokens, int size)
 	while (i < size)
 	{
 		(*tokens)[i].command = NULL;
-		(*tokens)[i].infiles = NULL;
-		(*tokens)[i].outfiles = NULL;
+		(*tokens)[i].redirects = NULL;
 		i++;
 	}
 }
@@ -133,7 +132,7 @@ int	parsing(t_main *main, t_tokens **tokens)
 {
 	if (!split_input(main))
 		return (0);
-	//print_split_input(main); //REMOVE
+	print_split_input(main); //REMOVE
 	free(main->input);
 	malloc_and_init_tokens(main, tokens);
 	if (check_for_pipe_error(main, tokens))
@@ -144,6 +143,6 @@ int	parsing(t_main *main, t_tokens **tokens)
 	quotes_and_variables(main, tokens);
 	if (create_heredoc(main, tokens) == 0)
 		return (0);
-	//print_tokens(main, tokens); //REMOVE
+	print_tokens(main, tokens); //REMOVE
 	return (1);
 }

@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 10:12:47 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/11/01 13:50:58 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/11/04 12:11:44 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ void	remove_heredocs(t_main *main, t_tokens **tokens)
 	i = 0;
 	while (i <= main->num_of_pipes)
 	{
-		node = (* tokens)[i].infiles;
+		node = (* tokens)[i].redirects;
 		while (node != NULL)
 		{
 			if (node->type == HEREDOC)

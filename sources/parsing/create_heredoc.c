@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 11:52:55 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/11/01 13:29:26 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/11/04 11:36:03 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,7 @@ int	create_heredoc(t_main *main, t_tokens **tokens)
 	num_of_heredocs = 0;
 	while (token_id <= main->num_of_pipes)
 	{
-		temp = (*tokens)[token_id].infiles;
+		temp = (*tokens)[token_id].redirects;
 		while (temp)
 		{
 			if (temp->type == HEREDOC)
