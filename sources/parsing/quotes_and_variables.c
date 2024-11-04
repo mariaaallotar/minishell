@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   quotes_and_variables.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 13:56:04 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/11/01 11:05:16 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/11/04 14:15:18 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,10 @@ static void	helper_for_redirects(t_main *main, t_tokens **tokens, int token_id)
 {
 	t_redirect_node	*temp;
 
-	temp = (*tokens)[token_id].infiles;
+	temp = (*tokens)[token_id].redirects;
 	while (temp)
 	{
-		if (temp->type == INFILE)
+		if (temp->type == INFILE || temp->type == OUTFILE || temp->type == APPEND)
 		{	
 			if (!expand_quotes_and_vars(main, tokens, &(temp->name), false))
 				free_all_and_exit_with_free_split_middle(main, tokens);
@@ -30,13 +30,6 @@ static void	helper_for_redirects(t_main *main, t_tokens **tokens, int token_id)
 			if (!remove_outside_quotes(&temp->delimiter))
 				free_all_and_exit_with_free_split_middle(main, tokens);
 		}
-		temp = temp->next;
-	}
-	temp = (*tokens)[token_id].outfiles;
-	while (temp)
-	{
-		if (!expand_quotes_and_vars(main, tokens, &(temp->name), false))
-			free_all_and_exit_with_free_split_middle(main, tokens);
 		temp = temp->next;
 	}	
 }

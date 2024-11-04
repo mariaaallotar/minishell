@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 11:21:19 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/11/04 12:03:36 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/11/04 12:17:05 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,7 @@ struct s_redirect_node
 typedef struct s_tokens
 {
 	char	**command;
-	t_redirect_node *infiles;
-	t_redirect_node *outfiles;
+	t_redirect_node *redirects;
 }	t_tokens;
 
 typedef struct s_expand

@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 10:33:14 by maheleni          #+#    #+#             */
-/*   Updated: 2024/11/04 12:06:06 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/11/04 13:28:23 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ int	execute_pipeline(t_main *main, int pipe_array[2][2], int *pids,
 			if (handle_redirects(tokens[i]) == -1)
 			{
 				free_all_in_child(main, pids);
-				exit(errno);
+				exit(1);	//always 1?
 			}
 			execute_child_process(main, tokens[i], pids);
 		}

@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/31 15:49:13 by maheleni          #+#    #+#             */
-/*   Updated: 2024/11/04 12:03:59 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/11/04 13:25:56 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,11 @@ int	execute_builtin_in_parent(t_main *main, t_tokens token, int num_of_pipes)
 			main->exit_code = errno;
 			return (1);
 		}
-		handle_redirects(token);
+		if (handle_redirects(token) == -1)
+		{
+			main->exit_code = 1;
+			return (1);
+		}
 		exit_code = execute_builtin(main, token, 1, original_stdin_stdout);
 		main->exit_code = exit_code;
 		restore_stdin_stdout(main, original_stdin_stdout[0], original_stdin_stdout[1]);

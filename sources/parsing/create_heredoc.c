@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 11:52:55 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/11/01 14:22:43 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/11/04 14:16:35 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ static int	readline_to_file(t_main *main, t_tokens **tokens, t_redirect_node *te
 		if (signal_received)
 		{
 			close (heredoc_fd);
-			main->exit_code = signal_received;
+			main->exit_code = signal_received; // REMOVE NOT HERE
 			signal_received = 0;
 			return (0);
 		}
@@ -101,7 +101,7 @@ int	create_heredoc(t_main *main, t_tokens **tokens)
 	num_of_heredocs = 0;
 	while (token_id <= main->num_of_pipes)
 	{
-		temp = (*tokens)[token_id].infiles;
+		temp = (*tokens)[token_id].redirects;
 		while (temp)
 		{
 			if (temp->type == HEREDOC)

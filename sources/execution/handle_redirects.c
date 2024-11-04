@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 11:06:40 by maheleni          #+#    #+#             */
-/*   Updated: 2024/11/04 12:07:12 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/11/04 14:09:01 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ int redirect_pipe_left(int* pipe_left)
 		}
 		close(pipe_left[0]);
 	}
+	return (0);
 }
 
 int redirect_pipe_right(int* pipe_right)
@@ -41,6 +42,7 @@ int redirect_pipe_right(int* pipe_right)
 		close(pipe_right[0]);
 		close(pipe_right[1]);
 	}
+	return (0);
 }
 
 int redirect_pipes(int i, int num_of_pipes, int pipe_array[2][2])
@@ -86,6 +88,7 @@ int	open_outfile(t_redirect_node *node)
 {
 	int	outfile;
 
+	outfile = -1;
 	if (node->type == OUTFILE)
 		outfile = open(node->name, O_WRONLY | O_TRUNC | O_CREAT, 0644);
 	else if (node->type == APPEND)
@@ -107,6 +110,7 @@ int	dup2_file(int file, int std_fileno)
 		return (-1);
 	}
 	close(file);
+	return (0);
 }
 
 int	handle_redirects(t_tokens token)
@@ -125,12 +129,20 @@ int	handle_redirects(t_tokens token)
 			if (infile != -1)
 				close(infile);
 			infile = open_infile(node);
+			if (infile == -1)
+			{
+				if (outfile != -1)
+					close(outfile);
+				return (-1);
+			}
 		}
 		else if (node->type == OUTFILE || node->type == APPEND)
 		{
 			if (outfile != -1)
 				close(outfile);
 			outfile = open_outfile(node);
+			if (outfile == -1)
+				return (-1);
 		}
 		node = node->next;
 	}
