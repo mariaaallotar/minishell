@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 10:00:41 by maheleni          #+#    #+#             */
-/*   Updated: 2024/10/31 15:51:20 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/11/04 13:58:01 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ void	execute_command(t_main *main, t_tokens token, int *pids)
 				printf("%s: command not found\n", token.command[0]);
 		}
 		else
-			perror(NULL);
+			perror(token.command[0]);
 		free_all_in_child(main, pids);
 		exit(errno);
 	}

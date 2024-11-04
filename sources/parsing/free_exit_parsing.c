@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free_exit_parsing.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/24 10:44:31 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/10/30 15:23:23 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/11/04 13:14:47 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,29 +93,26 @@ void	free_token_redirects(t_main *main, t_tokens **tokens)
 	t_redirect_node	*temp_next;
 
 	token_number = 0;
+	// char *message = "Before free_token_redirects\n";
+	// write(STDERR_FILENO, message, ft_strlen(message));
 	while (token_number < main->num_of_pipes + 1)
 	{
-		temp = (*tokens)[token_number].infiles;
+		temp = (*tokens)[token_number].redirects;
 		while (temp)
 		{
 			temp_next = temp->next;
 			if (temp->type == HEREDOC)
 				free(temp->delimiter);
-			if (temp->type == INFILE || (temp->type == HEREDOC && temp->name))
+			if (temp->type == INFILE || (temp->type == HEREDOC && temp->name) 
+					|| temp->type == OUTFILE || temp->type == APPEND)
 				free(temp->name);
-			free(temp);
-			temp = temp_next;
-		}
-		temp = (*tokens)[token_number].outfiles;
-		while (temp)
-		{
-			temp_next = temp->next;
-			free(temp->name);
 			free(temp);
 			temp = temp_next;
 		}
 		token_number++;
 	}
+	// message = "After free_token_redirects\n";
+	// write(STDERR_FILENO, message, ft_strlen(message));
 }
 
 void	free_and_exit_node_malloc_failed(t_main *main, t_tokens **tokens)

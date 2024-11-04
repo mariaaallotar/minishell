@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 11:32:36 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/11/01 14:22:51 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/11/04 14:22:47 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,40 +46,29 @@
 // 		}
 // 		//PRINT INFILES AND HEREDOCS
 // 		j = 0;
-// 		temp = (*tokens)[token_number].infiles;
+// 		temp = (*tokens)[token_number].redirects;
 // 		while (temp)
 // 		{
-// 			printf("infile[%d] name = %s, ", j, temp->name);
+// 			printf("redirect[%d] name = %s, ", j, temp->name);
 // 			if (temp->type == INFILE)
 // 				printf("type = INFILE");
-// 			else 
-// 				printf("type = HEREDOC");
 // 			if (temp->type == HEREDOC)
 // 			{
+// 				printf("type = HEREDOC");
 // 				printf(", delimiter = %s, ", temp->delimiter);
 // 				if (temp->delimiter_has_quotes)
 // 					printf("delimiter_has_quotes = true\n");
 // 				else
 // 					printf("delimiter_has_quotes = false\n");
 // 			}
+// 			if (temp->type == OUTFILE)
+// 				printf("type = OUTFILE\n");
+// 			if (temp->type == APPEND)
+// 				printf("type = APPEND\n");
 // 			printf("\n");
 // 			temp = temp->next;
 // 			j++;
 // 		}
-// 		//PRINT OUTFILES AND APPENDS
-// 		j = 0;
-// 		temp = (*tokens)[token_number].outfiles;
-// 		while (temp)
-// 		{
-// 			printf("outfile[%d] name = %s, ", j, temp->name);
-// 			if (temp->type == 102)
-// 				printf("type = OUTFILE\n");
-// 			else 
-// 				printf("type = APPEND\n");
-// 			temp = temp->next;
-// 			j++;
-// 		}
-
 // 		token_number++;
 // 		printf("\n");
 // 		printf("============================================\n");
@@ -116,8 +105,7 @@ static void	initialize_commands(t_tokens **tokens, int size)
 	while (i < size)
 	{
 		(*tokens)[i].command = NULL;
-		(*tokens)[i].infiles = NULL;
-		(*tokens)[i].outfiles = NULL;
+		(*tokens)[i].redirects = NULL;
 		i++;
 	}
 }
@@ -133,7 +121,7 @@ int	parsing(t_main *main, t_tokens **tokens)
 {
 	if (!split_input(main))
 		return (0);
-	//print_split_input(main); //REMOVE
+	// print_split_input(main); //REMOVE
 	free(main->input);
 	malloc_and_init_tokens(main, tokens);
 	if (check_for_pipe_error(main, tokens))
@@ -144,6 +132,6 @@ int	parsing(t_main *main, t_tokens **tokens)
 	quotes_and_variables(main, tokens);
 	if (create_heredoc(main, tokens) == 0)
 		return (0);
-	//print_tokens(main, tokens); //REMOVE
+	// print_tokens(main, tokens); //REMOVE
 	return (1);
 }
