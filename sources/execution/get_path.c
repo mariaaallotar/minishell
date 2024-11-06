@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 13:45:33 by maheleni          #+#    #+#             */
-/*   Updated: 2024/10/15 14:39:56 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/11/06 11:30:22 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,8 @@
 int	is_path_to_file(char *command)
 {
 	if (access((const char *)command, F_OK) == 0)
+		return (1);
+	else if (ft_strchr(command, '/'))
 		return (1);
 	else
 		return (0);
