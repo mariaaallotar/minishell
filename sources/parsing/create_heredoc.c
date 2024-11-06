@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   create_heredoc.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 11:52:55 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/11/04 14:16:35 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/11/05 13:43:46 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,12 +35,13 @@ static int	create_filename(char **name, int num_of_heredocs)
 	return (1);
 }
 
-int event(void)
+int	event(void)
 {
 	return (0);
 }
 
-static int	readline_to_file(t_main *main, t_tokens **tokens, t_redirect_node *temp)
+static int	readline_to_file(t_main *main, t_tokens **tokens
+		, t_redirect_node *temp)
 {
 	int		heredoc_fd;
 	char	*input;

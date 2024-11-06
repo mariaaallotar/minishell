@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 11:32:36 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/11/04 14:22:47 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/11/06 15:57:29 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,7 +121,6 @@ int	parsing(t_main *main, t_tokens **tokens)
 {
 	if (!split_input(main))
 		return (0);
-	// print_split_input(main); //REMOVE
 	free(main->input);
 	malloc_and_init_tokens(main, tokens);
 	if (check_for_pipe_error(main, tokens))
@@ -129,9 +128,10 @@ int	parsing(t_main *main, t_tokens **tokens)
 	if (check_for_redirect_error(main, tokens))
 		return (0);
 	tokenize(main, tokens);
+	//print_tokens(main, tokens); //REMOVE
 	quotes_and_variables(main, tokens);
 	if (create_heredoc(main, tokens) == 0)
 		return (0);
-	// print_tokens(main, tokens); //REMOVE
+	//print_tokens(main, tokens); //REMOVE
 	return (1);
 }

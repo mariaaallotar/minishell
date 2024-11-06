@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 16:50:02 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/11/01 13:32:53 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/11/06 12:00:03 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,17 +38,11 @@ static int	expand_exit_code(t_main *main, char **str)
 	return (1);
 }
 
-int	find_var_in_env(t_main *main, char **str)
+static int	find_var_in_env_helper(t_main *main, char **str)
 {
 	int		len;
 	t_list	*temp;
 
-	if ((*str)[0] == '$' && (*str)[1] == '?')
-	{
-		if (!expand_exit_code(main, str))
-			return (0);
-		return (1);
-	}
 	temp = main->env_list;
 	len = ft_strlen(*str);
 	while (temp)
@@ -64,13 +58,26 @@ int	find_var_in_env(t_main *main, char **str)
 		}
 		temp = temp->next;
 	}
+	return (1);
+}
+
+int	find_var_in_env(t_main *main, char **str)
+{
+	if ((*str)[0] == '$' && (*str)[1] == '?')
+	{
+		if (!expand_exit_code(main, str))
+			return (0);
+		return (1);
+	}
+	if (!find_var_in_env_helper(main, str))
+		return (0);
 	if ((*str)[0] == '$' && (*str)[1])
 	{
 		free(*str);
 		*str = NULL;
-		*str = ft_strdup("");
-		if (!*str)
-			return (0);
+		// *str = ft_strdup("");
+		// if (!*str)
+		// 	return (0);
 	}
 	return (1);
 }

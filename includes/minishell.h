@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 11:21:19 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/11/04 12:17:05 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/11/06 14:22:22 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@
 # define HEREDOC 101
 # define OUTFILE 102
 # define APPEND 103
+# define NULL_VAR 104
 
 extern int signal_received;
 
@@ -70,6 +71,8 @@ typedef struct s_main
 	int 	num_of_pipes;
 	int		elements_in_command;
 	int		id_command;
+	int		quote_split_length;
+	int		id_quote_split;
 } t_main;
 
 typedef struct s_parsing
@@ -241,6 +244,9 @@ int	check_for_unclosed_quotes(t_parsing p);
 
 //Checks for a pipe error where there is a pipe then nothing following
 int	check_for_pipe_error(t_main *main, t_tokens **tokens);
+
+//Return and change the index of the next non-NULL element in quote_split
+int next_id(t_main *main, char **quote_split);
 
 /*****************************************************************************/
 /*****************************************************************************/

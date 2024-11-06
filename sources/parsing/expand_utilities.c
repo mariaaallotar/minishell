@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 14:59:47 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/10/30 15:04:40 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/11/06 11:55:35 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,8 @@ int	add_quotes_back_to_str(char **str, char quote_type)
 int	check_for_heredoc_quotes(char **str, bool is_heredoc
 		, char quote_type, char ***quote_split)
 {
+	if (!str)
+		return (1);
 	if (is_heredoc && quote_type != '\0')
 	{
 		if (!add_quotes_back_to_str(str, quote_type))

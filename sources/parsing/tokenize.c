@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 10:23:05 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/11/04 11:19:02 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/11/05 13:41:20 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,11 +54,11 @@ static void	count_elements_in_command(t_main *main, int spl_id)
 	}
 }
 
-static void init_tokenize_vars(int *cmd_id, int *spl_id, bool *first_loop)
+static void	init_tokenize_vars(int *cmd_id, int *spl_id, bool *first_loop)
 {
 	*cmd_id = 0;
 	*spl_id = 0;
-	*first_loop = true;	
+	*first_loop = true;
 }
 
 void	tokenize(t_main *main, t_tokens **tokens)

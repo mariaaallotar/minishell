@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+         #
+#    By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/20 15:07:12 by eberkowi          #+#    #+#              #
-#    Updated: 2024/11/04 12:17:04 by maheleni         ###   ########.fr        #
+#    Updated: 2024/11/05 13:48:49 by eberkowi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,7 +22,9 @@ CFILES := main.c \
 		parsing/utilities.c \
 		parsing/add_quotes_and_special_elements.c \
 		parsing/tokenize.c \
-		parsing/free_exit_parsing.c \
+		parsing/free_exit_parsing_1.c \
+		parsing/free_exit_parsing_2.c \
+		parsing/free_exit_parsing_3.c \
 		parsing/redirect_tokens.c \
 		parsing/add_command_to_struct.c \
 		parsing/find_var_in_env.c \
