@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 12:56:28 by maheleni          #+#    #+#             */
-/*   Updated: 2024/10/31 15:34:39 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/11/07 14:19:20 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,4 +70,20 @@ void	activate_readline_signals(void)
 	sigemptyset(&sa_quit.sa_mask);
 	sa_quit.sa_flags = 0; // Ensure interrupted system calls are restarted
 	sigaction(SIGQUIT, &sa_quit, NULL);
+}
+
+void	activate_signals_for_child(void)
+{
+	struct sigaction sa_quit;
+	struct sigaction sa_int;
+
+	sa_quit.sa_handler = SIG_DFL;
+    sigemptyset(&sa_quit.sa_mask);
+    sa_quit.sa_flags = 0; // Ensure interrupted system calls are restarted
+    sigaction(SIGQUIT, &sa_quit, NULL);
+
+	sa_int.sa_handler = SIG_DFL;
+    sigemptyset(&sa_int.sa_mask);
+    sa_int.sa_flags = 0; // Ensure interrupted system calls are restarted
+    sigaction(SIGINT, &sa_int, NULL);
 }

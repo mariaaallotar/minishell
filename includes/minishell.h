@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 11:21:19 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/11/07 11:04:55 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/11/07 15:46:02 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,7 +110,10 @@ void	activate_readline_signals(void);
 
 void	activate_heredoc_signals(void);
 
+void	activate_signals_for_child(void);
+
 void handle_sigint_readline(int sig);
+
 
 void	ignore_sigint(void);
 
@@ -325,7 +328,7 @@ void	print_list_content(void *content);
  * @param main the main struct of the program
  * @param variable_key the key of the variable to remove
  */
-int	remove_variable(t_main *main, char *variable_key);
+void	remove_variable(t_main *main, char *variable_key);
 
 char	**convert_list_to_array(t_list *env_list);
 
@@ -545,6 +548,30 @@ int	unset(t_main *main, t_tokens token);
 void	execute_commandline(t_main *main, t_tokens *tokens);
 
 /**
+ * Allocates the needed amount of memory for the process ids
+ * 
+ * @param main the main struct of the program
+ * @param amount the amount of processes to run in that pipeline
+ * (number of pipes + 1)
+ * @returns pointer to the memory allocated
+ */
+int	*malloc_pids(t_main *main, int amount);
+
+/**
+ * Loops through all commands in the pipeline, creates the needed pipes and
+ * forks to run the commands in a childprocess, handles redirects and
+ * runs the command
+ * 
+ * @param main the main struct of the program
+ * @param pipe_array the array of filedescriptors for the pipe(s)
+ * @param pids allocated array of process ids
+ * @param tokens the array of tokens to loop through
+ * @returns 0 on success, > 0 when some system functioncalls in parent failed
+ */
+int	execute_pipeline(t_main *main, int pipe_array[2][2], int *pids,
+	t_tokens *tokens);
+
+/**
  * Checks if command is a builtin or not
  * 
  * @param the token that command is part of
@@ -581,19 +608,6 @@ int	prepare_pipes(int i, int num_of_pipes, int pipe_array[2][2], int *pids);
 void	execute_command(t_main *main, t_tokens token, int *pids);
 
 /**
- * Calls the right builtin function to execute it
- * 
- * @param main the main struct of the program
- * @param token  the token to execute
- */
-int	execute_builtin(t_main *main, t_tokens token, int parent, int open_fds[2]);
-
-void	restore_stdin_stdout(t_main *main, int original_stdin,
-	int original_stdout);
-
-int	is_builtin_not_part_of_pipeline(t_tokens token, int num_of_pipes);
-
-/**
  * Executes either a builtin or a command as a child process.
  * If a builtin is executed, the process is exited with the return
  * value of the builtin-function.
@@ -609,9 +623,38 @@ void	execute_child_process(t_main *main, t_tokens token, int *pids);
  * filedescriptors.
  * 
  * @param main the main struct of the program
+ * @param token the token to execute
+ * @param num_of_pipes the number of pipes left in pipeline
+ */
+int	execute_builtin_in_parent(t_main *main, t_tokens token, int num_of_pipes);
+
+/**
+ * Checks if the command is a builtin and that it is not part of a pipeline
+ * 
+ * @param token the token to check
+ * @param num_of_pipes the number of pipes in pipeline
+ * @returns 1 when command is a builtin not part of pipeline, 0 otherwise
+ */
+int	is_builtin_not_part_of_pipeline(t_tokens token, int num_of_pipes);
+
+/**
+ * Restores the filedescriptors to point back to STDIN and STDOUT
+ * 
+ * @param main the main struct of the program
+ * @param original_stdin duped fd of STDIN
+ * @param original_stdout duped fd of STDOUT
+ */
+void	restore_stdin_stdout(t_main *main, int original_stdin,
+	int original_stdout);
+
+/**
+ * Calls the right builtin function to execute it
+ * 
+ * @param main the main struct of the program
  * @param token  the token to execute
  */
-int	execute_builtin_in_parent(t_main *main, t_tokens token, int num_of_pipes); //TODO check params
+int	execute_builtin(t_main *main, t_tokens token, int parent, int open_fds[2]);
+
 
 char	*find_path(t_main *main, char *command, int *pids);
 

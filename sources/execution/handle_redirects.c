@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 11:06:40 by maheleni          #+#    #+#             */
-/*   Updated: 2024/11/07 09:48:45 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/11/07 14:52:36 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,6 +128,11 @@ int	handle_redirects(t_tokens token)
 		{
 			if (infile != -1)
 				close(infile);
+			if (node->name == NULL)
+			{
+				print_error("ambiguous redirect\n");
+				return (-1);
+			}
 			infile = open_infile(node);
 			if (infile == -1)
 			{

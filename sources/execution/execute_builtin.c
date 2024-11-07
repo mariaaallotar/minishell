@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/31 15:49:13 by maheleni          #+#    #+#             */
-/*   Updated: 2024/11/04 13:25:56 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/11/07 14:08:22 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,15 +43,17 @@ void	restore_stdin_stdout(t_main *main, int original_stdin,
 	{
 		close(original_stdin);
 		close(original_stdout);
-		perror("Exiting minishell because of: ");
+		perror("Exiting minishell because of");
 		free_all_in_parent(main);
 		exit(1);
 	}
+	close(original_stdin);
+	close(original_stdout);
 }
 
 int	is_builtin_not_part_of_pipeline(t_tokens token, int num_of_pipes)
 {
-	if ( token.command == NULL || token.command[0] == NULL)
+	if (token.command == NULL || token.command[0] == NULL)
 		return (0);
 	if (is_builtin(token) && num_of_pipes == 0)
 		return (1);
@@ -61,13 +63,14 @@ int	is_builtin_not_part_of_pipeline(t_tokens token, int num_of_pipes)
 int	execute_builtin_in_parent(t_main *main, t_tokens token, int num_of_pipes)
 {
 	int	exit_code;
-	int	original_stdin_stdout[2];
+	int	orig_stdin_stdout[2];
 
-	if (token.command[0] != NULL && is_builtin_not_part_of_pipeline(token, num_of_pipes))
+	if (token.command[0] != NULL
+		&& is_builtin_not_part_of_pipeline(token, num_of_pipes))
 	{
-		original_stdin_stdout[0] = dup(STDIN_FILENO);
-		original_stdin_stdout[1] = dup(STDOUT_FILENO);
-		if (original_stdin_stdout[0] == -1 || original_stdin_stdout[1] == -1)
+		orig_stdin_stdout[0] = dup(STDIN_FILENO);
+		orig_stdin_stdout[1] = dup(STDOUT_FILENO);
+		if (orig_stdin_stdout[0] == -1 || orig_stdin_stdout[1] == -1)
 		{
 			perror(NULL);
 			main->exit_code = errno;
@@ -78,13 +81,10 @@ int	execute_builtin_in_parent(t_main *main, t_tokens token, int num_of_pipes)
 			main->exit_code = 1;
 			return (1);
 		}
-		exit_code = execute_builtin(main, token, 1, original_stdin_stdout);
+		exit_code = execute_builtin(main, token, 1, orig_stdin_stdout);
 		main->exit_code = exit_code;
-		restore_stdin_stdout(main, original_stdin_stdout[0], original_stdin_stdout[1]);
-		close(original_stdin_stdout[0]);
-		close(original_stdin_stdout[1]);
+		restore_stdin_stdout(main, orig_stdin_stdout[0], orig_stdin_stdout[1]);
 		return (1);
 	}
 	return (0);
 }
-

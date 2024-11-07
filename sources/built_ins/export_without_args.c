@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 09:31:32 by maheleni          #+#    #+#             */
-/*   Updated: 2024/10/30 10:41:59 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/11/07 13:10:16 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,9 +68,13 @@ int	export_without_args(t_main *main)
 	t_list	*cur_node;
 	t_list	*biggest_node;
 
+	if (main->env_list == NULL)
+		return (0);
 	prev_node = get_smallest_node(main->env_list);
 	biggest_node = get_biggest_node(main->env_list);
 	printf("%s\n", (char *) prev_node->content);
+	if (prev_node == biggest_node)
+		return (0);
 	while (1)
 	{
 		cur_node = get_next_node(prev_node, biggest_node, main->env_list);

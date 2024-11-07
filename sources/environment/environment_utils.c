@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 14:37:05 by maheleni          #+#    #+#             */
-/*   Updated: 2024/10/28 15:56:48 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/11/07 13:25:34 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,8 @@ char	**convert_list_to_array(t_list *env_list)
 	t_list	*node;
 	int		i;
 
+	if (env_list == NULL)
+		return (NULL);
 	size = ft_lstsize(env_list);
 	array = malloc ((size + 1) * sizeof(char *));
 	if (array == NULL)
@@ -65,6 +67,8 @@ t_list	*copy_env(char *envp[], t_main *main)
 	t_list	*new;
 	int		i;
 
+	if (envp == NULL || envp[0] == NULL)
+		return (NULL);
 	new = ft_lstnew(ft_strdup(envp[0]));
 	if (new == NULL)
 	{
