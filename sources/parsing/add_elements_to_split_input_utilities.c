@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 15:37:17 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/10/30 15:40:40 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/11/07 10:33:04 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ int	check_for_unclosed_quotes(t_parsing p)
 {
 	if (p.inside_singles || p.inside_doubles)
 	{
-		printf("Error: Unclosed quotes\n");
+		print_error("Error: Unclosed quotes\n");
 		return (1);
 	}
 	return (0);

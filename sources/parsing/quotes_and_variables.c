@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   quotes_and_variables.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 13:56:04 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/11/04 14:15:18 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/11/07 10:35:02 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,8 @@ static void	helper_for_redirects(t_main *main, t_tokens **tokens, int token_id)
 	temp = (*tokens)[token_id].redirects;
 	while (temp)
 	{
-		if (temp->type == INFILE || temp->type == OUTFILE || temp->type == APPEND)
+		if (temp->type == INFILE || temp->type == OUTFILE
+			|| temp->type == APPEND)
 		{	
 			if (!expand_quotes_and_vars(main, tokens, &(temp->name), false))
 				free_all_and_exit_with_free_split_middle(main, tokens);
@@ -32,6 +33,26 @@ static void	helper_for_redirects(t_main *main, t_tokens **tokens, int token_id)
 		}
 		temp = temp->next;
 	}	
+}
+
+static void pop_null_element_in_commands(t_main *main, t_tokens **tokens, int token_id, int cmd_id)
+{
+	char **next;
+	
+	next = NULL;
+	while ((*tokens)[token_id].command[cmd_id + 1])
+	{
+		next = &((*tokens)[token_id].command[cmd_id + 1]);
+		(*tokens)[token_id].command[cmd_id] = ft_strdup(*next);
+		if (!((*tokens)[token_id].command[cmd_id]))
+		{
+			print_error("Error: Failed to malloc pop null elements in commands\n");
+			free_and_exit_quote_malloc(main, tokens, token_id, cmd_id);
+		}
+		free(*next);
+		*next = NULL;
+		cmd_id++;
+	}
 }
 
 void	quotes_and_variables(t_main *main, t_tokens **tokens)
@@ -51,6 +72,8 @@ void	quotes_and_variables(t_main *main, t_tokens **tokens)
 				if (!expand_quotes_and_vars(main, tokens
 						, &(*tokens)[token_id].command[cmd_id], false))
 					free_and_exit_quote_malloc(main, tokens, token_id, cmd_id);
+				if (!((*tokens)[token_id].command[cmd_id]))
+					pop_null_element_in_commands(main, tokens, token_id, cmd_id);
 				cmd_id++;
 			}
 		}

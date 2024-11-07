@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 11:56:14 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/10/30 15:37:50 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/11/07 10:33:21 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ static int	check_for_bonus_symbols(char *input, int id_input)
 	if ((input[id_input] == '|' && input[id_input + 1] == '|')
 		|| input[id_input] == '&' || input[id_input] == '*')
 	{
-		printf("Error: Invalid symbol\n");
+		print_error("Error: Invalid symbol\n");
 		return (1);
 	}
 	return (0);
@@ -57,7 +57,7 @@ static int	malloc_element_in_split_input(t_main *main, char *input
 	main->split_input[id_split] = malloc(len_of_element + 1);
 	if (!main->split_input[id_split])
 	{
-		printf("Error: Failed to malloc element in split_input\n");
+		print_error("Error: Failed to malloc element in split_input\n");
 		return (0);
 	}
 	return (1);

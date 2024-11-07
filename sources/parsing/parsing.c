@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 11:32:36 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/11/04 14:22:47 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/11/07 10:48:45 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,7 @@ static void	malloc_commands(t_main *main, t_tokens **tokens, int size)
 	*tokens = malloc((size) * sizeof(t_tokens));
 	if (!*tokens)
 	{
-		printf("Error: Failed to malloc\n");
+		print_error("Error: Failed to malloc\n");
 		ft_free_split(&main->split_input);
 		exit (1);
 	}	
@@ -121,17 +121,21 @@ int	parsing(t_main *main, t_tokens **tokens)
 {
 	if (!split_input(main))
 		return (0);
-	// print_split_input(main); //REMOVE
 	free(main->input);
+	main->input = NULL;
 	malloc_and_init_tokens(main, tokens);
 	if (check_for_pipe_error(main, tokens))
 		return (0);
-	if (check_for_redirect_error(main, tokens))
+	if (check_for_redirect_error(main))
 		return (0);
 	tokenize(main, tokens);
+	//print_tokens(main, tokens); //REMOVE
 	quotes_and_variables(main, tokens);
 	if (create_heredoc(main, tokens) == 0)
+	{
+		remove_heredocs(main, tokens);
 		return (0);
-	// print_tokens(main, tokens); //REMOVE
+	}
+	//print_tokens(main, tokens); //REMOVE
 	return (1);
 }

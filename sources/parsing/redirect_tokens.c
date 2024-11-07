@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/24 12:13:07 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/11/04 11:20:38 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/11/07 10:50:46 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ void	add_out_or_append(t_main *main, t_tokens **tokens, int cmd_id,
 	}
 }
 
-int	check_for_redirect_error(t_main *main, t_tokens **tokens)
+int	check_for_redirect_error(t_main *main)
 {
 	int	i;
 
@@ -83,15 +83,14 @@ int	check_for_redirect_error(t_main *main, t_tokens **tokens)
 		{
 			if (!(main->split_input[i + 1]))
 			{
-				printf("syntax error near unexpected token '\\n'\n");
-				free_split_and_tokens(main, tokens);
+				print_error("syntax error near unexpected token '\\n'\n");
 				return (1);
 			}
 			if (is_redirect((main->split_input[i + 1])[0]))
 			{
-				printf("syntax error near unexpected token '%s'\n",
-					main->split_input[i + 1]);
-				free_split_and_tokens(main, tokens);
+				print_error("syntax error near unexpected token ");
+				write(STDERR_FILENO, &main->split_input[i + 1], ft_strlen(main->split_input[i + 1]));
+				write(STDERR_FILENO, "\n", 1);
 				return (1);
 			}
 		}
