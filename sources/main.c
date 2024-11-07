@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 10:12:47 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/11/07 10:52:23 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/11/07 14:23:19 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ void	remove_heredocs(t_main *main, t_tokens **tokens)
 	}
 }
 
-int	main(int argc, char *argv[], char *envp[]) //what happens if ./minishell gets arguments?
+int	main(int argc, char *argv[], char *envp[])
 {	
 	t_main 	main;
 	t_tokens *tokens;
@@ -57,7 +57,6 @@ int	main(int argc, char *argv[], char *envp[]) //what happens if ./minishell get
 	initialize_variables(&main, &tokens);
 	tokens = NULL;
 	copy_env(envp, &main);
-	// update_env(&main);	//do we do this at all?
 	while (1)
 	{
 		errno = 0;
@@ -74,7 +73,6 @@ int	main(int argc, char *argv[], char *envp[]) //what happens if ./minishell get
 			continue;
 		}
 		execute_commandline(&main, tokens);
-		//set_exit_status_of_last_line();
 		remove_heredocs(&main, &tokens);
 		free_and_null_split_input(&main);
 		free_token_commands(&main, &tokens);
@@ -83,6 +81,5 @@ int	main(int argc, char *argv[], char *envp[]) //what happens if ./minishell get
 	}
 	free_environment(&(main.env_list));
 	rl_clear_history();
-	//free_signals();
-	exit (main.exit_code);		//just 0? I don't think we ever
+	exit (main.exit_code);
 }
