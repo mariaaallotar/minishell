@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 11:21:19 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/11/06 14:22:22 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/11/07 10:48:01 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,17 @@ typedef struct s_parsing
 /*****************************************************************************/
 /*****************************************************************************/
 
+	//MAIN
+
+/*****************************************************************************/
+/*****************************************************************************/
+
+//Print error message to STD error
+void	print_error(char *error);
+
+/*****************************************************************************/
+/*****************************************************************************/
+
 	//INPUT AND SIGNALS
 
 /*****************************************************************************/
@@ -130,28 +141,28 @@ int	char_is_special(char c);
 void add_special_element(t_main *main, char *input, int *i, int split_index);
 
 //Our own kind of tokenizing function of the input
-void tokenize(t_main *main, t_tokens **command);
+void tokenize(t_main *main, t_tokens **tokens);
 
 //Utility to check for redirection (< or >)
 int	is_redirect(char c);
 
 //Free command struct, free split_input, and exit with the given code
-void free_split_and_tokens(t_main *main, t_tokens **command);
+void free_split_and_tokens(t_main *main, t_tokens **tokens);
 
 //Free the command_token utilizing ft_free_split
-void free_token_commands(t_main *main, t_tokens **command);
+void free_token_commands(t_main *main, t_tokens **tokens);
 
 //Free command tokens, command struct, and split_input, then exit with given code
-void free_all_and_exit(t_main *main, t_tokens **command);
+void free_all_and_exit(t_main *main, t_tokens **tokens);
 
 //Checks for a syntax error where there are two redirects in a row or a redirect then NULL
-int check_for_redirect_error(t_main *main, t_tokens **command);
+int check_for_redirect_error(t_main *main);
 
 //Checks for and adds redirect_in and heredocs to the token struct
-void add_in_or_heredoc(t_main *main, t_tokens **command, int cmd_id, int *spl_id);
+void add_in_or_heredoc(t_main *main, t_tokens **tokens, int cmd_id, int *spl_id);
 
 //Checks for and adds redirect_out and redirect_append to the token struct
-void add_out_or_append(t_main *main, t_tokens **command, int cmd_id, int *spl_id);
+void add_out_or_append(t_main *main, t_tokens **tokens, int cmd_id, int *spl_id);
 
 //Free and null the split_input
 void	free_and_null_split_input(t_main *main);

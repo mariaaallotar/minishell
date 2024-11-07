@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 14:55:37 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/11/06 11:30:15 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/11/07 10:33:50 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ int	create_quote_split(char *str, char ***quote_split)
 		(*quote_split)[id_split] = malloc(split_element_len + 1);
 		if (!(*quote_split)[id_split])
 		{
-			printf("Error: Failed to malloc element in quote_split\n");
+			print_error("Error: Failed to malloc element in quote_split\n");
 			free_split_in_middle(quote_split, id_split - 1);
 			free(*quote_split);
 			return (0);

@@ -46,7 +46,7 @@ void	expand_vars_or_do_inner_expansion(t_main *main, t_tokens **tokens
 		}
 		else if (!find_var_in_env(main, &(*quote_split)[i]))
 		{
-			printf("Error: Failed to malloc environment variable in quotes\n");
+			print_error("Error: Failed to malloc environment variable in quotes\n");
 			free_and_exit_quote_split_expand(main, tokens, quote_split, i);
 		}
 		i++;
@@ -69,7 +69,7 @@ static int	combine_remaining_elements(t_main *main, t_tokens **tokens
 		*str = ft_strjoin(temp, (*quote_split)[next_id(main, *quote_split)]);
 		if (!*str)
 		{
-			printf("Error: Failed to malloc str in combine quote_split\n");
+			print_error("Error: Failed to malloc str in combine quote_split\n");
 			free(temp);
 			return (0);
 		}
@@ -121,23 +121,28 @@ static int	combine_quote_split(t_main *main, t_tokens **tokens
 		return (1);
 	if (num_of_existing_elements == 1)
 	{
-		*str = ft_strdup((*quote_split)[next_id(main, *quote_split)]); //CHANGE TO FIND FIRST ELEMENT
+		*str = ft_strdup((*quote_split)[next_id(main, *quote_split)]);
 		if (!*str)
 		{
-			printf("Error: Failed to malloc str in combine quote_split\n");
+			print_error("Error: Failed to malloc str in combine quote_split\n");
 			return (0);
 		}
 		return (1);
 	}
 	else
 	{
+		temp = NULL;
 		temp = ft_strdup((*quote_split)[next_id(main, *quote_split)]);
 		if (!temp)
+		{
+			print_error("Error: Failed to malloc temp var in combine_quote_split\n");
 			return (0);
+		}
 		(main->id_quote_split)++;
 		*str = ft_strjoin(temp, (*quote_split)[next_id(main, *quote_split)]);
 		if (!*str)
 		{
+			print_error("Error: Failed to malloc str in combine_quote_split\n");
 			free(temp);
 			return (0);
 		}

@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 11:39:13 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/10/25 14:18:08 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/11/07 10:36:10 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	add_special_element(t_main *main, char *input, int *i, int split_index)
 		main->split_input[split_index] = malloc(3);
 		if (!main->split_input[split_index])
 		{
-			printf("Error: Failed to malloc redirect in split_input\n");
+			print_error("Error: Failed to malloc redirect in split_input\n");
 			exit_free_split_element_malloc_failed(main, split_index);
 		}
 		main->split_input[split_index][0] = input[(*i)++];
@@ -33,7 +33,7 @@ void	add_special_element(t_main *main, char *input, int *i, int split_index)
 		main->split_input[split_index] = malloc(2);
 		if (!main->split_input[split_index])
 		{
-			printf("Error: Failed to malloc redirect in split_input\n");
+			print_error("Error: Failed to malloc redirect in split_input\n");
 			exit_free_split_element_malloc_failed(main, split_index);
 		}
 		main->split_input[split_index][0] = input[(*i)++];

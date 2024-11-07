@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 14:59:47 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/11/06 11:55:35 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/11/07 10:34:24 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ int	check_for_heredoc_quotes(char **str, bool is_heredoc
 	{
 		if (!add_quotes_back_to_str(str, quote_type))
 		{
-			printf("Error: Failed to malloc add-outside-quotes\n");
+			print_error("Error: Failed to malloc add-outside-quotes\n");
 			ft_free_split(quote_split);
 			return (0);
 		}
@@ -96,7 +96,7 @@ int	remove_outside_quotes(char **str)
 	*str = malloc(remove_quote_len);
 	if (!*str)
 	{
-		printf("Error: Failed to malloc remove-outside-quotes\n");
+		print_error("Error: Failed to malloc remove-outside-quotes\n");
 		free(temp);
 		return (0);
 	}

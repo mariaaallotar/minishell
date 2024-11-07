@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/25 10:37:36 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/10/30 15:41:32 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/11/07 10:32:49 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ static void	dup_cmd(t_main *main, t_tokens **tokens, int spl_id, char **cmd)
 	*cmd = ft_strdup(main->split_input[spl_id]);
 	if (!*cmd)
 	{
-		printf("Error: Failed to malloc add element to command\n");
+		print_error("Error: Failed to malloc add element to command\n");
 		free_all_and_exit(main, tokens);
 	}
 }

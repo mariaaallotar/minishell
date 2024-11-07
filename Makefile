@@ -6,7 +6,7 @@
 #    By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/20 15:07:12 by eberkowi          #+#    #+#              #
-#    Updated: 2024/11/05 13:48:49 by eberkowi         ###   ########.fr        #
+#    Updated: 2024/11/07 10:40:15 by eberkowi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,6 +16,7 @@ FLAGS := -Wall -Wextra -Werror
 LINKFLAGS := -lreadline
 
 CFILES := main.c \
+		utilities.c \
 		parsing/parsing.c \
 		parsing/split_input.c \
 		parsing/add_elements_to_split_input.c \

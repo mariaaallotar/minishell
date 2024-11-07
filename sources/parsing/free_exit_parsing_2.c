@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/24 10:44:31 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/11/05 13:51:34 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/11/07 10:36:19 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ void	free_token_redirects(t_main *main, t_tokens **tokens)
 
 void	free_and_exit_node_malloc_failed(t_main *main, t_tokens **tokens)
 {
-	printf("Error: Failed to malloc node for redirect linked list\n");
+	print_error("Error: Failed to malloc node for redirect linked list\n");
 	ft_free_split(&main->split_input);
 	free_token_commands(main, tokens);
 	free_token_redirects(main, tokens);

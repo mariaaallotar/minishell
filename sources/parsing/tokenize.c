@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 10:23:05 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/11/05 13:41:20 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/11/07 10:35:26 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	check_for_pipe_error(t_main *main, t_tokens **tokens)
 		if ((main->split_input[i])[0] == '|'
 			&& !(main->split_input[i + 1]))
 		{
-			printf("Error: Pipe followed by NULL\n");
+			print_error("Error: Pipe followed by NULL\n");
 			free_split_and_tokens(main, tokens);
 			return (1);
 		}
@@ -39,7 +39,7 @@ static void	malloc_commands(t_main *main, t_tokens **tokens, int cmd_id)
 	(*tokens)[cmd_id].command = malloc((temp + 1) * sizeof(char *));
 	if (!(*tokens)[cmd_id].command)
 	{
-		printf("Error: Failed to malloc command array in struct\n");
+		print_error("Error: Failed to malloc command array in struct\n");
 		free_all_and_exit(main, tokens);
 	}
 }

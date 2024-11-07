@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 11:52:55 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/11/05 13:43:46 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/11/07 10:33:45 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,14 +20,14 @@ static int	create_filename(char **name, int num_of_heredocs)
 	heredoc_num = ft_itoa(num_of_heredocs);
 	if (!heredoc_num)
 	{
-		printf("Error: Failed to malloc heredoc filename number\n");
+		print_error("Error: Failed to malloc heredoc filename number\n");
 		return (0);
 	}
 	*name = NULL;
 	*name = ft_strjoin("heredoc_", heredoc_num);
 	if (!*name)
 	{
-		printf("Error: Failed to malloc heredoc filename joining\n");
+		print_error("Error: Failed to malloc heredoc filename joining\n");
 		free(heredoc_num);
 		return (0);
 	}
@@ -64,7 +64,7 @@ static int	readline_to_file(t_main *main, t_tokens **tokens
 		}
 		if (!input)
 		{
-			printf("Error: Malloc failed in readline for heredoc\n");
+			print_error("Error: Malloc failed in readline for heredoc\n");
 			free_all_and_exit(main, tokens);
 		}
 		input_len = ft_strlen(input);
@@ -78,7 +78,7 @@ static int	readline_to_file(t_main *main, t_tokens **tokens
 		{
 			if (!expand_quotes_and_vars(main, tokens, &input, true))
 			{
-				printf("Error: Malloc failed in expand_quotes in heredoc\n");
+				print_error("Error: Malloc failed in expand_quotes in heredoc\n");
 				free(input);
 				free_all_and_exit(main, tokens);
 			}
