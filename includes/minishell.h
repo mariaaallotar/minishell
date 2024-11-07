@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 11:21:19 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/11/04 12:17:05 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/11/07 10:25:33 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -608,7 +608,7 @@ char	*get_path(t_main *main, char **command, int *pids);
 
 int	empty_command(char *command);
 
-int	is_direcotory(char *command);
+int	is_directory(char *command);
 
 int	is_path_to_executable(char *command);
 

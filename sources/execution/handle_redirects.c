@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 11:06:40 by maheleni          #+#    #+#             */
-/*   Updated: 2024/11/04 14:09:01 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/11/07 09:48:45 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,7 @@ int	open_outfile(t_redirect_node *node)
 
 int	dup2_file(int file, int std_fileno)
 {
-	if (file != -1 && dup2(file, std_fileno) == -1)
+	if (dup2(file, std_fileno) == -1)
 	{
 		close(file);
 		perror(NULL);
@@ -146,13 +146,17 @@ int	handle_redirects(t_tokens token)
 		}
 		node = node->next;
 	}
-	if (dup2_file(infile, STDIN_FILENO) == -1)
+	if (infile != -1 && dup2_file(infile, STDIN_FILENO) == -1)
 	{
+		close(infile);
 		if (outfile != -1)
 			close(outfile);
 		return (-1);
 	}
-	if (dup2_file(outfile, STDOUT_FILENO) == -1)
+	if (outfile != -1 && dup2_file(outfile, STDOUT_FILENO) == -1)
+	{
+		close(outfile);
 		return (-1);
+	}
 	return (0);
 }

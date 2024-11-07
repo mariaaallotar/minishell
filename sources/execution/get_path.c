@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 13:45:33 by maheleni          #+#    #+#             */
-/*   Updated: 2024/11/06 11:30:22 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/11/07 10:48:18 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,8 @@
 
 int	is_path_to_file(char *command)
 {
-	if (access((const char *)command, F_OK) == 0)
+	if (access((const char *)command, F_OK) == 0
+		&& ft_strchr(command, '/') != NULL)
 		return (1);
 	else if (ft_strchr(command, '/'))
 		return (1);
@@ -29,7 +30,7 @@ int	is_path_to_executable(char *command)
 	return (0);
 }
 
-int	is_direcotory(char *command)
+int	is_directory(char *command)
 {
 	struct stat	file_stat;
 
@@ -37,19 +38,17 @@ int	is_direcotory(char *command)
 	{
 		if(stat(command, &file_stat) == 0)
 		{
-			if(S_ISDIR(file_stat.st_mode))
+			if(S_ISDIR(file_stat.st_mode) && ft_strrchr(command, '/') != NULL)
 			{
 				errno = EISDIR;
 				return (1);
 			}
-			else
-				return (0);
+			return (0);
 		}
 		else
 			return (1);
 	}
-	else
-		return (0);
+	return (0);
 }
 
 int	empty_command(char *command)
@@ -64,12 +63,13 @@ int	empty_command(char *command)
 
 char	*get_path(t_main *main, char **command, int *pids)
 {
+	errno = 0;
 	if (command == NULL || empty_command(command[0]))
 	{
 		errno = 127;
 		return (NULL);
 	}
-	else if (is_direcotory(command[0]))
+	else if (is_directory(command[0]))
 		return (NULL);
 	else if (is_path_to_file(command[0]))
 	{

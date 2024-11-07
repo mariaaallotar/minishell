@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 10:00:41 by maheleni          #+#    #+#             */
-/*   Updated: 2024/11/06 11:09:16 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/11/07 10:17:20 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,8 +49,10 @@ void	execute_command(t_main *main, t_tokens token, int *pids)
 		else
 			perror(token.command[0]);
 		free_all_in_child(main, pids);
-		if (errno == EISDIR)
-			exit(126);
+		if (errno == EACCES || errno == EISDIR)
+			exit (126);
+		else if (errno == ENOENT)
+			exit (127);
 		exit (errno);
 	}
 	env = convert_list_to_array(main->env_list);
