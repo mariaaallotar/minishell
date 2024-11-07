@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 13:45:33 by maheleni          #+#    #+#             */
-/*   Updated: 2024/11/07 10:48:18 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/11/07 11:27:05 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,12 +64,7 @@ int	empty_command(char *command)
 char	*get_path(t_main *main, char **command, int *pids)
 {
 	errno = 0;
-	if (command == NULL || empty_command(command[0]))
-	{
-		errno = 127;
-		return (NULL);
-	}
-	else if (is_directory(command[0]))
+	if (is_directory(command[0]))
 		return (NULL);
 	else if (is_path_to_file(command[0]))
 	{

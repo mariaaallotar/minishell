@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 10:12:47 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/11/04 14:16:36 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/11/07 10:52:23 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@ void	initialize_variables(t_main *main, t_tokens **tokens)
 	main->num_of_pipes = 0;
 	main->elements_in_command = 0;
 	main->id_command = 0;
+	main->quote_split_length = 0;
+	main->id_quote_split = 0;
 }
 
 void	remove_heredocs(t_main *main, t_tokens **tokens)
@@ -53,6 +55,7 @@ int	main(int argc, char *argv[], char *envp[]) //what happens if ./minishell get
 	(void)argc;
 	(void)*argv;
 	initialize_variables(&main, &tokens);
+	tokens = NULL;
 	copy_env(envp, &main);
 	// update_env(&main);	//do we do this at all?
 	while (1)
@@ -65,8 +68,8 @@ int	main(int argc, char *argv[], char *envp[]) //what happens if ./minishell get
 			continue;
 		if (!parsing(&main, &tokens))
 		{
-			remove_heredocs(&main, &tokens);
-			free(main.input);
+			if (main.input)
+				free(main.input);
 			ft_free_split(&main.split_input);
 			continue;
 		}

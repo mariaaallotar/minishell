@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/24 12:16:01 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/11/01 11:35:19 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/11/07 10:34:42 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static int	expand_vars_in_quotes_inner(t_main *main, char ***quote_split)
 	{
 		if (!find_var_in_env(main, &(*quote_split)[i]))
 		{
-			printf("Error: Failed to malloc environment variable in quotes\n");
+			print_error("Error: Failed to malloc environment variable in quotes\n");
 			i++;
 			while ((*quote_split)[i])
 			{
@@ -53,7 +53,7 @@ static int	combine_remaining_elements_inner(char ***quote_split, char **str)
 		*str = ft_strjoin(temp, (*quote_split)[i]);
 		if (!*str)
 		{
-			printf("Error: Failed to malloc str in combine quote_split\n");
+			print_error("Error: Failed to malloc str in combine quote_split\n");
 			free(temp);
 			return (0);
 		}
@@ -73,7 +73,7 @@ static int	combine_quote_split_inner(char ***quote_split, char **str)
 		*str = ft_strdup((*quote_split)[0]);
 		if (!*str)
 		{
-			printf("Error: Failed to malloc str in combine quote_split\n");
+			print_error("Error: Failed to malloc str in combine quote_split\n");
 			return (0);
 		}
 		return (1);
@@ -89,7 +89,7 @@ static int	combine_quote_split_inner(char ***quote_split, char **str)
 
 static void	print_error_and_free_split(char ***quote_split)
 {
-	printf("Error: Failed to malloc in inner_expansion\n");
+	print_error("Error: Failed to malloc in inner_expansion\n");
 	ft_free_split(quote_split);
 }
 

@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 11:21:19 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/11/07 10:25:33 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/11/07 11:04:55 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@
 # define HEREDOC 101
 # define OUTFILE 102
 # define APPEND 103
+# define NULL_VAR 104
 
 extern int signal_received;
 
@@ -70,6 +71,8 @@ typedef struct s_main
 	int 	num_of_pipes;
 	int		elements_in_command;
 	int		id_command;
+	int		quote_split_length;
+	int		id_quote_split;
 } t_main;
 
 typedef struct s_parsing
@@ -80,6 +83,17 @@ typedef struct s_parsing
 	bool inside_singles;
 	bool inside_doubles;
 } t_parsing;
+
+/*****************************************************************************/
+/*****************************************************************************/
+
+	//MAIN
+
+/*****************************************************************************/
+/*****************************************************************************/
+
+//Print error message to STD error
+void	print_error(char *error);
 
 /*****************************************************************************/
 /*****************************************************************************/
@@ -127,28 +141,28 @@ int	char_is_special(char c);
 void add_special_element(t_main *main, char *input, int *i, int split_index);
 
 //Our own kind of tokenizing function of the input
-void tokenize(t_main *main, t_tokens **command);
+void tokenize(t_main *main, t_tokens **tokens);
 
 //Utility to check for redirection (< or >)
 int	is_redirect(char c);
 
 //Free command struct, free split_input, and exit with the given code
-void free_split_and_tokens(t_main *main, t_tokens **command);
+void free_split_and_tokens(t_main *main, t_tokens **tokens);
 
 //Free the command_token utilizing ft_free_split
-void free_token_commands(t_main *main, t_tokens **command);
+void free_token_commands(t_main *main, t_tokens **tokens);
 
 //Free command tokens, command struct, and split_input, then exit with given code
-void free_all_and_exit(t_main *main, t_tokens **command);
+void free_all_and_exit(t_main *main, t_tokens **tokens);
 
 //Checks for a syntax error where there are two redirects in a row or a redirect then NULL
-int check_for_redirect_error(t_main *main, t_tokens **command);
+int check_for_redirect_error(t_main *main);
 
 //Checks for and adds redirect_in and heredocs to the token struct
-void add_in_or_heredoc(t_main *main, t_tokens **command, int cmd_id, int *spl_id);
+void add_in_or_heredoc(t_main *main, t_tokens **tokens, int cmd_id, int *spl_id);
 
 //Checks for and adds redirect_out and redirect_append to the token struct
-void add_out_or_append(t_main *main, t_tokens **command, int cmd_id, int *spl_id);
+void add_out_or_append(t_main *main, t_tokens **tokens, int cmd_id, int *spl_id);
 
 //Free and null the split_input
 void	free_and_null_split_input(t_main *main);
@@ -241,6 +255,9 @@ int	check_for_unclosed_quotes(t_parsing p);
 
 //Checks for a pipe error where there is a pipe then nothing following
 int	check_for_pipe_error(t_main *main, t_tokens **tokens);
+
+//Return and change the index of the next non-NULL element in quote_split
+int next_id(t_main *main, char **quote_split);
 
 /*****************************************************************************/
 /*****************************************************************************/

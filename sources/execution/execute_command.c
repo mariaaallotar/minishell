@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 10:00:41 by maheleni          #+#    #+#             */
-/*   Updated: 2024/11/07 10:17:20 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/11/07 11:10:56 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,6 +92,8 @@ void	execute_child_process(t_main *main, t_tokens token, int *pids)
 	int	status;
 
 	activate_signals_for_child();
+	if (token.command == NULL || token.command[0] == NULL)
+		exit(0);
 	if (is_builtin(token))
 	{
 		status = execute_builtin(main, token, 0, NULL);

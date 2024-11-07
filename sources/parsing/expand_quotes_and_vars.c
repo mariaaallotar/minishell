@@ -46,7 +46,7 @@ void	expand_vars_or_do_inner_expansion(t_main *main, t_tokens **tokens
 		}
 		else if (!find_var_in_env(main, &(*quote_split)[i]))
 		{
-			printf("Error: Failed to malloc environment variable in quotes\n");
+			print_error("Error: Failed to malloc environment variable in quotes\n");
 			free_and_exit_quote_split_expand(main, tokens, quote_split, i);
 		}
 		i++;
@@ -56,54 +56,112 @@ void	expand_vars_or_do_inner_expansion(t_main *main, t_tokens **tokens
 static int	combine_remaining_elements(t_main *main, t_tokens **tokens
 		, char ***quote_split, char **str)
 {
-	int		i;
 	char	*temp;
 
-	i = 2;
 	temp = NULL;
-	while ((*quote_split)[i])
+	while (main->id_quote_split < main->quote_split_length)
 	{
 		temp = ft_strdup(*str);
 		if (!temp)
 			free_and_exit_combine_elements(main, tokens, quote_split);
 		free(*str);
 		*str = NULL;
-		*str = ft_strjoin(temp, (*quote_split)[i]);
+		*str = ft_strjoin(temp, (*quote_split)[next_id(main, *quote_split)]);
 		if (!*str)
 		{
-			printf("Error: Failed to malloc str in combine quote_split\n");
+			print_error("Error: Failed to malloc str in combine quote_split\n");
 			free(temp);
 			return (0);
 		}
 		free(temp);
 		temp = NULL;
-		i++;
+		(main->id_quote_split)++;
 	}
 	return (1);
+}
+
+static int get_num_of_existing_elements(t_main *main, char **quote_split)
+{
+	int i;
+	int result;
+
+	i = 0;
+	result = 0;
+	while (i < main->quote_split_length)
+	{
+		if (quote_split[i])
+			result++;
+		i++;
+	}
+	return (result);
+}
+
+int next_id(t_main *main, char **quote_split)
+{
+	while(main->id_quote_split < main->quote_split_length)
+	{
+		if (quote_split[main->id_quote_split])
+			return (main->id_quote_split);
+		(main->id_quote_split)++;
+	}
+	return (0);
 }
 
 static int	combine_quote_split(t_main *main, t_tokens **tokens
 		, char ***quote_split, char **str)
 {
+	int num_of_existing_elements;
+	char *temp;
+
 	free(*str);
 	*str = NULL;
-	if (!(*quote_split)[1])
+	main->id_quote_split = 0;
+	num_of_existing_elements = get_num_of_existing_elements(main, *quote_split);
+	if (num_of_existing_elements == 0)
+		return (1);
+	if (num_of_existing_elements == 1)
 	{
-		*str = ft_strdup((*quote_split)[0]);
+		*str = ft_strdup((*quote_split)[next_id(main, *quote_split)]);
 		if (!*str)
 		{
-			printf("Error: Failed to malloc str in combine quote_split\n");
+			print_error("Error: Failed to malloc str in combine quote_split\n");
 			return (0);
 		}
 		return (1);
 	}
 	else
-		*str = ft_strjoin((*quote_split)[0], (*quote_split)[1]);
-	if (!*str)
-		return (0);
+	{
+		temp = NULL;
+		temp = ft_strdup((*quote_split)[next_id(main, *quote_split)]);
+		if (!temp)
+		{
+			print_error("Error: Failed to malloc temp var in combine_quote_split\n");
+			return (0);
+		}
+		(main->id_quote_split)++;
+		*str = ft_strjoin(temp, (*quote_split)[next_id(main, *quote_split)]);
+		if (!*str)
+		{
+			print_error("Error: Failed to malloc str in combine_quote_split\n");
+			free(temp);
+			return (0);
+		}
+		free(temp);
+		(main->id_quote_split)++;
+	}
+
 	if (!combine_remaining_elements(main, tokens, quote_split, str))
 		return (0);
 	return (1);
+}
+
+static void get_quote_split_length(t_main *main, char **quote_split)
+{
+	main->quote_split_length = 0;
+	if (!quote_split)
+		return ;
+	while (quote_split[main->quote_split_length])
+		(main->quote_split_length)++;
 }
 
 int	expand_quotes_and_vars(t_main *main, t_tokens **tokens
@@ -124,15 +182,17 @@ int	expand_quotes_and_vars(t_main *main, t_tokens **tokens
 	if (!create_quote_split(*str, &quote_split))
 		return (0);
 	//print_quote_split(quote_split); //REMOVE
+	get_quote_split_length(main, quote_split);
+	//printf("quote_split_length = %d\n", main->quote_split_length);
 	expand_vars_or_do_inner_expansion(main, tokens, &quote_split, expand);
 	if (!combine_quote_split(main, tokens, &quote_split, str))
 	{
-		ft_free_split(&quote_split);
+		ft_free_split(&quote_split); //NEED TO CHANGE THIS TO USE LENGTH INSTEAD OF NULL
 		return (0);
 	}
-	if (!check_for_heredoc_quotes(str, is_heredoc, expand.quote_type
-			, &quote_split))
+	if (!check_for_heredoc_quotes(str, is_heredoc, expand.quote_type, &quote_split))
 		return (0);
-	ft_free_split(&quote_split);
+	//printf("combined_quote_split = %s\n", *str);
+	ft_free_split(&quote_split); //NEED TO CHANGE THIS TO USE LENGTH INSTEAD OF NULL
 	return (1);
 }
