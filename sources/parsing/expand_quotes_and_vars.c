@@ -53,33 +53,6 @@ void	expand_vars_or_do_inner_expansion(t_main *main, t_tokens **tokens
 	}	
 }
 
-static int	combine_remaining_elements(t_main *main, t_tokens **tokens
-		, char ***quote_split, char **str)
-{
-	char	*temp;
-
-	temp = NULL;
-	while (main->id_quote_split < main->quote_split_length)
-	{
-		temp = ft_strdup(*str);
-		if (!temp)
-			free_and_exit_combine_elements(main, tokens, quote_split);
-		free(*str);
-		*str = NULL;
-		*str = ft_strjoin(temp, (*quote_split)[next_id(main, *quote_split)]);
-		if (!*str)
-		{
-			print_error("Error: Failed to malloc str in combine quote_split\n");
-			free(temp);
-			return (0);
-		}
-		free(temp);
-		temp = NULL;
-		(main->id_quote_split)++;
-	}
-	return (1);
-}
-
 static int get_num_of_existing_elements(t_main *main, char **quote_split)
 {
 	int i;
@@ -107,6 +80,34 @@ int next_id(t_main *main, char **quote_split)
 	return (0);
 }
 
+static int	combine_remaining_elements(t_main *main, t_tokens **tokens
+		, char ***quote_split, char **str, int num_of_existing_elements)
+{
+	char	*temp;
+
+	temp = NULL;
+	//printf("id_quote_split_value = %d\n", main->id_quote_split);
+	while (main->id_quote_split < num_of_existing_elements)
+	{
+		temp = ft_strdup(*str);
+		if (!temp)
+			free_and_exit_combine_elements(main, tokens, quote_split);
+		free(*str);
+		*str = NULL;
+		*str = ft_strjoin(temp, (*quote_split)[next_id(main, *quote_split)]);
+		if (!*str)
+		{
+			print_error("Error: Failed to malloc str in combine quote_split\n");
+			free(temp);
+			return (0);
+		}
+		free(temp);
+		temp = NULL;
+		(main->id_quote_split)++;
+	}
+	return (1);
+}
+
 static int	combine_quote_split(t_main *main, t_tokens **tokens
 		, char ***quote_split, char **str)
 {
@@ -117,6 +118,8 @@ static int	combine_quote_split(t_main *main, t_tokens **tokens
 	*str = NULL;
 	main->id_quote_split = 0;
 	num_of_existing_elements = get_num_of_existing_elements(main, *quote_split);
+	//printf("elements_in_quote = %d\n", main->quote_split_length);
+	//printf("num_of_existing = %d\n", num_of_existing_elements);
 	if (num_of_existing_elements == 0)
 		return (1);
 	if (num_of_existing_elements == 1)
@@ -150,7 +153,7 @@ static int	combine_quote_split(t_main *main, t_tokens **tokens
 		(main->id_quote_split)++;
 	}
 
-	if (!combine_remaining_elements(main, tokens, quote_split, str))
+	if (!combine_remaining_elements(main, tokens, quote_split, str, num_of_existing_elements))
 		return (0);
 	return (1);
 }
