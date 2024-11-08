@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 11:52:55 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/11/07 15:18:45 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/11/08 12:31:16 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,63 +32,6 @@ static int	create_filename(char **name, int num_of_heredocs)
 		return (0);
 	}
 	free(heredoc_num);
-	return (1);
-}
-
-int	event(void)
-{
-	return (0);
-}
-
-static int	readline_to_file(t_main *main, t_tokens **tokens
-		, t_redirect_node *temp)
-{
-	int		heredoc_fd;
-	char	*input;
-	int		input_len;
-	int		delimiter_len;
-
-	delimiter_len = ft_strlen(temp->delimiter);
-	heredoc_fd = open(temp->name, O_WRONLY | O_TRUNC | O_CREAT, 0644);
-	activate_heredoc_signals();
-	rl_event_hook = event;
-	while (1)
-	{
-		input = readline("> ");
-		if (signal_received)
-		{
-			close (heredoc_fd);
-			main->exit_code = signal_received;
-			signal_received = 0;
-			return (0);
-		}
-		if (!input)
-		{
-			print_error("Error: Malloc failed in readline for heredoc\n");
-			free_all_and_exit(main, tokens);
-		}
-		input_len = ft_strlen(input);
-		if (!ft_strncmp(input, temp->delimiter, delimiter_len + 1))
-		{
-			free(input);
-			input = NULL;
-			break ;
-		}
-		if (!temp->delimiter_has_quotes)
-		{
-			if (!expand_quotes_and_vars(main, tokens, &input, true))
-			{
-				print_error("Error: Malloc failed in expand_quotes in heredoc\n");
-				free(input);
-				free_all_and_exit(main, tokens);
-			}
-		}
-		write(heredoc_fd, input, ft_strlen(input));
-		write(heredoc_fd, "\n", 1);
-		free(input);
-		input = NULL;
-	}
-	close(heredoc_fd);
 	return (1);
 }
 

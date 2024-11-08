@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 13:56:04 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/11/07 10:35:02 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/11/08 13:51:56 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,10 +35,11 @@ static void	helper_for_redirects(t_main *main, t_tokens **tokens, int token_id)
 	}	
 }
 
-static void pop_null_element_in_commands(t_main *main, t_tokens **tokens, int token_id, int cmd_id)
+static void	pop_null_element_in_cmds(t_main *main, t_tokens **tokens
+		, int token_id, int cmd_id)
 {
-	char **next;
-	
+	char	**next;
+
 	next = NULL;
 	while ((*tokens)[token_id].command[cmd_id + 1])
 	{
@@ -46,7 +47,7 @@ static void pop_null_element_in_commands(t_main *main, t_tokens **tokens, int to
 		(*tokens)[token_id].command[cmd_id] = ft_strdup(*next);
 		if (!((*tokens)[token_id].command[cmd_id]))
 		{
-			print_error("Error: Failed to malloc pop null elements in commands\n");
+			print_error("Error: Failed to malloc pop null elements in cmds\n");
 			free_and_exit_quote_malloc(main, tokens, token_id, cmd_id);
 		}
 		free(*next);
@@ -73,7 +74,7 @@ void	quotes_and_variables(t_main *main, t_tokens **tokens)
 						, &(*tokens)[token_id].command[cmd_id], false))
 					free_and_exit_quote_malloc(main, tokens, token_id, cmd_id);
 				if (!((*tokens)[token_id].command[cmd_id]))
-					pop_null_element_in_commands(main, tokens, token_id, cmd_id);
+					pop_null_element_in_cmds(main, tokens, token_id, cmd_id);
 				cmd_id++;
 			}
 		}

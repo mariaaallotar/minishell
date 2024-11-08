@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/24 12:13:07 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/11/08 09:57:18 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/11/08 13:48:59 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,16 @@ void	add_out_or_append(t_main *main, t_tokens **tokens, int cmd_id,
 	}
 }
 
+static void	write_syntax_error(t_main *main, int i)
+{
+	size_t	len;
+
+	len = ft_strlen(main->split_input[i + 1]);
+	print_error("syntax error near unexpected token ");
+	write(STDERR_FILENO, &main->split_input[i + 1], len);
+	write(STDERR_FILENO, "\n", 1);
+}
+
 int	check_for_redirect_error(t_main *main)
 {
 	int	i;
@@ -90,9 +100,7 @@ int	check_for_redirect_error(t_main *main)
 			if (is_redirect((main->split_input[i + 1])[0]))
 			{
 				main->exit_code = 2;
-				print_error("syntax error near unexpected token ");
-				write(STDERR_FILENO, &main->split_input[i + 1], ft_strlen(main->split_input[i + 1]));
-				write(STDERR_FILENO, "\n", 1);
+				write_syntax_error(main, i);
 				return (1);
 			}
 		}

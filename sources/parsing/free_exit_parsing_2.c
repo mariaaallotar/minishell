@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/24 10:44:31 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/11/07 10:36:19 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/11/08 10:38:00 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,8 +44,6 @@ void	free_token_redirects(t_main *main, t_tokens **tokens)
 	t_redirect_node	*temp_next;
 
 	token_number = 0;
-	// char *message = "Before free_token_redirects\n";
-	// write(STDERR_FILENO, message, ft_strlen(message));
 	while (token_number < main->num_of_pipes + 1)
 	{
 		temp = (*tokens)[token_number].redirects;
@@ -62,8 +60,6 @@ void	free_token_redirects(t_main *main, t_tokens **tokens)
 		}
 		token_number++;
 	}
-	// message = "After free_token_redirects\n";
-	// write(STDERR_FILENO, message, ft_strlen(message));
 }
 
 void	free_and_exit_node_malloc_failed(t_main *main, t_tokens **tokens)
@@ -77,13 +73,15 @@ void	free_and_exit_node_malloc_failed(t_main *main, t_tokens **tokens)
 	exit (1);
 }
 
-void	free_and_exit_variable_malloc_failed(t_main *main, int i)
+void	free_and_exit_quote_split_expand(t_main *main, t_tokens **tokens
+		, char ***quote_split, int i)
 {
-	while (main->split_input[i])
+	i++;
+	while ((*quote_split)[i])
 	{
-		free(main->split_input[i]);
+		free((*quote_split)[i]);
 		i++;
 	}
-	ft_free_split(&main->split_input);
-	exit (1);
+	ft_free_split(quote_split);
+	free_all_and_exit(main, tokens);
 }

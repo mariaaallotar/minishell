@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 12:11:12 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/11/07 14:23:17 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/11/08 13:13:10 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,6 @@ int	handle_inputs(char **input)
 	*input = readline("minishell: ");
 	if (*input == NULL)
 	{
-		// message = "exit\n";
-		// write(STDERR_FILENO, message, ft_strlen(message));
 		printf("exit\n");
 		return (-1);
 	}
