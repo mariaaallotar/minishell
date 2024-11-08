@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 11:52:55 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/11/07 10:33:45 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/11/07 15:18:45 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ static int	readline_to_file(t_main *main, t_tokens **tokens
 		if (signal_received)
 		{
 			close (heredoc_fd);
-			main->exit_code = signal_received; // REMOVE NOT HERE
+			main->exit_code = signal_received;
 			signal_received = 0;
 			return (0);
 		}

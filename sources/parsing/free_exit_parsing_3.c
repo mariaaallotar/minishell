@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/24 10:44:31 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/11/07 10:34:46 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/11/08 10:24:18 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,4 +50,12 @@ void	free_and_exit_quote_split_expand(t_main *main, t_tokens **tokens
 	}
 	ft_free_split(quote_split);
 	free_all_and_exit(main, tokens);
+}
+
+int pipe_syntax_error(t_main *main, t_tokens **tokens)
+{
+	print_error("Error: syntax error near unexpected token `|'\n");
+	main->exit_code = 2;
+	free(*tokens);
+	return (1);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 11:21:19 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/11/07 11:04:55 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/11/08 10:24:04 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,7 @@ typedef struct s_main
 	int		id_command;
 	int		quote_split_length;
 	int		id_quote_split;
+	int		num_of_existing_elements;
 } t_main;
 
 typedef struct s_parsing
@@ -258,6 +259,9 @@ int	check_for_pipe_error(t_main *main, t_tokens **tokens);
 
 //Return and change the index of the next non-NULL element in quote_split
 int next_id(t_main *main, char **quote_split);
+
+//Free tokens and print error but NOT exit for pipe syntax error
+int pipe_syntax_error(t_main *main, t_tokens **tokens);
 
 /*****************************************************************************/
 /*****************************************************************************/
