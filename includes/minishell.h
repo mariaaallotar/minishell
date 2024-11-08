@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 11:21:19 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/11/07 15:46:02 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/11/08 12:38:04 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -590,15 +590,6 @@ int	is_builtin(t_tokens token);
  */
 void	close_pipes_in_parent(int i, int num_of_pipes, int *pipe_left, int *pipe_right);
 
-
-void	close_pipes_on_error(int *pipe);
-
-int	create_fork(int i, int num_of_pipes, int pipe_array[2][2], int *pids);
-
-void	reassign_pipe_right_to_left(int pipe_array[2][2]);
-
-int	prepare_pipes(int i, int num_of_pipes, int pipe_array[2][2], int *pids);
-
 /**
  * Finds path to the command and execues it with execve
  * 
@@ -655,24 +646,102 @@ void	restore_stdin_stdout(t_main *main, int original_stdin,
  */
 int	execute_builtin(t_main *main, t_tokens token, int parent, int open_fds[2]);
 
-
+/**
+ * Finds the path to the command by looking up the PATH variable
+ * 
+ * @param main the main struct of the program
+ * @param command the command to find the path for
+ * @param pids allocated array of processids
+ * @returns the path to the command, NULL if path was not found
+ */
 char	*find_path(t_main *main, char *command, int *pids);
 
+/**
+ * Returns the PATH variables value as a (malloced) array of strings
+ * 
+ * @param main the main struct of the program
+ * @param pids allocated array of processids
+ * @returns array of paths, NULL if PATH is unset
+ */
+char	**get_split_paths(t_main *main, int *pids);
+
+/**
+ * Finds and returns the value of PATH variable
+ * 
+ * @param main the main struct of the program
+ * @returns value of PATH variable, NULL if PATH is unset
+ */
 char	*get_path_variable(t_main *main);
 
-char	**get_split_paths(char *path_variable, t_main *main, int *pids);
-
+/**
+ * Sets the path to the command into command_path if it is a path to an
+ * executable
+ * 
+ * @param env_path one of the paths from PATH variable
+ * @param command the command to check if is executable in that path
+ * @param command_path the variable where to set the path to the
+ * executable into
+ * @returns 1 on success, 0 on error
+ */
 int	set_path_if_executable(char *env_path, char *command, char **command_path);
 
-char	*get_path(t_main *main, char **command, int *pids);
+/**
+ * Returns the path to the executable
+ * 
+ * @param main the main struct of the program
+ * @param command the command to get path to
+ * @param pids allocated array of processids
+ * @returns the path to the command, NULL if path was not found
+ */
+char	*get_path(t_main *main, char *command, int *pids);
 
-int	empty_command(char *command);
-
+/**
+ * Checks if command is a directory
+ * 
+ * @param command the command to check
+ * @returns 1 when directory, 0 when not
+ */
 int	is_directory(char *command);
 
+/**
+ * Checks if command is a path to a file
+ * 
+ * @param command the command to check
+ * @returns 1 when is path, 0 when not
+ */
+int	is_path_to_file(char *command);
+
+/**
+ * Checks if command is a path to an executable
+ * 
+ * @param command the command to check
+ * @return 1 when executable, 0 when not
+ */
 int	is_path_to_executable(char *command);
 
-int	is_path_to_file(char *command);
+
+
+int	handle_redirects(t_tokens token);
+
+int	dup2_redirects(int infile, int outfile);
+
+int	open_file(int *infile, int *outfile, t_redirect_node *node);
+
+int	open_outfile(t_redirect_node *node);
+
+int	open_infile(t_redirect_node	*node);
+
+
+
+void	close_pipes_on_error(int *pipe);
+
+int	create_fork(int i, int num_of_pipes, int pipe_array[2][2], int *pids);
+
+void	reassign_pipe_right_to_left(int pipe_array[2][2]);
+
+int	prepare_pipes(int i, int num_of_pipes, int pipe_array[2][2], int *pids);
+
+
 
 void	free_all_in_child(t_main *main, int *pids);
 
@@ -680,13 +749,7 @@ void	free_all_in_parent(t_main *main);
 
 void	remove_heredocs(t_main *main, t_tokens **tokens);
 
-int	handle_redirects(t_tokens token);
 
-int	dup2_file(int file, int std_fileno);
-
-int	open_outfile(t_redirect_node *node);
-
-int	open_infile(t_redirect_node	*node);
 
 int redirect_pipes(int i, int num_of_pipes, int pipe_array[2][2]);
 

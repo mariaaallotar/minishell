@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 10:00:41 by maheleni          #+#    #+#             */
-/*   Updated: 2024/11/07 15:15:19 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/11/08 12:38:06 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ void	execute_command(t_main *main, t_tokens token, int *pids)
 	char	*path;
 	char	**env;
 
-	path = get_path(main, token.command, pids);
+	path = get_path(main, *(token.command), pids);
 	if (path == NULL)
 		path_error_handling(main, token, pids);
 	if (main->env_list == NULL)
