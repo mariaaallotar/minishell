@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/08 12:30:12 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/11/08 13:50:42 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/11/18 11:50:15 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,6 @@ static void	expand_for_heredoc(t_main *main, t_tokens **tokens, char **input)
 	if (!expand_quotes_and_vars(main, tokens, input, true))
 	{
 		print_error("Error: Malloc failed in expand_quotes in heredoc\n");
-		free(input);
 		free_all_and_exit(main, tokens);
 	}
 }

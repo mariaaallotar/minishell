@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/24 10:44:31 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/11/08 13:42:19 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/11/18 11:14:58 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ void	free_and_exit_quote_malloc(t_main *main, t_tokens **tokens
 	while ((*tokens)[token_id].command[cmd_id + i])
 	{
 		free((*tokens)[token_id].command[cmd_id + i]);
+		(*tokens)[token_id].command[cmd_id + i] = NULL;
 		i++;
 	}
 	free_and_null_split_input(main);
