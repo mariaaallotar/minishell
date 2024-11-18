@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 11:32:36 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/11/07 10:48:45 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/11/18 12:23:59 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ static void	get_number_of_pipes(t_main *main)
 			(main->num_of_pipes)++;
 }
 
-static void	malloc_commands(t_main *main, t_tokens **tokens, int size)
+static void	malloc_tokens(t_main *main, t_tokens **tokens, int size)
 {
 	*tokens = malloc((size) * sizeof(t_tokens));
 	if (!*tokens)
@@ -97,7 +97,7 @@ static void	malloc_commands(t_main *main, t_tokens **tokens, int size)
 	}	
 }
 
-static void	initialize_commands(t_tokens **tokens, int size)
+static void	initialize_tokens(t_tokens **tokens, int size)
 {
 	int	i;
 
@@ -113,8 +113,8 @@ static void	initialize_commands(t_tokens **tokens, int size)
 static void	malloc_and_init_tokens(t_main *main, t_tokens **tokens)
 {
 	get_number_of_pipes(main);
-	malloc_commands(main, tokens, main->num_of_pipes + 1);
-	initialize_commands(tokens, main->num_of_pipes + 1);
+	malloc_tokens(main, tokens, main->num_of_pipes + 1);
+	initialize_tokens(tokens, main->num_of_pipes + 1);
 }
 
 int	parsing(t_main *main, t_tokens **tokens)
@@ -127,15 +127,13 @@ int	parsing(t_main *main, t_tokens **tokens)
 	if (check_for_pipe_error(main, tokens))
 		return (0);
 	if (check_for_redirect_error(main))
-		return (0);
-	tokenize(main, tokens);
-	//print_tokens(main, tokens); //REMOVE
-	quotes_and_variables(main, tokens);
-	if (create_heredoc(main, tokens) == 0)
 	{
-		remove_heredocs(main, tokens);
+		free(*tokens);
 		return (0);
 	}
-	//print_tokens(main, tokens); //REMOVE
+	tokenize(main, tokens);
+	quotes_and_variables(main, tokens);
+	if (create_heredoc(main, tokens) == 0)
+		return (0);
 	return (1);
 }

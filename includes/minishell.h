@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 11:21:19 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/11/18 12:07:07 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/11/18 14:29:40 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@
 # define APPEND 103
 # define NULL_VAR 104
 
-extern int signal_received;
+extern int g_signal_received;
 
 typedef struct s_redirect_node t_redirect_node;
 
@@ -73,6 +73,7 @@ typedef struct s_main
 	int		id_command;
 	int		quote_split_length;
 	int		id_quote_split;
+	int		num_of_existing_elements;
 } t_main;
 
 typedef struct s_parsing
@@ -106,7 +107,7 @@ void	remove_heredocs(t_main *main, t_tokens **tokens);
 /*****************************************************************************/
 
 //display prompt, readline, and save it in history
-int	handle_inputs(char **input);
+int	handle_inputs(char **input, t_main *main);
 
 void	activate_readline_signals(void);
 
@@ -115,6 +116,8 @@ void	activate_heredoc_signals(void);
 void	activate_signals_for_child(void);
 
 void handle_sigint_readline(int sig);
+
+void	handle_sigint_heredoc(int sig);
 
 
 void	ignore_sigint(void);
@@ -150,9 +153,6 @@ void tokenize(t_main *main, t_tokens **tokens);
 
 //Utility to check for redirection (< or >)
 int	is_redirect(char c);
-
-//Free command struct, free split_input, and exit with the given code
-void free_split_and_tokens(t_main *main, t_tokens **tokens);
 
 //Free the command_token utilizing ft_free_split
 void free_token_commands(t_main *main, t_tokens **tokens);
@@ -191,9 +191,6 @@ void free_and_exit_node_malloc_failed(t_main *main, t_tokens **tokens);
 
 //Create and readline the heredoc fd's and put them in the tokens
 int	create_heredoc(t_main *main, t_tokens **tokens);
-
-//Free and exit if malloc failed for expand variables
-void free_and_exit_variable_malloc_failed(t_main *main, int i);
 
 //Remove or interpret quotes and expand variables
 void quotes_and_variables(t_main *main, t_tokens **tokens);
@@ -263,6 +260,21 @@ int	check_for_pipe_error(t_main *main, t_tokens **tokens);
 
 //Return and change the index of the next non-NULL element in quote_split
 int next_id(t_main *main, char **quote_split);
+
+//Free tokens and print error but NOT exit for pipe syntax error
+int pipe_syntax_error(t_main *main, t_tokens **tokens);
+
+//Free all that need to be freed in order to continue from main loop
+int	free_all_for_heredoc(t_main *main, t_tokens **tokens);
+
+//Readline to heredoc and check for signals that may interupt
+int	readline_to_file(t_main *main, t_tokens **tokens, t_redirect_node *temp);
+
+//Hook for signals
+int	event(void);
+
+//Combines the quote_split after everything has been expanded
+int	combine_quote_split(t_main *main, t_tokens **tokens, char ***quote_split, char **str);
 
 /*****************************************************************************/
 /*****************************************************************************/
