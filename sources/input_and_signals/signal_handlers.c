@@ -1,29 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   handle_inputs.c                                    :+:      :+:    :+:   */
+/*   signal_handlers.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/13 12:11:12 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/11/18 15:54:42 by maheleni         ###   ########.fr       */
+/*   Created: 2024/11/18 14:26:40 by maheleni          #+#    #+#             */
+/*   Updated: 2024/11/18 14:29:32 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int	handle_inputs(char **input)
+int	g_signal_received = 0;
+
+void	handle_sigint_readline(int sig)
 {
-	activate_readline_signals();
-	*input = readline("minishell: ");
-	if (*input == NULL)
-	{
-		printf("exit\n");
-		//print_error("exit\n");
-		return (-1);
-	}
-	else if (*input && *input[0] == '\0')
-		return (0);
-	add_history(*input);
-	return (1);
+	g_signal_received = 128 + sig;
+	write(1, "\n", 2);
+	rl_on_new_line();
+	rl_replace_line("", 0);
+	rl_done = 1;
+}
+
+void	handle_sigint_heredoc(int sig)
+{
+	g_signal_received = 128 + sig;
+	write(1, "\n", 2);
+	rl_on_new_line();
+	rl_replace_line("", 0);
+	rl_done = 1;
 }
