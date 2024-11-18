@@ -6,13 +6,17 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 16:11:31 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/10/25 12:50:18 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/11/08 12:31:21 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-//Left off here, listing more special chars
+int	event(void)
+{
+	return (0);
+}
+
 int	char_is_special(char c)
 {
 	if (c == '|' || c == '<' || c == '>')

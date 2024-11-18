@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 11:21:19 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/11/07 11:04:55 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/11/08 14:54:29 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,7 @@ typedef struct s_main
 	int		id_command;
 	int		quote_split_length;
 	int		id_quote_split;
+	int		num_of_existing_elements;
 } t_main;
 
 typedef struct s_parsing
@@ -146,9 +147,6 @@ void tokenize(t_main *main, t_tokens **tokens);
 //Utility to check for redirection (< or >)
 int	is_redirect(char c);
 
-//Free command struct, free split_input, and exit with the given code
-void free_split_and_tokens(t_main *main, t_tokens **tokens);
-
 //Free the command_token utilizing ft_free_split
 void free_token_commands(t_main *main, t_tokens **tokens);
 
@@ -186,9 +184,6 @@ void free_and_exit_node_malloc_failed(t_main *main, t_tokens **tokens);
 
 //Create and readline the heredoc fd's and put them in the tokens
 int	create_heredoc(t_main *main, t_tokens **tokens);
-
-//Free and exit if malloc failed for expand variables
-void free_and_exit_variable_malloc_failed(t_main *main, int i);
 
 //Remove or interpret quotes and expand variables
 void quotes_and_variables(t_main *main, t_tokens **tokens);
@@ -258,6 +253,21 @@ int	check_for_pipe_error(t_main *main, t_tokens **tokens);
 
 //Return and change the index of the next non-NULL element in quote_split
 int next_id(t_main *main, char **quote_split);
+
+//Free tokens and print error but NOT exit for pipe syntax error
+int pipe_syntax_error(t_main *main, t_tokens **tokens);
+
+//Free all that need to be freed in order to continue from main loop
+int	free_all_for_heredoc(t_main *main, t_tokens **tokens);
+
+//Readline to heredoc and check for signals that may interupt
+int	readline_to_file(t_main *main, t_tokens **tokens, t_redirect_node *temp);
+
+//Hook for signals
+int	event(void);
+
+//Combines the quote_split after everything has been expanded
+int	combine_quote_split(t_main *main, t_tokens **tokens, char ***quote_split, char **str);
 
 /*****************************************************************************/
 /*****************************************************************************/
