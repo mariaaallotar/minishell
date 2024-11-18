@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 13:45:33 by maheleni          #+#    #+#             */
-/*   Updated: 2024/11/08 10:33:45 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/11/18 11:58:12 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,9 +36,9 @@ int	is_directory(char *command)
 
 	if (access(command, F_OK) == 0)
 	{
-		if(stat(command, &file_stat) == 0)
+		if (stat(command, &file_stat) == 0)
 		{
-			if(S_ISDIR(file_stat.st_mode) && ft_strrchr(command, '/') != NULL)
+			if (S_ISDIR(file_stat.st_mode) && ft_strrchr(command, '/') != NULL)
 			{
 				errno = EISDIR;
 				return (1);

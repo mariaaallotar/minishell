@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 12:11:12 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/11/05 11:55:55 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/11/18 13:03:19 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int	handle_inputs(char **input)
 	// char	*message;
 
 	activate_readline_signals();
-	*input = readline("@minishell: ");
+	*input = readline("minishell: ");
 	if (*input == NULL)
 	{
 		// message = "exit\n";

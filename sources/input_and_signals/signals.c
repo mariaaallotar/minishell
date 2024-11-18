@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 12:56:28 by maheleni          #+#    #+#             */
-/*   Updated: 2024/11/07 14:19:20 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/11/18 12:54:34 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int signal_received = 0;
 // Signal handler for Ctrl-C (SIGINT)
 void handle_sigint_readline(int sig)
 {
-	(void) sig;
+	signal_received = 128 + sig;
 	write(1, "\n", 2);
 	rl_on_new_line();
 	rl_replace_line("", 0);
@@ -26,8 +26,6 @@ void handle_sigint_readline(int sig)
 
 void	handle_sigint_heredoc(int sig)
 {
-	(void) sig;
-
 	signal_received = 128 + sig;
 	write(1, "\n", 2);
 	rl_on_new_line();
