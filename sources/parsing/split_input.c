@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 11:19:25 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/11/07 10:35:31 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/11/18 13:29:07 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,7 @@ static int	malloc_split_input_array(t_main *main)
 	{
 		print_error("Error: Failed to malloc array for split_input\n");
 		free(main->input);
+		main->input = NULL;
 		return (0);
 	}
 	while (split_length)

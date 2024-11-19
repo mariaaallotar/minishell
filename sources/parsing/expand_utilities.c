@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 14:59:47 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/11/18 11:52:02 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/11/18 13:55:35 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,22 +37,32 @@ int	check_for_outside_quotes(char *str, char *quote_type)
 	return (0);
 }
 
+static int	malloc_temp_and_str(char **temp, size_t *add_quote_len, char **str)
+{
+	*temp = NULL;
+	*temp = ft_strdup(*str);
+	if (!temp)
+		return (0);
+	*add_quote_len = ft_strlen(*temp) + 3;
+	free(*str);
+	*str = NULL;
+	*str = malloc(*add_quote_len);
+	if (!*str)
+	{
+		free(*temp);
+		return (0);
+	}
+	return (1);
+}
+
 int	add_quotes_back_to_str(char **str, char quote_type)
 {
 	size_t	add_quote_len;
 	size_t	i;
 	char	*temp;
 
-	temp = ft_strdup(*str);
-	add_quote_len = ft_strlen(temp) + 3;
-	free(*str);
-	*str = NULL;
-	*str = malloc(add_quote_len);
-	if (!*str)
-	{
-		free(temp);
+	if (!malloc_temp_and_str(&temp, &add_quote_len, str))
 		return (0);
-	}
 	(*str)[0] = quote_type;
 	i = 1;
 	while (i < add_quote_len - 2)

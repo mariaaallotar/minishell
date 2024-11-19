@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 11:21:19 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/11/08 14:54:29 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/11/19 10:07:16 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -268,6 +268,12 @@ int	event(void);
 
 //Combines the quote_split after everything has been expanded
 int	combine_quote_split(t_main *main, t_tokens **tokens, char ***quote_split, char **str);
+
+//Check for malloc fail or received signal in create_heredoc
+int	check_malloc_fail_or_signal(t_main *main, t_tokens **tokens, int heredoc_fd, char *input);
+
+//Receive a signal in create_heredoc
+int	handle_signal_received(t_main *main, t_tokens **tokens, int heredoc_fd, char **input);
 
 /*****************************************************************************/
 /*****************************************************************************/
