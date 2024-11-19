@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   list_add_and_remove.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 11:55:29 by maheleni          #+#    #+#             */
-/*   Updated: 2024/11/18 13:20:01 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/11/19 13:55:18 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,8 @@ t_list	*find_node(t_main *main, char *variable)
 	current_node = main->env_list;
 	while (current_node != NULL)
 	{
-		if (ft_strncmp(variable, current_node->content, key_len) == 0)
+		if (current_node->content
+			&& ft_strncmp(variable, current_node->content, key_len) == 0)
 			return (current_node);
 		current_node = current_node->next;
 	}
@@ -41,7 +42,10 @@ int	update_variable(t_main *main, char *var)
 	free(node->content);
 	malloced_content = ft_strdup(var);
 	if (malloced_content == NULL)
+	{
+		node->content = NULL;
 		return (errno);
+	}
 	node->content = malloced_content;
 	return (0);
 }

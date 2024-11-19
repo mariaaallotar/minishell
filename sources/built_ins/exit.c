@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 18:38:06 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/10/30 13:14:44 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/11/19 13:23:53 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,10 @@ int	int_after_exit(char *element, int *exit_code)
 	if (*element == '+')
 		element++;
 	*exit_code = ft_atoi(element);
+	itoa_result = NULL;
 	itoa_result = ft_itoa(*exit_code);
+	if (!itoa_result)
+		return (0);
 	itoa_result_len = ft_strlen(itoa_result);
 	element_len = ft_strlen(element);
 	if (itoa_result_len > element_len)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 10:12:47 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/11/19 11:38:56 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/11/19 15:38:35 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ void	remove_heredocs(t_main *main, t_tokens **tokens)
 	i = 0;
 	while (i <= main->num_of_pipes)
 	{
-		node = (* tokens)[i].redirects;
+		node = (*tokens)[i].redirects;
 		while (node != NULL)
 		{
 			if (node->name)
@@ -49,41 +49,46 @@ void	remove_heredocs(t_main *main, t_tokens **tokens)
 	}
 }
 
+static void	execute_and_free(t_main *main, t_tokens **tokens)
+{
+	execute_commandline(main, *tokens);
+	remove_heredocs(main, tokens);
+	free_and_null_split_input(main);
+	free_token_commands(main, tokens);
+	free_token_redirects(main, tokens);
+	free(*tokens);
+}
+
+static void	free_env_and_clear_history(t_main *main)
+{
+	free_environment(&(main->env_list));
+	rl_clear_history();
+}
+
 int	main(int argc, char *argv[], char *envp[])
 {	
-	t_main 	main;
-	t_tokens *tokens;
-	int		rl_return;
+	t_main		main;
+	t_tokens	*tokens;
 
 	(void)argc;
 	(void)*argv;
 	initialize_variables(&main, &tokens);
-	tokens = NULL;
 	copy_env(envp, &main);
 	while (1)
 	{
 		errno = 0;
-		rl_return = handle_inputs(&main.input, &main);
-		if (rl_return == -1)
-			break;
-		else if (rl_return == 0)
-			continue;
+		main.rl_return = handle_inputs(&main.input, &main);
+		if (main.rl_return == -1)
+			break ;
+		else if (main.rl_return == 0)
+			continue ;
 		if (!parsing(&main, &tokens))
 		{
-			if (main.input)
-				free(main.input);
-			if (main.split_input)
-				ft_free_split(&main.split_input);
-			continue;
+			free_input_and_split(&main);
+			continue ;
 		}
-		execute_commandline(&main, tokens);
-		remove_heredocs(&main, &tokens);
-		free_and_null_split_input(&main);
-		free_token_commands(&main, &tokens);
-		free_token_redirects(&main, &tokens);
-		free(tokens);
+		execute_and_free(&main, &tokens);
 	}
-	free_environment(&(main.env_list));
-	rl_clear_history();
+	free_env_and_clear_history(&main);
 	exit (main.exit_code);
 }

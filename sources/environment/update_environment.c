@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   update_environment.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 09:31:28 by maheleni          #+#    #+#             */
-/*   Updated: 2024/09/19 11:16:12 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/11/19 14:12:24 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,6 @@ void	increment_shell_level(t_list *node)
 		node->content = new_str;
 	}
 	ft_memmove(node->content + 6, ft_itoa(new_level), get_magnitude(new_level));
-	
 }
 
 void	update_env(t_main *main)

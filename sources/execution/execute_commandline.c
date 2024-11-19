@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_commandline.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 10:33:14 by maheleni          #+#    #+#             */
-/*   Updated: 2024/11/07 14:35:49 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/11/19 13:15:36 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,10 +89,10 @@ int	*malloc_pids(t_main *main, int amount)
 {
 	int	*pids;
 
+	pids = NULL;
 	pids = malloc ((amount) * sizeof(int));
 	if (pids == NULL)
 	{
-		perror(NULL);
 		main->exit_code = errno;
 		return (NULL);
 	}

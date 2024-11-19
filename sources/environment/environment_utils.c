@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   environment_utils.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 14:37:05 by maheleni          #+#    #+#             */
-/*   Updated: 2024/11/19 11:37:55 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/11/19 13:35:58 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,12 +35,10 @@ char	**malloc_array(t_list *env_list)
 	if (env_list == NULL)
 		return (NULL);
 	size = ft_lstsize(env_list);
+	array = NULL;
 	array = malloc ((size + 1) * sizeof(char *));
 	if (array == NULL)
-	{
-		perror(NULL);
 		return (NULL);
-	}
 	return (array);
 }
 
@@ -51,6 +49,8 @@ char	**convert_list_to_array(t_list *env_list)
 	int		i;
 
 	array = malloc_array(env_list);
+	if (!array)
+		return (array);
 	node = env_list;
 	i = 0;
 	while (node != NULL)
@@ -74,22 +74,24 @@ t_list	*copy_env(char *envp[], t_main *main)
 	t_list	*env_list;
 	t_list	*new;
 	int		i;
+	char	*temp;
 
 	if (envp == NULL || envp[0] == NULL)
 		return (NULL);
-	new = ft_lstnew(ft_strdup(envp[0]));
+	temp = ft_strdup(envp[0]);
+	if (!temp)
+		exit(!!printf("Error: Failed to malloc copy env\n"));
+	new = ft_lstnew(temp);
 	if (new == NULL)
 	{
-		perror("Error");
-		ft_free_split(&(main->split_input));
+		printf("Error: Failed to malloc copy env\n");
+		free(temp);
+		exit (1);
 	}
 	env_list = new;
 	main->env_list = env_list;
 	i = 1;
 	while (envp[i] != NULL)
-	{
-		add_variable(main, envp[i]);
-		i++;
-	}
+		add_variable(main, envp[i++]);
 	return (env_list);
 }

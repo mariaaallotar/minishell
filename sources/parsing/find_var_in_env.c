@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 16:50:02 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/11/18 14:01:56 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/11/19 13:49:55 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ static int	find_var_in_env_helper(t_main *main, char **str)
 	len = ft_strlen(*str);
 	while (temp)
 	{
-		if (!cmp_eq(*str + 1, (char *)temp->content, len - 1))
+		if (temp->content && !cmp_eq(*str + 1, (char *)temp->content, len - 1))
 		{
 			free(*str);
 			*str = NULL;
