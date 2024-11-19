@@ -6,11 +6,17 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 12:02:21 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/11/18 12:25:11 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/11/19 10:09:01 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+
+static void	*free_and_return_null(t_redirect_node **new_node)
+{
+	free(*new_node);
+	return (NULL);
+}
 
 t_redirect_node	*lstnew_redirect_node(char *name, int type)
 {
@@ -29,13 +35,13 @@ t_redirect_node	*lstnew_redirect_node(char *name, int type)
 	{
 		new_node->delimiter = ft_strdup(name);
 		if (!new_node->delimiter)
-			return (NULL);
+			return (free_and_return_null(&new_node));
 	}
 	else
 	{
 		new_node->name = ft_strdup(name);
 		if (!new_node->name)
-			return (NULL);
+			return (free_and_return_null(&new_node));
 	}
 	return (new_node);
 }

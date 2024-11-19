@@ -6,7 +6,7 @@
 #    By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/20 15:07:12 by eberkowi          #+#    #+#              #
-#    Updated: 2024/11/18 14:29:04 by maheleni         ###   ########.fr        #
+#    Updated: 2024/11/19 11:39:01 by maheleni         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -40,6 +40,7 @@ CFILES := main.c \
 		parsing/expand_utilities.c \
 		parsing/add_elements_to_split_input_utilities.c \
 		parsing/readline_to_file.c \
+		parsing/readline_to_file_helper.c \
 		parsing/combine_quote_split.c \
 		environment/list_add_and_remove.c \
 		environment/environment_utils.c \
