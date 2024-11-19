@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/24 12:16:01 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/11/08 13:42:37 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/11/19 10:21:13 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,6 @@ static int	combine_remaining_elements_inner(char ***quote_split, char **str)
 		*str = ft_strjoin(temp, (*quote_split)[i]);
 		if (!*str)
 		{
-			print_error("Error: Failed to malloc str in combine quote_split\n");
 			free(temp);
 			return (0);
 		}
@@ -72,10 +71,7 @@ static int	combine_quote_split_inner(char ***quote_split, char **str)
 	{
 		*str = ft_strdup((*quote_split)[0]);
 		if (!*str)
-		{
-			print_error("Error: Failed to malloc str in combine quote_split\n");
 			return (0);
-		}
 		return (1);
 	}
 	else

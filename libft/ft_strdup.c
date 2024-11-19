@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 15:47:39 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/09/19 15:20:23 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/11/07 12:11:38 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,8 @@ char	*ft_strdup(const char *s1)
 	int		i;
 	char	*s2;
 
+	if (s1 == NULL)
+		return (NULL);
 	s2 = (char *)malloc(ft_strlen(s1) * sizeof(char) + 1);
 	if (!s2)
 		return (NULL);

@@ -3,40 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   readline_to_file.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/08 12:30:12 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/11/18 11:50:15 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/11/19 11:40:07 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
-
-static int	check_malloc_fail_or_signal(t_main *main, t_tokens **tokens
-		, int heredoc_fd, char *input)
-{
-	if (!input && errno != 0)
-	{
-		print_error("Error: Malloc failed in readline for heredoc\n");
-		free_all_and_exit(main, tokens);
-	}
-	else if (!input)
-	{
-		close(heredoc_fd);
-		return (free_all_for_heredoc(main, tokens));
-	}
-	return (1);
-}
-
-static int	handle_signal_received(t_main *main, t_tokens **tokens
-		, int heredoc_fd, char **input)
-{
-	close (heredoc_fd);
-	main->exit_code = signal_received;
-	signal_received = 0;
-	free(*input);
-	return (free_all_for_heredoc(main, tokens));
-}
 
 static void	expand_for_heredoc(t_main *main, t_tokens **tokens, char **input)
 {
@@ -55,30 +29,49 @@ static void	write_to_heredoc_and_free_input(char **input, int heredoc_fd)
 	*input = NULL;
 }
 
+static int	check_for_empty_prompt(char **in)
+{
+	if (*in && (*in)[0] == '\0')
+	{
+		free(*in);
+		return (1);
+	}
+	return (0);
+}
+
+static int	check_for_delimiter(char **in, t_redirect_node *temp)
+{
+	if (!ft_strncmp(*in, temp->delimiter, ft_strlen(temp->delimiter) + 1))
+	{
+		free(*in);
+		return (1);
+	}
+	return (0);
+}
+
 int	readline_to_file(t_main *main, t_tokens **tokens, t_redirect_node *temp)
 {
 	int		heredoc_fd;
-	char	*input;
+	char	*in;
 
 	heredoc_fd = open(temp->name, O_WRONLY | O_TRUNC | O_CREAT, 0644);
 	activate_heredoc_signals();
 	rl_event_hook = event;
 	while (1)
 	{
-		input = readline("> ");
-		if (!check_malloc_fail_or_signal(main, tokens, heredoc_fd, input))
+		in = NULL;
+		in = readline("> ");
+		if (check_for_empty_prompt(&in))
+			continue ;
+		if (!check_malloc_fail_or_signal(main, tokens, heredoc_fd, in))
 			return (0);
-		if (signal_received)
-			return (handle_signal_received(main, tokens, heredoc_fd, &input));
-		if (!ft_strncmp(input, temp->delimiter
-				, ft_strlen(temp->delimiter) + 1))
-		{
-			free(input);
+		if (g_signal_received)
+			return (handle_signal_received(main, tokens, heredoc_fd, &in));
+		if (check_for_delimiter(&in, temp))
 			break ;
-		}
 		if (!temp->delimiter_has_quotes)
-			expand_for_heredoc(main, tokens, &input);
-		write_to_heredoc_and_free_input(&input, heredoc_fd);
+			expand_for_heredoc(main, tokens, &in);
+		write_to_heredoc_and_free_input(&in, heredoc_fd);
 	}
 	close(heredoc_fd);
 	return (1);

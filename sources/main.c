@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 10:12:47 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/11/08 15:29:43 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/11/19 11:38:56 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,11 @@ void	remove_heredocs(t_main *main, t_tokens **tokens)
 		node = (* tokens)[i].redirects;
 		while (node != NULL)
 		{
-			if (node->type == HEREDOC)
-				unlink(node->name);
+			if (node->name)
+			{
+				if (node->type == HEREDOC && !access(node->name, F_OK))
+					unlink(node->name);
+			}
 			node = node->next;
 		}
 		i++;
@@ -60,7 +63,7 @@ int	main(int argc, char *argv[], char *envp[])
 	while (1)
 	{
 		errno = 0;
-		rl_return = handle_inputs(&main.input);
+		rl_return = handle_inputs(&main.input, &main);
 		if (rl_return == -1)
 			break;
 		else if (rl_return == 0)
@@ -69,7 +72,8 @@ int	main(int argc, char *argv[], char *envp[])
 		{
 			if (main.input)
 				free(main.input);
-			ft_free_split(&main.split_input);
+			if (main.split_input)
+				ft_free_split(&main.split_input);
 			continue;
 		}
 		execute_commandline(&main, tokens);

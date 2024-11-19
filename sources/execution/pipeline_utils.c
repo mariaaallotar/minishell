@@ -6,21 +6,20 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/31 15:43:29 by maheleni          #+#    #+#             */
-/*   Updated: 2024/11/04 11:00:00 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/11/18 11:45:13 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-//pipe[0]: read, pipe[1]: write
 void	close_pipes_in_parent(int i, int num_of_pipes, int *pipe_left,
 	int *pipe_right)
 {
-	if (num_of_pipes > 0 && i == 0)			//first command
+	if (num_of_pipes > 0 && i == 0)
 		close (pipe_right[1]);
-	else if (num_of_pipes == 0 && i > 0)	//last command
+	else if (num_of_pipes == 0 && i > 0)
 		close(pipe_left[0]);
-	else if (num_of_pipes > 0 && i > 0)		//middle command
+	else if (num_of_pipes > 0 && i > 0)
 	{
 		close(pipe_left[0]);
 		close(pipe_right[1]);
@@ -45,6 +44,7 @@ int	create_fork(int i, int num_of_pipes, int pipe_array[2][2], int *pids)
 		if (num_of_pipes > 0)
 			close_pipes_on_error(pipe_array[1]);
 		free(pids);
+		return (-1);
 	}
 	pids[i] = pid;
 	return (pid);

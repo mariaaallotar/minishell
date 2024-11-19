@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 10:33:14 by maheleni          #+#    #+#             */
-/*   Updated: 2024/11/04 13:28:23 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/11/07 14:35:49 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,6 @@ void	wait_for_processes(t_main *main, int *pids)
 	i = 0;
 	while (i < main->num_of_pipes + 1)
 	{
-		//TODO make this robust, has to work with signals as well
 		waitpid(pids[i], &status, 0);
 		if (WIFEXITED(status))
 			main->exit_code = WEXITSTATUS(status);
@@ -72,21 +71,16 @@ int	execute_pipeline(t_main *main, int pipe_array[2][2], int *pids,
 			return (errno);
 		if (pids[i] == 0)
 		{
-			if (redirect_pipes(i, pipes, pipe_array) == -1)
+			if (redirect_pipes(i, pipes, pipe_array) == -1
+				|| handle_redirects(tokens[i]) == -1)
 			{
 				free_all_in_child(main, pids);
-				exit(errno);
-			}
-			if (handle_redirects(tokens[i]) == -1)
-			{
-				free_all_in_child(main, pids);
-				exit(1);	//always 1?
+				exit(1);
 			}
 			execute_child_process(main, tokens[i], pids);
 		}
 		ignore_sigint();
-		close_pipes_in_parent(i, pipes--, pipe_array[0], pipe_array[1]);
-		i++;
+		close_pipes_in_parent(i++, pipes--, pipe_array[0], pipe_array[1]);
 	}
 	return (0);
 }
@@ -109,7 +103,7 @@ void	execute_commandline(t_main *main, t_tokens *tokens)
 {
 	int	pipe_array[2][2];
 	int	*pids;
-	
+
 	if (execute_builtin_in_parent(main, tokens[0], main->num_of_pipes))
 		return ;
 	pids = malloc_pids(main, (main->num_of_pipes + 1));

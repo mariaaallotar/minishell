@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 09:33:42 by maheleni          #+#    #+#             */
-/*   Updated: 2024/10/30 11:37:51 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/11/07 15:51:23 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	unset(t_main *main, t_tokens token)
 {
-	int		i;
+	int	i;
 
 	i = 1;
 	while (token.command[i] != NULL)

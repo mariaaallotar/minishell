@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 11:21:19 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/11/08 14:54:29 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/11/19 11:37:51 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@
 # define APPEND 103
 # define NULL_VAR 104
 
-extern int signal_received;
+extern int g_signal_received;
 
 typedef struct s_redirect_node t_redirect_node;
 
@@ -96,6 +96,8 @@ typedef struct s_parsing
 //Print error message to STD error
 void	print_error(char *error);
 
+void	remove_heredocs(t_main *main, t_tokens **tokens);
+
 /*****************************************************************************/
 /*****************************************************************************/
 
@@ -105,13 +107,18 @@ void	print_error(char *error);
 /*****************************************************************************/
 
 //display prompt, readline, and save it in history
-int	handle_inputs(char **input);
+int	handle_inputs(char **input, t_main *main);
 
 void	activate_readline_signals(void);
 
 void	activate_heredoc_signals(void);
 
+void	activate_signals_for_child(void);
+
 void handle_sigint_readline(int sig);
+
+void	handle_sigint_heredoc(int sig);
+
 
 void	ignore_sigint(void);
 
@@ -269,6 +276,12 @@ int	event(void);
 //Combines the quote_split after everything has been expanded
 int	combine_quote_split(t_main *main, t_tokens **tokens, char ***quote_split, char **str);
 
+//Check for malloc fail or received signal in create_heredoc
+int	check_malloc_fail_or_signal(t_main *main, t_tokens **tokens, int heredoc_fd, char *input);
+
+//Receive a signal in create_heredoc
+int	handle_signal_received(t_main *main, t_tokens **tokens, int heredoc_fd, char **input);
+
 /*****************************************************************************/
 /*****************************************************************************/
 
@@ -335,7 +348,7 @@ void	print_list_content(void *content);
  * @param main the main struct of the program
  * @param variable_key the key of the variable to remove
  */
-int	remove_variable(t_main *main, char *variable_key);
+void	remove_variable(t_main *main, char *variable_key);
 
 char	**convert_list_to_array(t_list *env_list);
 
@@ -555,6 +568,30 @@ int	unset(t_main *main, t_tokens token);
 void	execute_commandline(t_main *main, t_tokens *tokens);
 
 /**
+ * Allocates the needed amount of memory for the process ids
+ * 
+ * @param main the main struct of the program
+ * @param amount the amount of processes to run in that pipeline
+ * (number of pipes + 1)
+ * @returns pointer to the memory allocated
+ */
+int	*malloc_pids(t_main *main, int amount);
+
+/**
+ * Loops through all commands in the pipeline, creates the needed pipes and
+ * forks to run the commands in a childprocess, handles redirects and
+ * runs the command
+ * 
+ * @param main the main struct of the program
+ * @param pipe_array the array of filedescriptors for the pipe(s)
+ * @param pids allocated array of process ids
+ * @param tokens the array of tokens to loop through
+ * @returns 0 on success, > 0 when some system functioncalls in parent failed
+ */
+int	execute_pipeline(t_main *main, int pipe_array[2][2], int *pids,
+	t_tokens *tokens);
+
+/**
  * Checks if command is a builtin or not
  * 
  * @param the token that command is part of
@@ -563,45 +600,12 @@ void	execute_commandline(t_main *main, t_tokens *tokens);
 int	is_builtin(t_tokens token);
 
 /**
- * Closes the necessary pipe-filedescriptors depending on the executed commands
- * position in the command line.
- * 
- * @param i index of the command executed in commandline
- * @param num_of_pipes number of pipes left in commandline
- * @param pipe_left array of filedescriptors for the left-hand side pipe of command
- * @param pipe_right array of filedescriptors for the right-hand side pipe of command
- */
-void	close_pipes_in_parent(int i, int num_of_pipes, int *pipe_left, int *pipe_right);
-
-
-void	close_pipes_on_error(int *pipe);
-
-int	create_fork(int i, int num_of_pipes, int pipe_array[2][2], int *pids);
-
-void	reassign_pipe_right_to_left(int pipe_array[2][2]);
-
-int	prepare_pipes(int i, int num_of_pipes, int pipe_array[2][2], int *pids);
-
-/**
  * Finds path to the command and execues it with execve
  * 
  * @param main the main struct of the program
  * @param token  the token to execute
  */
 void	execute_command(t_main *main, t_tokens token, int *pids);
-
-/**
- * Calls the right builtin function to execute it
- * 
- * @param main the main struct of the program
- * @param token  the token to execute
- */
-int	execute_builtin(t_main *main, t_tokens token, int parent, int open_fds[2]);
-
-void	restore_stdin_stdout(t_main *main, int original_stdin,
-	int original_stdout);
-
-int	is_builtin_not_part_of_pipeline(t_tokens token, int num_of_pipes);
 
 /**
  * Executes either a builtin or a command as a child process.
@@ -619,46 +623,255 @@ void	execute_child_process(t_main *main, t_tokens token, int *pids);
  * filedescriptors.
  * 
  * @param main the main struct of the program
+ * @param token the token to execute
+ * @param num_of_pipes the number of pipes left in pipeline
+ */
+int	execute_builtin_in_parent(t_main *main, t_tokens token, int num_of_pipes);
+
+/**
+ * Checks if the command is a builtin and that it is not part of a pipeline
+ * 
+ * @param token the token to check
+ * @param num_of_pipes the number of pipes in pipeline
+ * @returns 1 when command is a builtin not part of pipeline, 0 otherwise
+ */
+int	is_builtin_not_part_of_pipeline(t_tokens token, int num_of_pipes);
+
+/**
+ * Restores the filedescriptors to point back to STDIN and STDOUT
+ * 
+ * @param main the main struct of the program
+ * @param original_stdin duped fd of STDIN
+ * @param original_stdout duped fd of STDOUT
+ */
+void	restore_stdin_stdout(t_main *main, int original_stdin,
+	int original_stdout);
+
+/**
+ * Calls the right builtin function to execute it
+ * 
+ * @param main the main struct of the program
  * @param token  the token to execute
  */
-int	execute_builtin_in_parent(t_main *main, t_tokens token, int num_of_pipes); //TODO check params
+int	execute_builtin(t_main *main, t_tokens token, int parent, int open_fds[2]);
 
+/**
+ * Finds the path to the command by looking up the PATH variable
+ * 
+ * @param main the main struct of the program
+ * @param command the command to find the path for
+ * @param pids allocated array of processids
+ * @returns the path to the command, NULL if path was not found
+ */
 char	*find_path(t_main *main, char *command, int *pids);
 
+/**
+ * Returns the PATH variables value as a (malloced) array of strings
+ * 
+ * @param main the main struct of the program
+ * @param pids allocated array of processids
+ * @returns array of paths, NULL if PATH is unset
+ */
+char	**get_split_paths(t_main *main, int *pids);
+
+/**
+ * Finds and returns the value of PATH variable
+ * 
+ * @param main the main struct of the program
+ * @returns value of PATH variable, NULL if PATH is unset
+ */
 char	*get_path_variable(t_main *main);
 
-char	**get_split_paths(char *path_variable, t_main *main, int *pids);
-
+/**
+ * Sets the path to the command into command_path if it is a path to an
+ * executable
+ * 
+ * @param env_path one of the paths from PATH variable
+ * @param command the command to check if is executable in that path
+ * @param command_path the variable where to set the path to the
+ * executable into
+ * @returns 1 on success, 0 on error
+ */
 int	set_path_if_executable(char *env_path, char *command, char **command_path);
 
-char	*get_path(t_main *main, char **command, int *pids);
+/**
+ * Returns the path to the executable
+ * 
+ * @param main the main struct of the program
+ * @param command the command to get path to
+ * @param pids allocated array of processids
+ * @returns the path to the command, NULL if path was not found
+ */
+char	*get_path(t_main *main, char *command, int *pids);
 
-int	empty_command(char *command);
-
+/**
+ * Checks if command is a directory
+ * 
+ * @param command the command to check
+ * @returns 1 when directory, 0 when not
+ */
 int	is_directory(char *command);
 
-int	is_path_to_executable(char *command);
-
+/**
+ * Checks if command is a path to a file
+ * 
+ * @param command the command to check
+ * @returns 1 when is path, 0 when not
+ */
 int	is_path_to_file(char *command);
 
-void	free_all_in_child(t_main *main, int *pids);
+/**
+ * Checks if command is a path to an executable
+ * 
+ * @param command the command to check
+ * @returns 1 when executable, 0 when not
+ */
+int	is_path_to_executable(char *command);
 
-void	free_all_in_parent(t_main *main);
-
-void	remove_heredocs(t_main *main, t_tokens **tokens);
-
+/**
+ * Loops through all redirects and opens them. Does dup2 only for the
+ * last opened infile and outfile
+ * 
+ * @param token the token that the rediects are part of
+ * @returns 0 on success, -1 on fail
+ */
 int	handle_redirects(t_tokens token);
 
-int	dup2_file(int file, int std_fileno);
+/**
+ * Does dup2 for the infile and outfile
+ * 
+ * @param infile filedescriptor for the last infile for this command
+ * @param outfile filedescriptor for the last outfile for this command
+ * @returns 0 on success, -1 on fail
+ */
+int	dup2_redirects(int infile, int outfile);
 
+/**
+ * Opens the file that node holds
+ * 
+ * @param infile pointer to the filedescriptor of the last opened infile
+ * @param outfile pointer to the filedescriptor of the last opened outfile
+ * @param node pointer to the redirect node that holds the filename to open
+ * @returns 0 on success, -1 on fail
+ */
+int	open_file(int *infile, int *outfile, t_redirect_node *node);
+
+/**
+ * Opens outfile
+ * 
+ * @param node pointer to the redirect node that holds the filename to open
+ * @returns 0 on success, -1 on fail
+ */
 int	open_outfile(t_redirect_node *node);
 
+/**
+ * Opens infile
+ * 
+ * @param node pointer to the redirect node that holds the filename to open
+ * @returns 0 on success, -1 on fail
+ */
 int	open_infile(t_redirect_node	*node);
 
+/**
+ * Prepares the pipes for the next comand
+ * 
+ * @param i the index of the command to prepare
+ * @param num_of_pipes the number of pipes left in pipeline
+ * @param pipe_array the array that holds the filedescriptors for left and
+ * right pipes
+ * @param pids array of processids
+ * @returns 1 on success, -1 on error
+ */
+int	prepare_pipes(int i, int num_of_pipes, int pipe_array[2][2], int *pids);
+
+/**
+ * Reassigns the right-hand side pipes filedescriptors (i.e. pipe_array[1]) to
+ * the left-hand side (i.e. pipe_array[0])
+ * 
+ * @param pipe_array the array that holds the filedescriptors for left and
+ * right pipes
+ */
+void	reassign_pipe_right_to_left(int pipe_array[2][2]);
+
+/**
+ * Forks a process
+ * 
+ * @param i the index of the command
+ * @param num_of_pipes the number of pipes left in pipeline
+ * @param pipe_array the array that holds the filedescriptors for left and
+ * right pipes
+ * @param pids array of processids
+ * @returns the processid of that process on success, -1 on error
+ */
+int	create_fork(int i, int num_of_pipes, int pipe_array[2][2], int *pids);
+
+/**
+ * Closes both sides of a pipe
+ * 
+ * @param array of both filedescriptors for that pipe
+ */
+void	close_pipes_on_error(int *pipe);
+
+/**
+ * Closes the necessary pipe-filedescriptors depending on the executed commands
+ * position in the command line.
+ * 
+ * @param i index of the command executed in commandline
+ * @param num_of_pipes number of pipes left in commandline
+ * @param pipe_left array of filedescriptors for the left-hand side pipe of command
+ * @param pipe_right array of filedescriptors for the right-hand side pipe of command
+ */
+void	close_pipes_in_parent(int i, int num_of_pipes, int *pipe_left, int *pipe_right);
+
+/**
+ * Does dup2 for the created pipes
+ * 
+ * @param i index of the command executed in commandline
+ * @param num_of_pipes number of pipes left in commandline
+ * @param pipe_array the array that holds the filedescriptors for left and
+ * right pipes
+ * @returns 0 on success, -1 on error
+ */
 int redirect_pipes(int i, int num_of_pipes, int pipe_array[2][2]);
 
+/**
+ * Does dup2 on the right-hand side pipe
+ * 
+ * @param pipe_right array of filedescriptors for the right-hand side pipe
+ * @returns 0 on success, -1 on error
+ */
 int redirect_pipe_right(int* pipe_right);
 
+/**
+ * Does dup2 on the left-hand side pipe
+ * 
+ * @param pipe_right array of filedescriptors for the left-hand side pipe
+ * @returns 0 on success, -1 on error
+ */
 int redirect_pipe_left(int* pipe_left);
+
+/**
+ * Frees everything that is allocated and the array of processids
+ * 
+ * @param main the main struct of the program
+ * @param pids array of processids
+ */
+void	free_all_in_child(t_main *main, int *pids);
+
+/**
+ * Frees everything that is mmalloced in the parent process
+ * 
+ * @param main the main struct of the program
+ */
+void	free_all_in_parent(t_main *main);
+
+/**
+ * Writes the correct error message and exits when problem with getting path to command
+ * 
+ * @param main the main struct of the program
+ * @param token the token that the error has occured in
+ * @param pids array of processids
+ */
+void	path_error_handling(t_main *main, t_tokens token, int *pids);
 
 #endif
