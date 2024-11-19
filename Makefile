@@ -6,7 +6,7 @@
 #    By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/20 15:07:12 by eberkowi          #+#    #+#              #
-#    Updated: 2024/11/08 12:29:43 by maheleni         ###   ########.fr        #
+#    Updated: 2024/11/18 14:29:04 by maheleni         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -39,11 +39,14 @@ CFILES := main.c \
 		parsing/create_quote_split.c \
 		parsing/expand_utilities.c \
 		parsing/add_elements_to_split_input_utilities.c \
+		parsing/readline_to_file.c \
+		parsing/combine_quote_split.c \
 		environment/list_add_and_remove.c \
 		environment/environment_utils.c \
 		environment/print_environment.c \
 		input_and_signals/handle_inputs.c \
 		input_and_signals/signals.c \
+		input_and_signals/signal_handlers.c \
 		built_ins/echo.c \
 		built_ins/export_without_args.c \
 		built_ins/export_with_args.c \

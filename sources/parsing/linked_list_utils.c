@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 12:02:21 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/11/06 11:45:27 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/11/18 12:25:11 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ t_redirect_node	*lstnew_redirect_node(char *name, int type)
 {
 	t_redirect_node	*new_node;
 
+	new_node = NULL;
 	new_node = (t_redirect_node *)malloc(sizeof(t_redirect_node));
 	if (!new_node)
 		return (NULL);

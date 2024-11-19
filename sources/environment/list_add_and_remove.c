@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 11:55:29 by maheleni          #+#    #+#             */
-/*   Updated: 2024/11/07 16:28:11 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/11/18 13:20:01 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,25 +41,25 @@ int	update_variable(t_main *main, char *var)
 	free(node->content);
 	malloced_content = ft_strdup(var);
 	if (malloced_content == NULL)
-		return(errno);
+		return (errno);
 	node->content = malloced_content;
 	return (0);
 }
 
-int    add_variable(t_main *main, char *content)
+int	add_variable(t_main *main, char *content)
 {
-    t_list  *new_node;
+	t_list	*new_node;
 	char	*new_content;
 
 	new_content = ft_strdup(content);
 	if (new_content == NULL)
 		return (errno);
-    new_node = ft_lstnew(new_content);
-    if (new_node == NULL)
-    {
-        perror(NULL);
-        return (errno);
-    }
+	new_node = ft_lstnew(new_content);
+	if (new_node == NULL)
+	{
+		perror(NULL);
+		return (errno);
+	}
 	if (main->env_list == NULL)
 		main->env_list = new_node;
 	else

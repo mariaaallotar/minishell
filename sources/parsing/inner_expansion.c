@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/24 12:16:01 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/11/07 10:34:42 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/11/08 13:42:37 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static int	expand_vars_in_quotes_inner(t_main *main, char ***quote_split)
 	{
 		if (!find_var_in_env(main, &(*quote_split)[i]))
 		{
-			print_error("Error: Failed to malloc environment variable in quotes\n");
+			print_error("Error: Failed to malloc env variable in quotes\n");
 			i++;
 			while ((*quote_split)[i])
 			{

@@ -6,19 +6,19 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 14:37:05 by maheleni          #+#    #+#             */
-/*   Updated: 2024/11/07 13:25:34 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/11/18 13:23:41 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-void    free_environment(t_list **env_list)
+void	free_environment(t_list **env_list)
 {
 	t_list	*current_node;
 	t_list	*temp;
 
 	current_node = *env_list;
-    while (current_node != NULL)
+	while (current_node != NULL)
 	{
 		temp = current_node->next;
 		free(current_node->content);
@@ -27,12 +27,10 @@ void    free_environment(t_list **env_list)
 	}
 }
 
-char	**convert_list_to_array(t_list *env_list)
+char	**malloc_array(t_list *env_list)
 {
 	int		size;
 	char	**array;
-	t_list	*node;
-	int		i;
 
 	if (env_list == NULL)
 		return (NULL);
@@ -43,6 +41,16 @@ char	**convert_list_to_array(t_list *env_list)
 		perror(NULL);
 		return (NULL);
 	}
+	return (array);
+}
+
+char	**convert_list_to_array(t_list *env_list)
+{
+	char	**array;
+	t_list	*node;
+	int		i;
+
+	array = malloc_array(env_list);
 	node = env_list;
 	i = 0;
 	while (node != NULL)
@@ -51,7 +59,7 @@ char	**convert_list_to_array(t_list *env_list)
 		{
 			i++;
 			node = node->next;
-			continue;
+			continue ;
 		}
 		array[i] = node->content;
 		i++;
@@ -73,7 +81,7 @@ t_list	*copy_env(char *envp[], t_main *main)
 	if (new == NULL)
 	{
 		perror("Error");
-        ft_free_split(&(main->split_input));
+		ft_free_split(&(main->split_input));
 	}
 	env_list = new;
 	main->env_list = env_list;

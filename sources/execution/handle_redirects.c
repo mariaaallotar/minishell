@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 11:06:40 by maheleni          #+#    #+#             */
-/*   Updated: 2024/11/08 12:32:47 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/11/18 14:17:21 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,7 @@ int	dup2_redirects(int infile, int outfile)
 				close(outfile);
 			return (-1);
 		}
+		close (infile);
 	}
 	if (outfile != -1)
 	{
@@ -90,6 +91,7 @@ int	dup2_redirects(int infile, int outfile)
 			close(outfile);
 			return (-1);
 		}
+		close (outfile);
 	}
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 16:50:02 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/11/06 12:00:03 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/11/18 11:43:43 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,9 +75,6 @@ int	find_var_in_env(t_main *main, char **str)
 	{
 		free(*str);
 		*str = NULL;
-		// *str = ft_strdup("");
-		// if (!*str)
-		// 	return (0);
 	}
 	return (1);
 }

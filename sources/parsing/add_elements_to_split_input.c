@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 11:56:14 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/11/07 10:33:21 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/11/08 15:45:40 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ static size_t	get_length_of_split_input_element(char *input, int id_input)
 	return (result);
 }
 
-static int	malloc_element_in_split_input(t_main *main, char *input
+static void	malloc_element_in_split_input(t_main *main, char *input
 		, int id_input, int id_split)
 {
 	size_t	len_of_element;
@@ -58,9 +58,9 @@ static int	malloc_element_in_split_input(t_main *main, char *input
 	if (!main->split_input[id_split])
 	{
 		print_error("Error: Failed to malloc element in split_input\n");
-		return (0);
+		ft_free_split(&main->split_input);
+		exit (0);
 	}
-	return (1);
 }
 
 static int	add_regular_or_quote_element(t_main *main, char *input
@@ -73,8 +73,7 @@ static int	add_regular_or_quote_element(t_main *main, char *input
 	p.num_of_doubles = 0;
 	p.inside_singles = false;
 	p.inside_doubles = false;
-	if (!malloc_element_in_split_input(main, input, *id_input, id_split))
-		return (0);
+	malloc_element_in_split_input(main, input, *id_input, id_split);
 	while (input[*id_input])
 	{
 		if (char_is_space_or_special_and_quotes_are_closed(input[*id_input], p))
