@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 11:21:19 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/11/19 15:36:04 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/11/20 10:55:17 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,12 +53,6 @@ typedef struct s_expand
 	char	quote_type;
 }	t_expand;
 
-/**
- * char		*input;
- * char		**split_input;
- * t_list	*env_list;
- * int		exit_code;
- */
 typedef struct s_main
 {
 	char		*input;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_builtin.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/31 15:49:13 by maheleni          #+#    #+#             */
-/*   Updated: 2024/11/07 14:08:22 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/11/20 11:00:39 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,6 @@ int	execute_builtin(t_main *main, t_tokens token, int parent, int open_fds[2])
 void	restore_stdin_stdout(t_main *main, int original_stdin,
 	int original_stdout)
 {
-	(void) main;
 	if (dup2(original_stdin, STDIN_FILENO) == -1
 		|| dup2(original_stdout, STDOUT_FILENO) == -1)
 	{

@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 12:11:12 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/11/19 14:12:41 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/11/20 11:10:03 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ int	handle_inputs(char **input, t_main *main)
 	}
 	if (*input == NULL || **input == '\n' || **input == '\0')
 	{
-		printf("exit\n");
+		print_error("exit\n");
 		return (-1);
 	}
 	else if (*input && *input[0] == '\0')
