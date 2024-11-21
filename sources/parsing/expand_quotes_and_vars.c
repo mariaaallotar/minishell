@@ -75,13 +75,6 @@ int	expand_quotes_and_vars(t_main *main, t_tokens **tokens
 	t_expand	expand;
 
 	init_expand_struct(&expand, is_heredoc);
-	if (check_for_outside_quotes(*str, &expand.quote_type))
-	{
-		if (!remove_outside_quotes(str))
-			return (0);
-		if ((*str)[0] == '\0' || expand.quote_type == '\'')
-			return (1);
-	}
 	if (!create_quote_split(*str, &quote_split))
 		return (0);
 	get_quote_split_length(main, quote_split);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 10:33:16 by maheleni          #+#    #+#             */
-/*   Updated: 2024/10/28 11:03:13 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/11/20 11:55:56 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ char	*get_pwd(void)
 
 	size = 10;
 	buf = NULL;
-	while (1)
+	while (size < 10000)
 	{
 		buf = getcwd(buf, size);
 		if (buf == NULL)
@@ -27,6 +27,7 @@ char	*get_pwd(void)
 		else
 			return (buf);
 	}
+	return (NULL);
 }
 
 int	pwd(t_main *main, t_tokens token)

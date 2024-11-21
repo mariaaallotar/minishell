@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 15:38:24 by maheleni          #+#    #+#             */
-/*   Updated: 2024/11/19 14:10:08 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/11/20 11:59:16 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@ int	update_directory_variable(t_main *main, char *key)
 	char	*key_value;
 
 	value = get_pwd();
+	if (!value)
+		return (0);
 	key_value = ft_strjoin(key, value);
 	if (key_value == NULL)
 	{

@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 18:38:06 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/11/19 13:23:53 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/11/20 16:27:05 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,6 @@ int	exit_command(t_main *main, t_tokens token, int parent, int open_fds[2])
 {
 	int	code;
 
-	dup2(STDERR_FILENO, STDOUT_FILENO);
 	if (token.command[1] == NULL)
 	{
 		if (!parent)
@@ -75,11 +74,11 @@ int	exit_command(t_main *main, t_tokens token, int parent, int open_fds[2])
 	}
 	else if (!int_after_exit(token.command[1], &code))
 	{
-		printf("exit: numeric argument required\n");
+		print_error("exit: numeric argument required\n");
 		if (!parent)
 			return (2);
 		free_and_exit(main, open_fds, 2);
 	}
-	printf("exit: too many arguments\n");
+	print_error("exit: too many arguments\n");
 	return (1);
 }

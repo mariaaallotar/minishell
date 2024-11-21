@@ -3,15 +3,15 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+         #
+#    By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/20 15:07:12 by eberkowi          #+#    #+#              #
-#    Updated: 2024/11/19 11:39:01 by maheleni         ###   ########.fr        #
+#    Updated: 2024/11/20 11:24:24 by eberkowi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME := minishell
-CC := cc -g
+CC := cc
 FLAGS := -Wall -Wextra -Werror
 LINKFLAGS := -lreadline
 
