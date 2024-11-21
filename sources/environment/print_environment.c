@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   print_environment.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 09:38:46 by maheleni          #+#    #+#             */
-/*   Updated: 2024/10/28 15:48:52 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/11/21 13:44:18 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

@@ -6,7 +6,7 @@
 #    By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/20 15:07:12 by eberkowi          #+#    #+#              #
-#    Updated: 2024/11/20 11:24:24 by eberkowi         ###   ########.fr        #
+#    Updated: 2024/11/21 11:14:39 by eberkowi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -56,6 +56,7 @@ CFILES := main.c \
 		built_ins/cd.c \
 		built_ins/env.c \
 		built_ins/exit.c \
+		built_ins/ft_itoa_long.c \
 		execution/execute_commandline.c \
 		execution/pipeline_utils.c \
 		execution/execute_builtin.c \

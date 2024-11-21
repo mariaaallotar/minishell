@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 11:21:19 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/11/20 11:19:49 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/11/21 13:40:32 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@
 # include <errno.h>
 # include <sys/stat.h>
 # include <signal.h>
+# include <limits.h>
 
 # define INFILE 100
 # define HEREDOC 101
@@ -59,7 +60,7 @@ typedef struct s_main
 	char		**split_input;
 	t_list		*env_list;
 	t_tokens	**tokens;
-	int			exit_code;
+	long		exit_code;
 	int			num_of_pipes;
 	int			elements_in_command;
 	int			id_command;
@@ -87,7 +88,7 @@ typedef struct s_parsing
 /*****************************************************************************/
 
 //Print error message to STD error
-void			print_error(char *error);
+int				print_error(char *error);
 
 void			remove_heredocs(t_main *main, t_tokens **tokens);
 
@@ -445,7 +446,7 @@ int				env(t_main *main, t_tokens token);
  * @param open_fds array of the open file descriptors
  * @returns the exitcode if in child process
  */
-int				exit_command(t_main *main, t_tokens token, int parent,
+long			exit_command(t_main *main, t_tokens token, int parent,
 					int open_fds[2]);
 
 /**
@@ -465,7 +466,7 @@ void			free_and_exit(t_main *main, int open_fds[2], int exit_code);
  * @param exit_code pointer to variable to hold the exit code in
  * @returns 1 if numeric value, 0 if not
  */
-int				int_after_exit(char *element, int *exit_code);
+int				int_after_exit(char *element, long *exit_code);
 
 /**
  * Exports a variable of form VAR or VAR=value to the env list
@@ -563,6 +564,9 @@ char			*get_pwd(void);
  * @returns 0 on success, 1 on error
  */
 int				unset(t_main *main, t_tokens token);
+
+//Itoa but for longs for exit code handling
+char			*ft_itoa_long(long n);
 
 /*****************************************************************************/
 /*****************************************************************************/

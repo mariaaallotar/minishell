@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_command.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 10:00:41 by maheleni          #+#    #+#             */
-/*   Updated: 2024/11/08 12:38:06 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/11/21 13:43:11 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,13 +31,15 @@ void	free_all_in_child(t_main *main, int *pids)
 
 void	path_error_handling(t_main *main, t_tokens token, int *pids)
 {
-	dup2(STDERR_FILENO, 1);
 	if (errno == 127)
 	{
 		if (token.command == NULL || token.command[0] == NULL)
-			printf(" : command not found\n");
+			print_error(" : command not found\n");
 		else
-			printf("%s: command not found\n", token.command[0]);
+		{
+			print_error(token.command[0]);
+			print_error(": command not found\n");
+		}
 	}
 	else
 		perror(token.command[0]);

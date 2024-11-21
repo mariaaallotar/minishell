@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 14:55:37 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/11/18 11:20:16 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/11/21 13:44:06 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ static int	malloc_quote_split(char *str, char ***quote_split)
 	*quote_split = malloc(quote_split_len * sizeof(char *));
 	if (!*quote_split)
 	{
-		printf("Error: Failed to malloc quote_split\n");
+		print_error("Error: Failed to malloc quote_split\n");
 		return (0);
 	}
 	while (quote_split_len)

@@ -6,13 +6,13 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 11:39:13 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/11/21 10:26:56 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/11/21 13:29:28 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-static size_t len_redirect(char *input, int i)
+static	size_t len_redirect(char *input, int i)
 {
 	size_t result;
 

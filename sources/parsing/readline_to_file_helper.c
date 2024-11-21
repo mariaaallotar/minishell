@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   readline_to_file_helper.c                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 10:03:19 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/11/19 11:39:59 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/11/21 13:54:28 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ int	handle_signal_received(t_main *main, t_tokens **tokens
 	close (heredoc_fd);
 	main->exit_code = g_signal_received;
 	g_signal_received = 0;
-	free(*input);
+	if (*input)
+		free(*input);
 	return (free_all_for_heredoc(main, tokens));
 }

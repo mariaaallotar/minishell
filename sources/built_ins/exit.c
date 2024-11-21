@@ -6,13 +6,40 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 18:38:06 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/11/20 16:27:05 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/11/21 13:37:33 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int	int_after_exit(char *element, int *exit_code)
+static long	ft_atoi_long(const char *str)
+{
+	long	result;
+	int		sign;
+
+	sign = 1;
+	while ((*str >= 9 && *str <= 13) || *str == ' ')
+		str++;
+	if (*str == '-' || *str == '+')
+	{
+		if (*str == '-')
+			sign *= -1;
+		str++;
+	}
+	result = 0;
+	while (*str && ft_isdigit(*str))
+	{
+		result = (result * 10) + sign * (*str - '0');
+		if (sign == 1 && result < 0)
+			return (-1);
+		else if (sign == -1 && result > 0)
+			return (0);
+		str++;
+	}
+	return (result);
+}
+
+int	int_after_exit(char *element, long *exit_code)
 {
 	size_t	itoa_result_len;
 	size_t	element_len;
@@ -21,9 +48,9 @@ int	int_after_exit(char *element, int *exit_code)
 
 	if (*element == '+')
 		element++;
-	*exit_code = ft_atoi(element);
+	*exit_code = ft_atoi_long(element);
 	itoa_result = NULL;
-	itoa_result = ft_itoa(*exit_code);
+	itoa_result = ft_itoa_long(*exit_code);
 	if (!itoa_result)
 		return (0);
 	itoa_result_len = ft_strlen(itoa_result);
@@ -50,15 +77,15 @@ void	free_and_exit(t_main *main, int open_fds[2], int exit_code)
 	free(*(main->tokens));
 	free_environment(&(main->env_list));
 	rl_clear_history();
-	printf("exit\n");
+	print_error("exit\n");
 	close(open_fds[0]);
 	close(open_fds[1]);
 	exit(exit_code);
 }
 
-int	exit_command(t_main *main, t_tokens token, int parent, int open_fds[2])
+long	exit_command(t_main *main, t_tokens token, int parent, int open_fds[2])
 {
-	int	code;
+	long	code;
 
 	if (token.command[1] == NULL)
 	{

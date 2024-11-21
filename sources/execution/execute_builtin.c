@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/31 15:49:13 by maheleni          #+#    #+#             */
-/*   Updated: 2024/11/20 11:00:39 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/11/21 12:11:38 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,6 @@ int	is_builtin_not_part_of_pipeline(t_tokens token, int num_of_pipes)
 
 int	execute_builtin_in_parent(t_main *main, t_tokens token, int num_of_pipes)
 {
-	int	exit_code;
 	int	orig_stdin_stdout[2];
 
 	if (token.command[0] != NULL
@@ -80,8 +79,7 @@ int	execute_builtin_in_parent(t_main *main, t_tokens token, int num_of_pipes)
 			main->exit_code = 1;
 			return (1);
 		}
-		exit_code = execute_builtin(main, token, 1, orig_stdin_stdout);
-		main->exit_code = exit_code;
+		main->exit_code = execute_builtin(main, token, 1, orig_stdin_stdout);
 		restore_stdin_stdout(main, orig_stdin_stdout[0], orig_stdin_stdout[1]);
 		return (1);
 	}

@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 14:37:05 by maheleni          #+#    #+#             */
-/*   Updated: 2024/11/19 13:35:58 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/11/21 13:41:15 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,11 +80,11 @@ t_list	*copy_env(char *envp[], t_main *main)
 		return (NULL);
 	temp = ft_strdup(envp[0]);
 	if (!temp)
-		exit(!!printf("Error: Failed to malloc copy env\n"));
+		exit(print_error("Error: Failed to malloc copy env\n"));
 	new = ft_lstnew(temp);
 	if (new == NULL)
 	{
-		printf("Error: Failed to malloc copy env\n");
+		print_error("Error: Failed to malloc copy env\n");
 		free(temp);
 		exit (1);
 	}
