@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/31 15:43:29 by maheleni          #+#    #+#             */
-/*   Updated: 2024/11/18 11:45:13 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/11/21 12:30:06 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,8 @@ int	create_fork(int i, int num_of_pipes, int pipe_array[2][2], int *pids)
 			close_pipes_on_error(pipe_array[0]);
 		if (num_of_pipes > 0)
 			close_pipes_on_error(pipe_array[1]);
+		while (--i >= 0)
+			kill(pids[i], SIGINT);
 		free(pids);
 		return (-1);
 	}
