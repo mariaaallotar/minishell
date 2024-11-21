@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/24 10:44:31 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/11/18 12:23:46 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/11/21 15:03:19 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 void	exit_free_split_element_malloc_failed(t_main *main, int i)
 {
+	print_error("Error: Failed to malloc redirect in split_input\n");
 	while (i >= 0)
 	{
 		free(main->split_input[i]);

@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 11:32:36 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/11/21 10:28:49 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/11/21 15:04:09 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,7 +121,6 @@ int	parsing(t_main *main, t_tokens **tokens)
 {
 	if (!split_input(main))
 		return (0);
-	//print_split_input(main);
 	free(main->input);
 	main->input = NULL;
 	malloc_and_init_tokens(main, tokens);

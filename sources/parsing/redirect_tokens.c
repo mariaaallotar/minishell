@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/24 12:13:07 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/11/21 10:49:35 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/11/21 15:10:29 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,8 @@ int	check_for_redirect_error(t_main *main)
 	{
 		if (is_redirect((main->split_input[i])[0]))
 		{
-			if (!(main->split_input[i + 1]) || is_redirect((main->split_input[i + 1])[0]))
+			if (!(main->split_input[i + 1])
+				|| is_redirect((main->split_input[i + 1])[0]))
 			{
 				main->exit_code = 2;
 				print_error("syntax error near unexpected token\n");

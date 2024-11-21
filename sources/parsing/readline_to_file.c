@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/08 12:30:12 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/11/21 13:54:46 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/11/21 15:10:17 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,10 +52,9 @@ static int	check_for_delimiter(char **in, t_redirect_node *temp)
 
 int	readline_to_file(t_main *main, t_tokens **tokens, t_redirect_node *temp)
 {
-	int		heredoc_fd;
 	char	*in;
 
-	heredoc_fd = open(temp->name, O_WRONLY | O_TRUNC | O_CREAT, 0644);
+	main->fd = open(temp->name, O_WRONLY | O_TRUNC | O_CREAT, 0644);
 	activate_heredoc_signals();
 	rl_event_hook = event;
 	while (1)
@@ -63,19 +62,19 @@ int	readline_to_file(t_main *main, t_tokens **tokens, t_redirect_node *temp)
 		in = NULL;
 		in = readline("> ");
 		if (g_signal_received && check_for_empty_prompt(&in))
-			return (handle_signal_received(main, tokens, heredoc_fd, &in));
+			return (handle_signal_received(main, tokens, main->fd, &in));
 		if (check_for_empty_prompt(&in))
 			continue ;
-		if (!check_malloc_fail_or_signal(main, tokens, heredoc_fd, in))
+		if (!check_malloc_fail_or_signal(main, tokens, main->fd, in))
 			return (0);
 		if (g_signal_received)
-			return (handle_signal_received(main, tokens, heredoc_fd, &in));
+			return (handle_signal_received(main, tokens, main->fd, &in));
 		if (check_for_delimiter(&in, temp))
 			break ;
 		if (!temp->delimiter_has_quotes)
 			expand_for_heredoc(main, tokens, &in);
-		write_to_heredoc_and_free_input(&in, heredoc_fd);
+		write_to_heredoc_and_free_input(&in, main->fd);
 	}
-	close(heredoc_fd);
+	close(main->fd);
 	return (1);
 }

@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 11:21:19 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/11/21 13:40:32 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/11/21 15:10:52 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,7 @@ typedef struct s_main
 	int			id_quote_split;
 	int			num_of_existing_elements;
 	int			rl_return;
+	int			fd;
 }	t_main;
 
 typedef struct s_parsing
