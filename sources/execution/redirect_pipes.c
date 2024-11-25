@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/08 12:07:23 by maheleni          #+#    #+#             */
-/*   Updated: 2024/11/08 12:10:09 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/11/25 14:39:03 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,9 +49,8 @@ int	redirect_pipes(int i, int num_of_pipes, int pipe_array[2][2])
 {
 	int	return_value;
 
-	if (i == 0)
-		return_value = redirect_pipe_left(NULL);
-	else
+	return_value = 0;
+	if (i > 0)
 		return_value = redirect_pipe_left(pipe_array[0]);
 	if (return_value == -1)
 	{
@@ -62,9 +61,7 @@ int	redirect_pipes(int i, int num_of_pipes, int pipe_array[2][2])
 		}
 		return (-1);
 	}
-	if (num_of_pipes == 0)
-		return_value = redirect_pipe_right(NULL);
-	else
+	if (num_of_pipes > 0)
 		return_value = redirect_pipe_right(pipe_array[1]);
 	if (return_value == -1)
 		return (-1);

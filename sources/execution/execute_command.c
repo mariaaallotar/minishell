@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_command.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 10:00:41 by maheleni          #+#    #+#             */
-/*   Updated: 2024/11/25 12:08:04 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/11/25 15:15:31 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,19 +36,25 @@ void	path_error_handling(t_main *main, t_tokens token, int *pids)
 
 static int	error_print(t_tokens token)
 {
+	dup2(STDERR_FILENO, STDOUT_FILENO);
 	if (is_directory(token.command[0]))
 	{
-		printf("%s\n", strerror(EISDIR));
+		printf("%s: %s\n", token.command[0], strerror(EISDIR));
+		return (126);
+	}
+	else if (errno == EACCES)
+	{
+		printf("%s: %s\n", token.command[0], strerror(EACCES));
 		return (126);
 	}
 	else if (errno == ENOENT)
 	{
-		printf("%s\n", strerror(ENOENT));
+		printf("%s: %s\n", token.command[0], strerror(ENOENT));
 		return (127);
 	}
 	else
 	{
-		perror(NULL);
+		perror(token.command[0]);
 		return (errno);
 	}	
 }
