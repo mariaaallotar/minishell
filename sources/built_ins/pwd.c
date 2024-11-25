@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 10:33:16 by maheleni          #+#    #+#             */
-/*   Updated: 2024/11/20 11:55:56 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/11/25 13:38:29 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,20 @@ char	*get_pwd(void)
 	return (NULL);
 }
 
+static char	*get_pwd_from_env(t_main *main)
+{
+	t_list	*node;
+	char	*pwd;
+
+	node = find_node(main, "PWD=");
+	if (node == NULL)
+	{
+		return (NULL);
+	}
+	pwd = node->content + 4;
+	return (pwd);
+}
+
 int	pwd(t_main *main, t_tokens token)
 {
 	char	*buf;
@@ -37,8 +51,14 @@ int	pwd(t_main *main, t_tokens token)
 	(void)main;
 	if (token.command[0] == NULL)
 		return (1);
-	buf = get_pwd();
-	printf("%s\n", buf);
-	free(buf);
+	buf = get_pwd_from_env(main);
+	if (!buf)
+	{
+		buf = get_pwd();
+		printf("%s\n", buf);
+		free(buf);
+	}
+	else
+		printf("%s\n", buf);
 	return (0);
 }

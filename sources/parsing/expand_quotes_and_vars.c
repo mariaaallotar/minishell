@@ -12,18 +12,6 @@
 
 #include "../../includes/minishell.h"
 
-// static void print_quote_split(char **quote_split)
-// {
-// 	printf("\033[0;34m---QUOTE SPLIT ---\033[0m\n");
-// 	int i = 0;
-// 	while (quote_split[i])
-// 	{
-// 		printf("quote_split[%d] = %s\n", i, quote_split[i]);
-// 		i++;
-// 	}
-// 	printf("\n");
-// }
-
 void	expand_vars_or_do_inner_expansion(t_main *main, t_tokens **tokens
 		, char ***quote_split, t_expand expand)
 {
