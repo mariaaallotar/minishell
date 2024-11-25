@@ -6,7 +6,7 @@
 #    By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/20 15:07:12 by eberkowi          #+#    #+#              #
-#    Updated: 2024/11/21 11:14:39 by eberkowi         ###   ########.fr        #
+#    Updated: 2024/11/25 12:08:36 by eberkowi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -63,6 +63,7 @@ CFILES := main.c \
 		execution/handle_redirects.c \
 		execution/redirect_pipes.c \
 		execution/execute_command.c \
+		execution/execute_command_freeing.c \
 		execution/find_path.c \
 		execution/get_path.c \
 

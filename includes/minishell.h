@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 11:21:19 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/11/21 15:10:52 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/11/25 12:09:44 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -734,22 +734,6 @@ char			*get_path(t_main *main, char *command, int *pids);
  * @returns 1 when directory, 0 when not
  */
 int				is_directory(char *command);
-
-/**
- * Checks if command is a path to a file
- * 
- * @param command the command to check
- * @returns 1 when is path, 0 when not
- */
-int				is_path_to_file(char *command);
-
-/**
- * Checks if command is a path to an executable
- * 
- * @param command the command to check
- * @returns 1 when executable, 0 when not
- */
-int				is_path_to_executable(char *command);
 
 /**
  * Loops through all redirects and opens them. Does dup2 only for the

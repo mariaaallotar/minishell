@@ -3,32 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   get_path.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 13:45:33 by maheleni          #+#    #+#             */
-/*   Updated: 2024/11/18 11:58:12 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/11/25 12:16:47 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
-
-int	is_path_to_executable(char *command)
-{
-	if (access((const char *)command, X_OK) == 0)
-		return (1);
-	return (0);
-}
-
-int	is_path_to_file(char *command)
-{
-	if (access((const char *)command, F_OK) == 0
-		&& ft_strchr(command, '/') != NULL)
-		return (1);
-	else if (ft_strchr(command, '/'))
-		return (1);
-	else
-		return (0);
-}
 
 int	is_directory(char *command)
 {
@@ -38,7 +20,7 @@ int	is_directory(char *command)
 	{
 		if (stat(command, &file_stat) == 0)
 		{
-			if (S_ISDIR(file_stat.st_mode) && ft_strrchr(command, '/') != NULL)
+			if (S_ISDIR(file_stat.st_mode))
 			{
 				errno = EISDIR;
 				return (1);
@@ -51,17 +33,41 @@ int	is_directory(char *command)
 	return (0);
 }
 
+static int	command_begins_with_dot_or_contains_slash(char *command)
+{
+	int	i;
+
+	if (command[0] == '.')
+		return (1);
+	i = 0;
+	while (command[i])
+	{
+		if (command[i] == '/')
+			return (1);
+		i++;
+	}
+	return (0);
+}
+
+static int	path_does_not_exist(t_main *main)
+{
+	t_list	*node;
+
+	node = find_node(main, "PATH=");
+	if (node == NULL)
+	{
+		errno = ENOENT;
+		return (1);
+	}
+	return (0);
+}
+
 char	*get_path(t_main *main, char *command, int *pids)
 {
 	errno = 0;
-	if (is_directory(command))
-		return (NULL);
-	else if (is_path_to_file(command))
-	{
-		if (is_path_to_executable(command))
-			return (ft_strdup(command));
-		else
-			return (NULL);
-	}
+	if (command_begins_with_dot_or_contains_slash(command))
+		return (ft_strdup(command));
+	if (path_does_not_exist(main))
+		return (ft_strdup(command));
 	return (find_path(main, command, pids));
 }

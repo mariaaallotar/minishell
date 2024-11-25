@@ -1,33 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   signal_handlers.c                                  :+:      :+:    :+:   */
+/*   execute_command_2.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/18 14:26:40 by maheleni          #+#    #+#             */
-/*   Updated: 2024/11/25 12:17:25 by eberkowi         ###   ########.fr       */
+/*   Created: 2024/10/11 10:00:41 by maheleni          #+#    #+#             */
+/*   Updated: 2024/11/25 12:06:39 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int	g_signal_received = 0;
-
-void	handle_sigint_readline(int sig)
+void	free_all_in_parent(t_main *main)
 {
-	g_signal_received = 128 + sig;	//todo
-	write(1, "\n", 2);
-	rl_on_new_line();
-	rl_replace_line("", 0);
-	rl_done = 1;
+	rl_clear_history();
+	remove_heredocs(main, main->tokens);
+	free_and_null_split_input(main);
+	free_token_commands(main, main->tokens);
+	free_token_redirects(main, main->tokens);
+	free(*(main->tokens));
+	free_environment(&(main->env_list));
 }
 
-void	handle_sigint_heredoc(int sig)
+void	free_all_in_child(t_main *main, int *pids)
 {
-	g_signal_received = 128 + sig;	//todo
-	write(1, "\n", 2);
-	rl_on_new_line();
-	rl_replace_line("", 0);
-	rl_done = 1;
+	free_all_in_parent(main);
+	free(pids);
 }

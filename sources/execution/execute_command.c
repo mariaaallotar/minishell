@@ -6,28 +6,11 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 10:00:41 by maheleni          #+#    #+#             */
-/*   Updated: 2024/11/21 13:43:11 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/11/25 12:08:04 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
-
-void	free_all_in_parent(t_main *main)
-{
-	rl_clear_history();
-	remove_heredocs(main, main->tokens);
-	free_and_null_split_input(main);
-	free_token_commands(main, main->tokens);
-	free_token_redirects(main, main->tokens);
-	free(*(main->tokens));
-	free_environment(&(main->env_list));
-}
-
-void	free_all_in_child(t_main *main, int *pids)
-{
-	free_all_in_parent(main);
-	free(pids);
-}
 
 void	path_error_handling(t_main *main, t_tokens token, int *pids)
 {
@@ -51,10 +34,37 @@ void	path_error_handling(t_main *main, t_tokens token, int *pids)
 	exit (errno);
 }
 
+static int	error_print(t_tokens token)
+{
+	if (is_directory(token.command[0]))
+	{
+		printf("%s\n", strerror(EISDIR));
+		return (126);
+	}
+	else if (errno == ENOENT)
+	{
+		printf("%s\n", strerror(ENOENT));
+		return (127);
+	}
+	else
+	{
+		perror(NULL);
+		return (errno);
+	}	
+}
+
+static void	env_is_null(t_main *main, int *pids, char **path)
+{
+	free_all_in_child(main, pids);
+	free(*path);
+	exit(errno);
+}
+
 void	execute_command(t_main *main, t_tokens token, int *pids)
 {
 	char	*path;
 	char	**env;
+	int		exit_value;
 
 	path = get_path(main, *(token.command), pids);
 	if (path == NULL)
@@ -65,18 +75,15 @@ void	execute_command(t_main *main, t_tokens token, int *pids)
 	{
 		env = convert_list_to_array(main->env_list);
 		if (env == NULL)
-		{
-			free_all_in_child(main, pids);
-			free(path);
-			exit(errno);
-		}
+			env_is_null(main, pids, &path);
 	}
 	if (execve(path, token.command, env) == -1)
 	{
+		exit_value = error_print(token);
 		free_all_in_child(main, pids);
 		free(path);
 		free(env);
-		exit(errno);
+		exit(exit_value);
 	}
 }
 
