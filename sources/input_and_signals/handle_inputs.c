@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 12:11:12 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/11/20 16:05:29 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/11/25 12:24:51 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	handle_inputs(char **input, t_main *main)
 	*input = readline("minishell: ");
 	if (g_signal_received)
 	{
-		main->exit_code = g_signal_received;
+		main->exit_code = g_signal_received + 128;
 		g_signal_received = 0;
 		if (*input)
 			free(*input);

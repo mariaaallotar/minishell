@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 10:03:19 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/11/21 13:54:28 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/11/25 12:25:07 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ int	handle_signal_received(t_main *main, t_tokens **tokens
 		, int heredoc_fd, char **input)
 {
 	close (heredoc_fd);
-	main->exit_code = g_signal_received;
+	main->exit_code = g_signal_received + 128;
 	g_signal_received = 0;
 	if (*input)
 		free(*input);
