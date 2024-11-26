@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_path.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 13:45:33 by maheleni          #+#    #+#             */
-/*   Updated: 2024/11/25 12:16:47 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/11/26 10:15:58 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ int	is_directory(char *command)
 	return (0);
 }
 
-static int	command_begins_with_dot_or_contains_slash(char *command)
+int	command_begins_with_dot_or_contains_slash(char *command)
 {
 	int	i;
 
@@ -49,7 +49,7 @@ static int	command_begins_with_dot_or_contains_slash(char *command)
 	return (0);
 }
 
-static int	path_does_not_exist(t_main *main)
+int	path_does_not_exist(t_main *main)
 {
 	t_list	*node;
 

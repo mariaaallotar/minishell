@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 10:33:16 by maheleni          #+#    #+#             */
-/*   Updated: 2024/11/25 13:38:29 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/11/26 10:23:47 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ char	*get_pwd(void)
 	return (NULL);
 }
 
-static char	*get_pwd_from_env(t_main *main)
+char	*get_pwd_from_env(t_main *main)
 {
 	t_list	*node;
 	char	*pwd;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 11:21:19 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/11/25 12:09:44 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/11/26 10:24:40 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -550,6 +550,14 @@ t_list			*get_smallest_node(t_list *env_list);
 int				pwd(t_main *main, t_tokens token);
 
 /**
+ * Returns the value of PWD variable if it exists
+ * 
+ * @param main the main struct of the program
+ * @returns value of PWD or NULL
+ */
+char			*get_pwd_from_env(t_main *main);
+
+/**
  * Gets and returns the current working directory in a buffer that is malloced
  * by getcwd()
  * 
@@ -718,14 +726,37 @@ int				set_path_if_executable(char *env_path, char *command,
 					char **command_path);
 
 /**
- * Returns the path to the executable
+ * Returns a path to the command executable
+ * When
+ * 	a) command is a relative or absolute path
+ * 	-> returns an allocated copy of that command
+ * 	b) command is just a word
+ * 	-> tries to find the path to the executable with the name of command
+ * 		from the PATH variable, when successfull returns path, NULL otherwise
  * 
  * @param main the main struct of the program
  * @param command the command to get path to
  * @param pids allocated array of processids
- * @returns the path to the command, NULL if path was not found
+ * @returns the path to the command, the command or NULL
  */
 char			*get_path(t_main *main, char *command, int *pids);
+
+/**
+ * Checks if the PATH variable exist in the environment
+ * 
+ * @param main the main struct of the program
+ * @returns 1 when PATH does not exist, 0 when it exists
+ */
+int				path_does_not_exist(t_main *main);
+
+/**
+ * Checks if the command begins with a dot or contains a slash, i.e. if the
+ * command is a path
+ * 
+ * @param command the command to check
+ * @returns 1 when it contains either . or /, 0 if dos not contain either
+ */
+int				command_begins_with_dot_or_contains_slash(char *command);
 
 /**
  * Checks if command is a directory
