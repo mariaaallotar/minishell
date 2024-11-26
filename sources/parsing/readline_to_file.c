@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/08 12:30:12 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/11/25 12:25:16 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/11/26 15:38:44 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,12 +29,13 @@ static void	write_to_heredoc_and_free_input(char **input, int heredoc_fd)
 	*input = NULL;
 }
 
-static int	check_for_empty_prompt(char **in)
+static int	check_for_empty_prompt(int fd, char **in)
 {
 	if (*in && (*in)[0] == '\0')
 	{
 		free(*in);
 		*in = NULL;
+		write(fd, "\n", 1);
 		return (1);
 	}
 	return (0);
@@ -61,14 +62,12 @@ int	readline_to_file(t_main *main, t_tokens **tokens, t_redirect_node *temp)
 	{
 		in = NULL;
 		in = readline("> ");
-		if (g_signal_received && check_for_empty_prompt(&in))
+		if (g_signal_received)
 			return (handle_signal_received(main, tokens, main->fd, &in));
-		if (check_for_empty_prompt(&in))
+		if (check_for_empty_prompt(main->fd, &in))
 			continue ;
 		if (!check_malloc_fail_or_signal(main, tokens, main->fd, in))
 			return (0);
-		if (g_signal_received)
-			return (handle_signal_received(main, tokens, main->fd, &in));
 		if (check_for_delimiter(&in, temp))
 			break ;
 		if (!temp->delimiter_has_quotes)
