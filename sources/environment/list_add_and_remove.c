@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   list_add_and_remove.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 11:55:29 by maheleni          #+#    #+#             */
-/*   Updated: 2024/11/19 13:55:18 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/11/27 15:57:14 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,17 +14,22 @@
 
 t_list	*find_node(t_main *main, char *variable)
 {
-	int		key_len;
 	t_list	*current_node;
+	const char *equal_sign_maybe = ft_strchrnul(variable, '=');
+	const size_t len_to_compare = equal_sign_maybe - variable;
+	size_t max_len;
+	size_t length_to_equal_sign;
 
-	key_len = ft_strchr(variable, '=') - variable;
-	if (key_len < 0)
-		key_len = ft_strlen(variable);
 	current_node = main->env_list;
 	while (current_node != NULL)
 	{
+		length_to_equal_sign = ft_strchrnul(current_node->content, '=') - (char *)current_node->content;
+		if (length_to_equal_sign < len_to_compare)
+			max_len = len_to_compare;
+		else
+			max_len = length_to_equal_sign;
 		if (current_node->content
-			&& ft_strncmp(variable, current_node->content, key_len) == 0)
+			&& ft_strncmp(variable, current_node->content, max_len) == 0)
 			return (current_node);
 		current_node = current_node->next;
 	}
@@ -37,8 +42,14 @@ int	update_variable(t_main *main, char *var)
 	char	*malloced_content;
 
 	node = find_node(main, var);
+	if (ft_strchr(var, '=') == NULL && node != NULL)
+	{
+		return (0);
+	}
 	if (node == NULL)
+	{
 		return (1);
+	}
 	free(node->content);
 	malloced_content = ft_strdup(var);
 	if (malloced_content == NULL)
@@ -71,15 +82,29 @@ int	add_variable(t_main *main, char *content)
 	return (0);
 }
 
-void	set_node_and_prev_node(t_list **previous_node, t_list **node,
+int	set_node_and_prev_node(t_list **previous_node, t_list **node,
 	char *variable_key)
 {
-	while (*node != NULL
-		&& ft_strncmp((*node)->content, variable_key, ft_strlen(variable_key)))
+	char	*temp;
+
+	while (*node != NULL)
 	{
+		temp = ft_strjoin((*node)->content, "=");
+		if (temp == NULL)
+		{
+			perror("unset");
+			return (-1);
+		}
+		if (ft_strncmp(temp, variable_key, ft_strlen(variable_key)) == 0)
+			break ;
+		free(temp);
+		temp = NULL;
 		*previous_node = *node;
 		*node = (*previous_node)->next;
 	}
+	if (temp)
+		free(temp);
+	return (0);
 }
 
 void	remove_variable(t_main *main, char *variable_key)
@@ -88,16 +113,12 @@ void	remove_variable(t_main *main, char *variable_key)
 	t_list	*node;
 	t_list	*next_node;
 
-	variable_key = ft_strjoin(variable_key, "=");
-	if (variable_key == NULL)
-	{
-		perror(NULL);
+	if (main->env_list == NULL)
 		return ;
-	}
 	node = main->env_list;
 	previous_node = NULL;
-	set_node_and_prev_node(&previous_node, &node, variable_key);
-	free(variable_key);
+	if (set_node_and_prev_node(&previous_node, &node, variable_key) == -1)
+		return ;
 	if (node == NULL)
 		return ;
 	next_node = node->next;
