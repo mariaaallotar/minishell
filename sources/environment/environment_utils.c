@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   environment_utils.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 14:37:05 by maheleni          #+#    #+#             */
-/*   Updated: 2024/11/21 13:41:15 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/11/27 16:23:24 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,10 +31,18 @@ char	**malloc_array(t_list *env_list)
 {
 	int		size;
 	char	**array;
+	t_list	*node;
 
 	if (env_list == NULL)
 		return (NULL);
-	size = ft_lstsize(env_list);
+	size = 0;
+	node = env_list;
+	while (node)
+	{
+		if (ft_strchr(node->content, '='))
+			size++;
+		node = node->next;
+	}
 	array = NULL;
 	array = malloc ((size + 1) * sizeof(char *));
 	if (array == NULL)
@@ -49,15 +57,14 @@ char	**convert_list_to_array(t_list *env_list)
 	int		i;
 
 	array = malloc_array(env_list);
-	if (!array)
+	if (array == NULL)
 		return (array);
 	node = env_list;
 	i = 0;
 	while (node != NULL)
 	{
-		if (ft_strrchr(node->content, '=') == NULL)
+		if (ft_strchr(node->content, '=') == NULL)
 		{
-			i++;
 			node = node->next;
 			continue ;
 		}
