@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/08 12:30:12 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/11/26 15:38:44 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/11/28 10:27:40 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,12 +64,12 @@ int	readline_to_file(t_main *main, t_tokens **tokens, t_redirect_node *temp)
 		in = readline("> ");
 		if (g_signal_received)
 			return (handle_signal_received(main, tokens, main->fd, &in));
-		if (check_for_empty_prompt(main->fd, &in))
-			continue ;
 		if (!check_malloc_fail_or_signal(main, tokens, main->fd, in))
 			return (0);
 		if (check_for_delimiter(&in, temp))
 			break ;
+		if (check_for_empty_prompt(main->fd, &in))
+			continue ;
 		if (!temp->delimiter_has_quotes)
 			expand_for_heredoc(main, tokens, &in);
 		write_to_heredoc_and_free_input(&in, main->fd);
