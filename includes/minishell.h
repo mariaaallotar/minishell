@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 11:21:19 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/11/28 11:45:15 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/11/28 14:40:57 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -793,9 +793,10 @@ int				open_file(int *infile, int *outfile, t_redirect_node *node);
  * Opens outfile
  * 
  * @param node pointer to the redirect node that holds the filename to open
+ * @param infile pointer to the infile filedescriptor
  * @returns 0 on success, -1 on fail
  */
-int				open_outfile(t_redirect_node *node);
+int				open_outfile(t_redirect_node *node, int *infile);
 
 /**
  * Opens infile

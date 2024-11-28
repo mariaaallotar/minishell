@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 11:55:29 by maheleni          #+#    #+#             */
-/*   Updated: 2024/11/27 15:57:14 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/11/28 15:12:05 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,16 +14,19 @@
 
 t_list	*find_node(t_main *main, char *variable)
 {
-	t_list	*current_node;
-	const char *equal_sign_maybe = ft_strchrnul(variable, '=');
-	const size_t len_to_compare = equal_sign_maybe - variable;
-	size_t max_len;
-	size_t length_to_equal_sign;
+	t_list		*current_node;
+	const char	*equal_sign_maybe;
+	size_t		len_to_compare;
+	size_t		max_len;
+	size_t		length_to_equal_sign;
 
+	equal_sign_maybe = ft_strchrnul(variable, '=');
+	len_to_compare = equal_sign_maybe - variable;
 	current_node = main->env_list;
 	while (current_node != NULL)
 	{
-		length_to_equal_sign = ft_strchrnul(current_node->content, '=') - (char *)current_node->content;
+		length_to_equal_sign = ft_strchrnul(current_node->content, '=')
+			- (char *)current_node->content;
 		if (length_to_equal_sign < len_to_compare)
 			max_len = len_to_compare;
 		else

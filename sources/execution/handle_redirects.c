@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 11:06:40 by maheleni          #+#    #+#             */
-/*   Updated: 2024/11/18 14:17:21 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/11/28 14:41:18 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int	open_infile(t_redirect_node	*node)
 	return (infile);
 }
 
-int	open_outfile(t_redirect_node *node)
+int	open_outfile(t_redirect_node *node, int *infile)
 {
 	int	outfile;
 
@@ -37,6 +37,8 @@ int	open_outfile(t_redirect_node *node)
 	if (outfile == -1)
 	{
 		perror(node->name);
+		if (*infile != -1)
+			close (*infile);
 		return (-1);
 	}
 	return (outfile);
@@ -64,7 +66,7 @@ int	open_file(int *infile, int *outfile, t_redirect_node *node)
 	}
 	if (*outfile != -1)
 		close(*outfile);
-	*outfile = open_outfile(node);
+	*outfile = open_outfile(node, infile);
 	if (*outfile == -1)
 		return (-1);
 	return (0);
