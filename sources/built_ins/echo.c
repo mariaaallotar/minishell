@@ -6,61 +6,67 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 14:52:20 by maheleni          #+#    #+#             */
-/*   Updated: 2024/11/26 15:39:19 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/11/27 11:34:33 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int	has_no_newline_flag(char *str)
+int	check_for_newline_flag(char *str)
 {
 	int	i;
 
-	i = 0;
-	if (str[i] == '-')
-		i++;
-	else
+	if (!str[0])
 		return (0);
-	while (str[i] == 'n')
-		i++;
-	if (str[i] != '\0')
+	if (str[0] != '-')
 		return (0);
+	if (str[0] == '-' && !str[1])
+		return (0);
+	i = 1;
+	while (str[i])
+	{
+		if (str[i++] != 'n')
+			return (0);
+	}
 	return (1);
 }
 
-void	print_echo_arguments(int i, int has_new_line, t_tokens token)
+void	print_echo_arguments(t_tokens token)
 {
-	while (token.command[i] != NULL)
+	int	i;
+	int	newline_flag;
+
+	newline_flag = check_for_newline_flag(token.command[1]);
+	i = 1;
+	while (token.command[i])
 	{
-		printf("%s", token.command[i]);
-		i++;
-		if (token.command[i] == NULL && has_new_line)
-			printf("\n");
-		else if (token.command[i] == NULL)
-			break ;
+		if (check_for_newline_flag(token.command[i]))
+			i++;
 		else
-			printf(" ");
+		{
+			while (token.command[i])
+			{
+				printf("%s", token.command[i++]);
+				if (token.command[i])
+					printf(" ");
+			}
+		}
 	}
+	if (!newline_flag)
+		printf("\n");
 }
 
 int	echo(t_main *main, t_tokens token)
 {
-	int	has_new_line;
 	int	i;
 
 	(void)main;
-	has_new_line = 1;
 	i = 1;
 	if (token.command[i] == NULL)
 	{
 		printf("\n");
 		return (0);
 	}
-	if (has_no_newline_flag(token.command[i]))
-	{
-		has_new_line = 0;
-		i++;
-	}
-	print_echo_arguments(i, has_new_line, token);
+	print_echo_arguments(token);
 	return (0);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 11:21:19 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/11/26 10:24:40 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/11/28 11:45:15 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -412,29 +412,24 @@ int				update_directory_variable(t_main *main, char *key);
 int				echo(t_main *main, t_tokens token);
 
 /**
+ * Checks for a newline flag on the given string (-n or -nnnnn etc.)
+ * 
+ * @param str the string that we are checking for newline flag
+ * @returns 1 on true, 0 on false
+ */
+int				check_for_newline_flag(char *str);
+
+/**
  * Prints the arguments
  * 
- * @param i position of first aguent to print
- * @param has_new_line 1 if will print newline at the end, 0 if not
  * @param token the token that echo command is part of
  */
-void			print_echo_arguments(int i, int has_new_line, t_tokens token);
+void			print_echo_arguments(t_tokens token);
 
 /**
- * Checks if echo has the flag -n or not, indicating if the trailing newline
- * will be printed or not.
+ * Prints the current environment variables and applies any newline flags
  * 
- * @param str the string that will hold the -n or first argument
- * @returns 1 if -n flag is present, 0 otherwise
- */
-int				has_no_newline_flag(char *str);
-
-/**
- * Prints the current environment variables
- * 
- * @param main the main struct of the program
  * @param token the token that env command is part of
- * @returns 0 on success, 1 on error
  */
 int				env(t_main *main, t_tokens token);
 
