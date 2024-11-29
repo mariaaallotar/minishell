@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/08 12:30:12 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/11/28 10:27:40 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/11/28 14:37:14 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,20 @@ int	readline_to_file(t_main *main, t_tokens **tokens, t_redirect_node *temp)
 	{
 		in = NULL;
 		in = readline("> ");
+		//BEGIN TEST
+		// if (isatty(fileno(stdin)))
+		// 	in = readline("minishell: ");
+		// else
+		// {
+		// 	char *line;
+		// 	line = get_next_line(fileno(stdin));
+		// 	in = ft_strtrim(line, "\n");
+		// 	free(line);
+		// }
+		// char *tmp = ft_strdup(in);
+		// free(in);
+		// in = tmp;
+		//END TEST
 		if (g_signal_received)
 			return (handle_signal_received(main, tokens, main->fd, &in));
 		if (!check_malloc_fail_or_signal(main, tokens, main->fd, in))

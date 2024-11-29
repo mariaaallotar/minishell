@@ -56,6 +56,20 @@ static void	init_expand_struct(t_expand *expand, bool is_heredoc)
 	(*expand).is_heredoc = is_heredoc;
 }
 
+static void free_quote_split(t_main *main, char ***arr)
+{
+	int	i;
+
+	i = 0;
+	while (i < main->quote_split_length)
+	{
+		if ((*arr)[i])
+			free((*arr)[i]);
+		i++;
+	}
+	free(*arr);	
+}
+
 int	expand_quotes_and_vars(t_main *main, t_tokens **tokens
 		, char **str, bool is_heredoc)
 {
@@ -69,12 +83,12 @@ int	expand_quotes_and_vars(t_main *main, t_tokens **tokens
 	expand_vars_or_do_inner_expansion(main, tokens, &quote_split, expand);
 	if (!combine_quote_split(main, tokens, &quote_split, str))
 	{
-		ft_free_split(&quote_split);
+		free_quote_split(main, &quote_split);
 		return (0);
 	}
 	if (!check_for_heredoc_quotes(str, is_heredoc
 			, expand.quote_type, &quote_split))
 		return (0);
-	ft_free_split(&quote_split);
+	free_quote_split(main, &quote_split);
 	return (1);
 }
