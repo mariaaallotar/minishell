@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 11:21:19 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/11/28 14:40:57 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/11/29 11:13:07 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -215,6 +215,10 @@ int				expand_quotes_and_vars(t_main *main, t_tokens **tokens,
 //Free and  exit when malloc fails in combine elements for quote_split
 void			free_and_exit_combine_elements(t_main *main,
 					t_tokens **tokens, char ***quote_split);
+
+//Frees the quote_split using the length of the malloced quote_split instead
+//of the regular free_split because some elements are NULL
+void			free_quote_split(int len, char ***arr);
 
 //Expansion of quote and vars in the middle of words or double quotes
 int				inner_expansion(t_main *main, char **str, bool is_heredoc);

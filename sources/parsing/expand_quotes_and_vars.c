@@ -56,19 +56,17 @@ static void	init_expand_struct(t_expand *expand, bool is_heredoc)
 	(*expand).is_heredoc = is_heredoc;
 }
 
-static void free_quote_split(t_main *main, char ***arr)
-{
-	int	i;
-
-	i = 0;
-	while (i < main->quote_split_length)
-	{
-		if ((*arr)[i])
-			free((*arr)[i]);
-		i++;
-	}
-	free(*arr);	
-}
+// static void print_quote_split(char **quote_split)
+// {
+// 	printf("\033[0;34m---QUOTE SPLIT ---\033[0m\n");
+// 	int i = 0;
+// 	while (quote_split[i])
+// 	{
+// 		printf("quote_split[%d] = %s\n", i, quote_split[i]);
+// 		i++;
+// 	}
+// 	printf("\n");
+// }
 
 int	expand_quotes_and_vars(t_main *main, t_tokens **tokens
 		, char **str, bool is_heredoc)
@@ -79,16 +77,18 @@ int	expand_quotes_and_vars(t_main *main, t_tokens **tokens
 	init_expand_struct(&expand, is_heredoc);
 	if (!create_quote_split(*str, &quote_split))
 		return (0);
+	// printf("PARENT\n"); //REMOVE
+	// print_quote_split(quote_split); //REMOVE
 	get_quote_split_length(main, quote_split);
 	expand_vars_or_do_inner_expansion(main, tokens, &quote_split, expand);
 	if (!combine_quote_split(main, tokens, &quote_split, str))
 	{
-		free_quote_split(main, &quote_split);
+		free_quote_split(main->quote_split_length, &quote_split);
 		return (0);
 	}
 	if (!check_for_heredoc_quotes(str, is_heredoc
 			, expand.quote_type, &quote_split))
 		return (0);
-	free_quote_split(main, &quote_split);
+	free_quote_split(main->quote_split_length, &quote_split);
 	return (1);
 }

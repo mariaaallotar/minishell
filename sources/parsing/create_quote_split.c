@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 14:55:37 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/11/21 13:44:06 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/11/29 11:33:01 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ static int	get_quote_split_len(char *str)
 {
 	int		i;
 	int		num_of_vars;
-	size_t	result;
+	int		result;
 
 	i = 0;
 	num_of_vars = 0;
@@ -55,7 +55,8 @@ static int	get_quote_split_len(char *str)
 
 static int	malloc_quote_split(char *str, char ***quote_split)
 {
-	size_t	quote_split_len;
+	int i;
+	int	quote_split_len;
 
 	quote_split_len = get_quote_split_len(str) + 1;
 	*quote_split = NULL;
@@ -65,12 +66,13 @@ static int	malloc_quote_split(char *str, char ***quote_split)
 		print_error("Error: Failed to malloc quote_split\n");
 		return (0);
 	}
-	while (quote_split_len)
+	i = quote_split_len;
+	while (i > 0)
 	{
-		(*quote_split)[quote_split_len - 1] = NULL;
-		quote_split_len--;
+		(*quote_split)[i - 1] = NULL;
+		i--;
 	}
-	return (1);
+	return (quote_split_len);
 }
 
 int	create_quote_split(char *str, char ***quote_split)
@@ -78,8 +80,10 @@ int	create_quote_split(char *str, char ***quote_split)
 	int		id_str;
 	int		id_split;
 	size_t	split_element_len;
+	int 	quote_split_len;
 
-	if (!malloc_quote_split(str, quote_split))
+	quote_split_len = malloc_quote_split(str, quote_split);
+	if (!quote_split_len)
 		return (0);
 	id_str = 0;
 	id_split = 0;
@@ -99,5 +103,5 @@ int	create_quote_split(char *str, char ***quote_split)
 		id_str += (int)split_element_len;
 		id_split++;
 	}
-	return (1);
+	return (quote_split_len);
 }
