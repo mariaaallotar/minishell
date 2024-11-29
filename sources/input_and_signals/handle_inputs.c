@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 12:11:12 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/11/29 11:13:46 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/11/29 14:51:16 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,10 @@ int	handle_inputs(char **input, t_main *main)
 		return (-1);
 	}
 	else if (*input && *input[0] == '\0')
+	{
+		free(*input);
 		return (0);
+	}
 	add_history(*input);
 	return (1);
 }

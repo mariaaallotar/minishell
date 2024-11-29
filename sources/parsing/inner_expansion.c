@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/24 12:16:01 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/11/29 14:14:42 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/11/29 15:08:18 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,13 +34,6 @@ static int	expand_vars_in_quotes_inner(t_main *main, char ***quote_split)
 		i++;
 	}
 	return (1);
-}
-
-static int	print_error_and_free_split(int len, char ***quote_split)
-{
-	print_error("Error: Failed to malloc in inner_expansion\n");
-	free_quote_split(len, quote_split);
-	return (0);
 }
 
 static int get_num_of_elements(char **quote_split, int quote_split_len)
