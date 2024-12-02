@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 11:21:19 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/11/29 15:08:57 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/12/02 10:23:26 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -209,7 +209,7 @@ void			free_all_and_exit_with_free_split_middle(t_main *main,
 					t_tokens **tokens);
 
 //Print malloc error and free quote_split
-int			print_error_and_free_split(int len, char ***quote_split);
+int				print_error_and_free_split(int len, char ***quote_split);
 
 //Removes outer double quotes and expands the environment vars within
 int				expand_quotes_and_vars(t_main *main, t_tokens **tokens,

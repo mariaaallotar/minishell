@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/24 12:16:01 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/11/29 15:08:18 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/12/02 10:29:31 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ static int	expand_vars_in_quotes_inner(t_main *main, char ***quote_split)
 	return (1);
 }
 
-static int get_num_of_elements(char **quote_split, int quote_split_len)
+static int	get_num_of_elements(char **quote_split, int quote_split_len)
 {
 	int	i;
 	int	result;
@@ -52,7 +52,8 @@ static int get_num_of_elements(char **quote_split, int quote_split_len)
 	return (result);
 }
 
-static int join_multiple_strs(int quote_split_len, char **str, char **quote_split)
+static int	join_multiple_strs(int quote_split_len, char **str
+	, char **quote_split)
 {
 	int		i;
 	char	*temp;
@@ -77,7 +78,8 @@ static int join_multiple_strs(int quote_split_len, char **str, char **quote_spli
 	return (1);
 }
 
-static int	combine_quote_split_inner(char **quote_split, char **str, int quote_split_len)
+static int	combine_quote_split_inner(char **quote_split, char **str
+	, int quote_split_len)
 {
 	free(*str);
 	*str = NULL;
@@ -91,19 +93,6 @@ static int	combine_quote_split_inner(char **quote_split, char **str, int quote_s
 	return (1);
 }
 
-// static void print_quote_split(char **quote_split, int quote_split_len) //REMOVE
-// {
-// 	printf("\033[0;34m---QUOTE SPLIT ---\033[0m\n");
-// 	int i = 0;
-// 	while (i < quote_split_len)
-// 	{
-// 		//if (quote_split[i])
-// 		printf("quote_split[%d] = %s\n", i, quote_split[i]);
-// 		i++;
-// 	}
-// 	printf("\n");
-// }
-
 int	inner_expansion(t_main *main, char **str, bool is_heredoc)
 {
 	char	**quote_split;
@@ -114,15 +103,10 @@ int	inner_expansion(t_main *main, char **str, bool is_heredoc)
 	if ((*str)[0] == '\0')
 		return (1);
 	quote_split_len = create_quote_split(*str, &quote_split);
-	//printf("inner_quote_split_len = %d\n", quote_split_len); //REMOVE
-	//printf("INNER BEFORE EXPAND\n"); //REMOVE
-	//print_quote_split(quote_split, quote_split_len); //REMOVE
 	if (!quote_split_len)
 		return (0);
 	if (!expand_vars_in_quotes_inner(main, &quote_split))
 		return (0);
-	//printf("INNER AFTER EXPAND\n"); //REMOVE
-	//print_quote_split(quote_split, quote_split_len); //REMOVE
 	if (!combine_quote_split_inner(quote_split, str, quote_split_len))
 		return (print_error_and_free_split(quote_split_len, &quote_split));
 	if (is_heredoc)

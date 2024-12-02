@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 14:55:37 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/11/29 11:33:01 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/12/02 10:28:57 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ static int	get_quote_split_len(char *str)
 
 static int	malloc_quote_split(char *str, char ***quote_split)
 {
-	int i;
+	int	i;
 	int	quote_split_len;
 
 	quote_split_len = get_quote_split_len(str) + 1;
@@ -75,12 +75,20 @@ static int	malloc_quote_split(char *str, char ***quote_split)
 	return (quote_split_len);
 }
 
+static int	malloc_error_free_and_print(char ***quote_split, int id_split)
+{
+	print_error("Error: Failed to malloc element in quote_split\n");
+	free_split_in_middle(quote_split, id_split - 1);
+	free(*quote_split);
+	return (0);
+}
+
 int	create_quote_split(char *str, char ***quote_split)
 {
 	int		id_str;
 	int		id_split;
 	size_t	split_element_len;
-	int 	quote_split_len;
+	int		quote_split_len;
 
 	quote_split_len = malloc_quote_split(str, quote_split);
 	if (!quote_split_len)
@@ -93,12 +101,7 @@ int	create_quote_split(char *str, char ***quote_split)
 		(*quote_split)[id_split] = NULL;
 		(*quote_split)[id_split] = malloc(split_element_len + 1);
 		if (!(*quote_split)[id_split])
-		{
-			print_error("Error: Failed to malloc element in quote_split\n");
-			free_split_in_middle(quote_split, id_split - 1);
-			free(*quote_split);
-			return (0);
-		}
+			return (malloc_error_free_and_print(quote_split, id_split));
 		add_element_to_quote_split(quote_split, str, id_split, id_str);
 		id_str += (int)split_element_len;
 		id_split++;
