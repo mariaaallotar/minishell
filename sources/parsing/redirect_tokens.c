@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/24 12:13:07 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/11/21 15:10:29 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/12/02 15:26:14 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,13 @@ void	add_out_or_append(t_main *main, t_tokens **tokens, int cmd_id,
 	}
 }
 
+static int	print_syntax_error(t_main *main)
+{
+	main->exit_code = 2;
+	print_error("syntax error near unexpected token\n");
+	return (1);
+}
+
 int	check_for_redirect_error(t_main *main)
 {
 	int	i;
@@ -79,16 +86,19 @@ int	check_for_redirect_error(t_main *main)
 	i = 0;
 	while (main->split_input[i])
 	{
-		if (is_redirect((main->split_input[i])[0]))
+		if (!is_redirect((main->split_input[i])[0]))
 		{
-			if (!(main->split_input[i + 1])
-				|| is_redirect((main->split_input[i + 1])[0]))
-			{
-				main->exit_code = 2;
-				print_error("syntax error near unexpected token\n");
-				return (1);
-			}
+			i++;
+			continue ;
 		}
+		if (!(main->split_input[i + 1])
+			|| is_redirect((main->split_input[i + 1])[0]))
+			return (print_syntax_error(main));
+		if (ft_strncmp("<", main->split_input[i], 2)
+			&& ft_strncmp(">", main->split_input[i], 2)
+			&& ft_strncmp("<<", main->split_input[i], 3)
+			&& ft_strncmp(">>", main->split_input[i], 3))
+			return (print_syntax_error(main));
 		i++;
 	}
 	return (0);
