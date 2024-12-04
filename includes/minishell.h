@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 11:21:19 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/12/04 16:20:05 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/12/04 16:30:50 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,7 @@ typedef struct s_main
 	int			num_of_existing_elements;
 	int			rl_return;
 	int			fd;
+	int			pipes;
 }	t_main;
 
 typedef struct s_parsing
@@ -645,7 +646,7 @@ void			execute_command(t_main *main, t_tokens token, int *pids);
  * @param token  the token to execute
  */
 void			execute_child_process(t_main *main, t_tokens token, int *pids,
-					int pipe_right[2], int pipes);
+					int pipe_right[2]);
 
 /**
  * Executes a bultin in the parent process. Redirects STDIN and STDOUT

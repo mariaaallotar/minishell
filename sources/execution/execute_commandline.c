@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_commandline.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 10:33:14 by maheleni          #+#    #+#             */
-/*   Updated: 2024/12/04 16:20:54 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/12/04 16:28:59 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,28 +59,27 @@ int	execute_pipeline(t_main *main, int pipe_array[2][2], int *pids,
 	t_tokens *tokens)
 {
 	int	i;
-	int	pipes;
 
 	i = 0;
-	pipes = main->num_of_pipes;
-	while (pipes >= 0)
+	main->pipes = main->num_of_pipes;
+	while (main->pipes >= 0)
 	{
-		if (prepare_pipes(i, pipes, pipe_array, pids) == -1)
+		if (prepare_pipes(i, main->pipes, pipe_array, pids) == -1)
 			return (errno);
-		if (create_fork(i, pipes, pipe_array, pids) == -1)
+		if (create_fork(i, main->pipes, pipe_array, pids) == -1)
 			return (errno);
 		if (pids[i] == 0)
 		{
-			if (redirect_pipes(i, pipes, pipe_array, tokens[i]) == -1
+			if (redirect_pipes(i, main->pipes, pipe_array, tokens[i]) == -1
 				|| handle_redirects(tokens[i]) == -1)
 			{
 				free_all_in_child(main, pids);
 				exit(1);
 			}
-			execute_child_process(main, tokens[i], pids, pipe_array[1], pipes);
+			execute_child_process(main, tokens[i], pids, pipe_array[1]);
 		}
 		ignore_sigint();
-		close_pipes_in_parent(i++, pipes--, pipe_array[0], pipe_array[1]);
+		close_pipes_in_parent(i++, main->pipes--, pipe_array[0], pipe_array[1]);
 	}
 	return (0);
 }

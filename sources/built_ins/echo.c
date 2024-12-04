@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 14:52:20 by maheleni          #+#    #+#             */
-/*   Updated: 2024/11/27 11:34:33 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/12/04 17:17:30 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,14 +46,16 @@ void	print_echo_arguments(t_tokens token)
 		{
 			while (token.command[i])
 			{
-				printf("%s", token.command[i++]);
+				write(STDOUT_FILENO, token.command[i],
+					ft_strlen(token.command[i]));
+				i++;
 				if (token.command[i])
-					printf(" ");
+					write(STDOUT_FILENO, " ", 1);
 			}
 		}
 	}
 	if (!newline_flag)
-		printf("\n");
+		write(STDOUT_FILENO, "\n", 1);
 }
 
 int	echo(t_main *main, t_tokens token)
