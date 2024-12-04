@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 11:21:19 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/12/02 10:23:26 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/12/04 16:20:05 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -644,7 +644,8 @@ void			execute_command(t_main *main, t_tokens token, int *pids);
  * @param main the main struct of the program
  * @param token  the token to execute
  */
-void			execute_child_process(t_main *main, t_tokens token, int *pids);
+void			execute_child_process(t_main *main, t_tokens token, int *pids,
+					int pipe_right[2], int pipes);
 
 /**
  * Executes a bultin in the parent process. Redirects STDIN and STDOUT
@@ -874,9 +875,11 @@ void			close_pipes_in_parent(int i, int num_of_pipes, int *pipe_left,
  * @param num_of_pipes number of pipes left in commandline
  * @param pipe_array the array that holds the filedescriptors for left and
  * right pipes
+ * @param token the token that these pipes are part of
  * @returns 0 on success, -1 on error
  */
-int				redirect_pipes(int i, int num_of_pipes, int pipe_array[2][2]);
+int				redirect_pipes(int i, int num_of_pipes, int pipe_array[2][2],
+					t_tokens token);
 
 /**
  * Does dup2 on the right-hand side pipe
@@ -884,7 +887,7 @@ int				redirect_pipes(int i, int num_of_pipes, int pipe_array[2][2]);
  * @param pipe_right array of filedescriptors for the right-hand side pipe
  * @returns 0 on success, -1 on error
  */
-int				redirect_pipe_right(int *pipe_right);
+int				redirect_pipe_right(int *pipe_right, t_tokens token);
 
 /**
  * Does dup2 on the left-hand side pipe
@@ -892,7 +895,7 @@ int				redirect_pipe_right(int *pipe_right);
  * @param pipe_right array of filedescriptors for the left-hand side pipe
  * @returns 0 on success, -1 on error
  */
-int				redirect_pipe_left(int *pipe_left);
+int				redirect_pipe_left(int *pipe_left, t_tokens token);
 
 /**
  * Frees everything that is allocated and the array of processids

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_commandline.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 10:33:14 by maheleni          #+#    #+#             */
-/*   Updated: 2024/11/19 13:15:36 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/12/04 16:20:54 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,13 +71,13 @@ int	execute_pipeline(t_main *main, int pipe_array[2][2], int *pids,
 			return (errno);
 		if (pids[i] == 0)
 		{
-			if (redirect_pipes(i, pipes, pipe_array) == -1
+			if (redirect_pipes(i, pipes, pipe_array, tokens[i]) == -1
 				|| handle_redirects(tokens[i]) == -1)
 			{
 				free_all_in_child(main, pids);
 				exit(1);
 			}
-			execute_child_process(main, tokens[i], pids);
+			execute_child_process(main, tokens[i], pids, pipe_array[1], pipes);
 		}
 		ignore_sigint();
 		close_pipes_in_parent(i++, pipes--, pipe_array[0], pipe_array[1]);

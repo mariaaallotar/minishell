@@ -6,7 +6,7 @@
 /*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 10:00:41 by maheleni          #+#    #+#             */
-/*   Updated: 2024/11/25 15:15:31 by maheleni         ###   ########.fr       */
+/*   Updated: 2024/12/04 16:17:34 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ void	execute_command(t_main *main, t_tokens token, int *pids)
 	}
 }
 
-void	execute_child_process(t_main *main, t_tokens token, int *pids)
+void	execute_child_process(t_main *main, t_tokens token, int *pids, int pipe_right[2], int pipes)
 {
 	int	status;
 
@@ -103,8 +103,12 @@ void	execute_child_process(t_main *main, t_tokens token, int *pids)
 	if (is_builtin(token))
 	{
 		status = execute_builtin(main, token, 0, NULL);
+		if (pipes)
+			close(pipe_right[0]);
 		free_all_in_child(main, pids);
 		exit(status);
 	}
+	if (pipes)
+		close(pipe_right[0]);
 	execute_command(main, token, pids);
 }
