@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/31 15:49:13 by maheleni          #+#    #+#             */
-/*   Updated: 2024/11/21 12:11:38 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/12/05 14:20:57 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,8 @@ int	execute_builtin_in_parent(t_main *main, t_tokens token, int num_of_pipes)
 		}
 		if (handle_redirects(token) == -1)
 		{
+			restore_stdin_stdout(main, orig_stdin_stdout[0],
+				orig_stdin_stdout[1]);
 			main->exit_code = 1;
 			return (1);
 		}
