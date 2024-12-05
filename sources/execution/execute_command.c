@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 10:00:41 by maheleni          #+#    #+#             */
-/*   Updated: 2024/12/04 16:28:08 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/12/05 14:54:20 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,11 @@ void	execute_child_process(t_main *main, t_tokens token, int *pids
 
 	activate_signals_for_child();
 	if (token.command == NULL || token.command[0] == NULL)
+	{
+		if (main->pipes)
+			close(pipe_right[0]);
 		exit(0);
+	}
 	if (is_builtin(token))
 	{
 		status = execute_builtin(main, token, 0, NULL);

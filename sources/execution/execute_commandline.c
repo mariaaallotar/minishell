@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 10:33:14 by maheleni          #+#    #+#             */
-/*   Updated: 2024/12/04 16:28:59 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/12/05 15:06:24 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,7 @@ int	execute_pipeline(t_main *main, int pipe_array[2][2], int *pids,
 			if (redirect_pipes(i, main->pipes, pipe_array, tokens[i]) == -1
 				|| handle_redirects(tokens[i]) == -1)
 			{
+				close(pipe_array[1][0]);
 				free_all_in_child(main, pids);
 				exit(1);
 			}
