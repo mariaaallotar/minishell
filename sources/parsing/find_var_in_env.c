@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 16:50:02 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/11/19 13:49:55 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/12/05 14:28:59 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,8 @@ static int	find_var_in_env_helper(t_main *main, char **str)
 
 int	find_var_in_env(t_main *main, char **str)
 {
+	if (**str != '$')
+		return (1);
 	if ((*str)[0] == '$' && (*str)[1] == '?')
 	{
 		if (!expand_exit_code(main, str))
