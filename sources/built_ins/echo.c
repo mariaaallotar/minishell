@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: maheleni <maheleni@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 14:52:20 by maheleni          #+#    #+#             */
-/*   Updated: 2024/12/05 10:03:42 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/12/06 18:21:10 by maheleni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ int	echo(t_main *main, t_tokens token)
 	i = 1;
 	if (token.command[i] == NULL)
 	{
-		printf("\n");
+		write(STDOUT_FILENO, "\n", 1);
 		return (0);
 	}
 	print_echo_arguments(token);
