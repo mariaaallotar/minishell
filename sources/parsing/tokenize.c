@@ -6,7 +6,7 @@
 /*   By: eberkowi <eberkowi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 10:23:05 by eberkowi          #+#    #+#             */
-/*   Updated: 2024/12/02 15:06:11 by eberkowi         ###   ########.fr       */
+/*   Updated: 2024/12/09 12:43:25 by eberkowi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,8 @@ int	check_for_pipe_error(t_main *main, t_tokens **tokens)
 	{
 		if ((main->split_input[i])[0] == '|'
 			&& ((main->split_input[i - 1])[0] == '<'
-			|| (main->split_input[i - 1])[0] == '>'))
+			|| (main->split_input[i - 1])[0] == '>'
+			|| (main->split_input[i - 1])[0] == '|'))
 			return (pipe_syntax_error(main, tokens));
 		i++;
 	}
