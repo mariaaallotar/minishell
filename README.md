@@ -1,6 +1,6 @@
 # Minishell
 
-A simple bash-like shell. This is the first pair project of the 42 curiculum. [Ethan Berkowitz](https://github.com/ethan-berkowitz) focused on user input and parsing. I focused on everything else.
+A simple bash-like shell. This is the first pair project of the 42 curiculum. [Ethan Berkowitz](https://github.com/ethan-berkowitz) focused on user input, parsing and variable expansion. I focused on everything else.
 
 ## Features
 
