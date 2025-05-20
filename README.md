@@ -12,8 +12,7 @@ A simple bash-like shell. This is the first pair project of the 42 curiculum. [E
   - unset with no options
   - env with no options or arguments
   - exit with no options
-- execute any program based on PATH
-- execute any program with relative or absolute path
+- execute any program based on PATH variable as well as relative or absolute path
 - handle single and double quotes
 - redirections
 - pipes
