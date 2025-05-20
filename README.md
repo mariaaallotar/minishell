@@ -44,6 +44,9 @@ A simple bash-like shell. This is the first pair project of the 42 curiculum. [E
 ## What I learned
 
 - project planing, management and teamwork
-- to use `Git` for a shared project
+- to use `Git` for a shared project   
+  - branches
+  - pull requests
+  - merging
 - error handling
 - project structure
