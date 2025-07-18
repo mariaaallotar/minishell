@@ -21,9 +21,9 @@ A simple bash-like shell. This is the first pair project of the 42 curiculum. [E
   - ctrl-C, ctrl-D and ctrl-\
 - history
 
-## Screenshots
+## Usage
 
-![image](https://github.com/user-attachments/assets/7be6e04a-f44c-4670-9b89-2ed0441e7f54)   
+![gif of the usage of the program](https://github.com/user-attachments/assets/5e4f8c37-7791-4033-bd5e-039177b752e8)
 
 ## Allowed external functions
 
