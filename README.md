@@ -21,7 +21,7 @@ A simple bash-like shell written in C. The project is done by [Ethan Berkowitz](
   - ctrl-C, ctrl-D and ctrl-\
 - history
 
-## Usage
+## Demo
 
 ![gif of the usage of the program](https://github.com/user-attachments/assets/5e4f8c37-7791-4033-bd5e-039177b752e8)
 
